@@ -10,12 +10,7 @@ module.exports = {
       password: '0000',
       database: 'dataveg'
     },
-
-    migrations: {
-      tableNames: 'Usuarios',
-      directory: `${__dirname}/src/database/migrations`
-    },
-
+    
     seeds: {
       directory: `${__dirname}/src/database/seeds`
     }

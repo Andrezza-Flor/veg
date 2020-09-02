@@ -2,41 +2,22 @@ const knex = require('../database')
 const e = require('express')
 
 module.exports = {
-    // Função de apresentação de  usuarios
+    // Função de apresentação de Login
     async index(req,res) {
-        const results = await knex('Usuarios')
-        return res.json(results)
-    },
+        const results = await knex('Logins')
+        .join('Usuarios', 'Logins.email_Usuario', '=', 'Usuarios.email_Usuario')
+        .select('Usuarios.*', 'Logins.tipo_Usuario')
 
-    // Função de criação de usuario
+
+    return res.json(results)
+    },
+        // Função de criação de Login **
     async create(req, res, next) {
 
-        try {
-
-            const { 
-                email_Usuario,
-                nome_Usuario,
-                telefone_Usuario,
-                cpf_Usuario,
-                dt_Nasc_Usuario
-             } = req.body
-
-            await knex('Usuarios').insert({
-                email_Usuario,
-                nome_Usuario,
-                telefone_Usuario,
-                cpf_Usuario,
-                dt_Nasc_Usuario
-            })
-
-            return res.status(201).send()
-
-        } catch (error) {
-            next(error)
-        }        
+             
     },
 
-    // Função de atualizar o usuario 
+    // Função de atualizar o Login **
     async update(req, res, next) {
         try {
 
@@ -59,7 +40,7 @@ module.exports = {
         }
     },
 
-    //Função de deletar o usuario
+    //Função de deletar o Login **
     async delete(req, res, next) {
         try {
             const { email_Usuario } = req.params
