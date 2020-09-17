@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../../public/style/main.css">
+    <link rel="stylesheet" href="../../public/style/mainStyle.css">
+    <link rel="stylesheet" href="../../public/style/pagetable.css">
+    <link rel="stylesheet" href="../../public/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">
+        <h1>Escolha uma opção</h1>
+
+        <button class="button-menu">
+            <a href="celeiro.html">
+                <img src="../../public/imagem/menu/celeiro.png" alt="Celeiro">
+                Celeiro
+            </a>
+        </button>
+
+        <button class="button-menu">
+            <a href="armazem.html">
+                <img src="../../public/imagem/menu/armazem.png" alt="Armazem">
+                Armazém
+            </a>
+        </button>
+
+        <button class="button-menu">
+            <a href="compra.html">
+                <img src="../../public/imagem/menu/compra.png" alt="Compra">
+                Compra
+            </a>
+        </button> 
+
+        <button class="button-menu">
+            <a href="venda.html">
+                <img src="../../public/imagem/menu/vender.png" alt="Venda">
+                Venda
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="colaborador.html">
+                <img src="../../public/imagem/menu/colaborador.png" alt="Colaborador">
+                Colaborador
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="estufa.html">
+                <img src="../../public/imagem/menu/estufa.png" alt="Estufa">
+                Estufa
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="relatorio.html">
+                <img src="../../public/imagem/menu/relatorio-seo.png" alt="Relatório">
+                Relatório
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="atividades.html">
+                <img src="../../public/imagem/menu/atividade.png" alt="Atividade">
+                Atividade 
+            </a>
+        </button>
+        
+        <button class="button-menu-exit">
+           <a href="loginPage.html">
+                <img class="footer" src="../../public/imagem/menu/sair.png" alt="Sair">
+                <p>Sair</p>
+            </a> 
+        </button>
+
+        <button class="button-menu-perfil">
+            <a href="perfil.html">
+                <img class="footer" src="../../public/imagem/menu/perfil.png" alt="Perfil">
+                <p>Perfil</p>
+            </a>
+        </button>        
+    </div>
+    
+    <div class="main">
+        <h1>
+            Perfil
+        </h1>
+
+        <form>
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Dados Pessoais</legend>
+                </div>
+                <div class="read-block">
+                    <label for="nomeUsuario">Nome:</label>
+                    <input type="text" id="nomeUsuario" name="nomeUsuario" value="Matheus de Barros Santos" readonly>
+                </div>
+               <div class="read-block">
+                    <label for="cpfUsuario">CPF:</label>
+                    <input type="text" id="cpfUsuario" name="cpfUsuario" value="440.998.787-23" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="telefoneUsuario">Telefone:</label>
+                    <input type="text" id="telefoneUsuario" name="telefoneUsuario" value="(11)99898-6544" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="dtNascimento">Data de Nascimento:</label>
+                    <input type="date" id="dtNascimento" name="dtNascimento" value="1980-08-02" readonly>
+                </div> 
+            </fieldset>
+
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados da Acesso</legend>
+                </div>
+                <div class="read-block">
+                    <label for="emailUsuario">Email:</label>
+                    <input type="text" id="emailUsuario" name="emailUsuario" value="matheus.santos@gmail.com" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="funcaoUsuario">Função:</label>
+                    <input type="text" id="funcaoUsuario" name="funcaoUsuario" value="Colaborador Financeiro" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="dtAdmissao">Data de Admissão:</label>
+                    <input type="date" id="dtAdmissao" name="dtAdmissao" value="2020-02-02" readonly>
+                </div>
+            </fieldset>
+
+            <div class="botton-foot">
+                <a class="button-Editar-Colaborador" href="perfilEditar.html">Editar Cadastro</a>
+            </div>
+        </form>        
+    </div>
+</body>
+</html>

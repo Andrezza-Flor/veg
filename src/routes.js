@@ -14,55 +14,66 @@ const FornecedorController = require('./controllers/FornecedorController')
 const ClienteController = require('./controllers/ClienteController ')
 const VendaController = require('./controllers/VendaController')
 const CompraController = require('./controllers/CompraController')
+const homeController = require('./controllers/homeController')
 
-// Gerente
 routes
-    .get('/gerente', GerenteController.index)
-    .post('/gerente', GerenteController.create)
-    .put('/gerente/:email_Usuario', GerenteController.update )
-    .delete('/gerente/:email_Usuario', GerenteController.delete )
+//Login
+    .get('/', LoginController.index)
+    .post('/home', homeController.index)
+// Gerente
+    .get('/cadastro', GerenteController.index)
+    .post('/cadastrar', GerenteController.create)
+    // .put('/gerente/:email_Usuario', GerenteController.update )
+    // .delete('/gerente/:email_Usuario', GerenteController.delete )
 
-// Colaborador
-    .get('/colaborador', ColaboradorController.index)
-    .post('/colaborador', ColaboradorController.create)
+// Home
+    
 
-// Plantacao
-    .get('/plantacao', PlantacaoController.index)
+// // Colaborador
+//     .get('/colaborador', ColaboradorController.index)
+//     .post('/colaborador', ColaboradorController.create)
 
-// Login
-    .get('/login', LoginController.index)
+// // Plantacao
+//     .get('/plantacao', PlantacaoController.index)
 
-// Armazem
-    .get('/armazem', ArmazemController.index)
+// // Login
+//     .get('/login', LoginController.index)
 
-// Celeiro
-    .get('/celeiro', CeleiroController.index)
-    .post('/celeiro', CeleiroController.create)
+// // Armazem
+//     .get('/armazem', ArmazemController.index)
 
-// Insumo
-    .get('/insumo', InsumoController.index)
-    .post('/insumo', InsumoController.create)
-    .delete('/insumo/:cod_Insumo', InsumoController.delete)
+// // Celeiro
+//     .get('/celeiro', CeleiroController.index)
+//     .post('/celeiro', CeleiroController.create)
 
-// Hortalicas
-    .get('/hortalica', HortalicaController.index)
+// // Insumo
+//     // .post('/insumo', function(req, res) {
+//     //     res.render('loginPage.html');
+//     // })
 
-// Fornecedores
-    .get('/fornecedor', FornecedorController.index)
-    .post('/fornecedor', FornecedorController.create)
-    .delete('/fornecedor/:cod_Fornecedor', FornecedorController.delete )
+//     .get('/insumo', InsumoController.index)
+//     .post('/insumo', InsumoController.create)
+//     .delete('/insumo/:cod_Insumo', InsumoController.delete)
 
-// Clientes
-    .get('/cliente/:cod_Plantacao', ClienteController.index)
-    .post('/cliente', ClienteController.create)
+// // Hortalicas
+//     .get('/hortalica', HortalicaController.index)
 
-// Pedidos de Venda
-    .get('/venda', VendaController.index)
-    .post('/venda', VendaController.create)
-    .delete('/venda/:cod_Pedido_Venda', VendaController.delete)
+// // Fornecedores
+//     .get('/fornecedor', FornecedorController.index)
+//     .post('/fornecedor', FornecedorController.create)
+//     .delete('/fornecedor/:cod_Fornecedor', FornecedorController.delete )
 
-// Pedidos de Compra
-    .get('/compra', CompraController.index)
-    .post('/compra', CompraController.create)
+// // Clientes
+//     .get('/cliente/:cod_Plantacao', ClienteController.index)
+//     .post('/cliente', ClienteController.create)
+
+// // Pedidos de Venda
+//     .get('/venda', VendaController.index)
+//     .post('/venda', VendaController.create)
+//     .delete('/venda/:cod_Pedido_Venda', VendaController.delete)
+
+// // Pedidos de Compra
+//     .get('/compra', CompraController.index)
+//     .post('/compra', CompraController.create)
 
 module.exports = routes

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../../public/style/main.css">
+    <link rel="stylesheet" href="../../public/style/mainStyle.css">
+    <link rel="stylesheet" href="../../public/style/pagetable.css">
+    <link rel="stylesheet" href="../../public/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">
+        <h1>Escolha uma opção</h1>
+
+        <button class="button-menu">
+            <a href="celeiro.html">
+                <img src="../../public/imagem/menu/celeiro.png" alt="Celeiro">
+                Celeiro
+            </a>
+        </button>
+
+        <button class="button-menu">
+            <a href="armazem.html">
+                <img src="../../public/imagem/menu/armazem.png" alt="Armazem">
+                Armazém
+            </a>
+        </button>
+
+        <button class="button-menu">
+            <a href="compra.html">
+                <img src="../../public/imagem/menu/compra.png" alt="Compra">
+                Compra
+            </a>
+        </button> 
+
+        <button class="button-menu">
+            <a href="venda.html">
+                <img src="../../public/imagem/menu/vender.png" alt="Venda">
+                Venda
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="colaborador.html">
+                <img src="../../public/imagem/menu/colaborador.png" alt="Colaborador">
+                Colaborador
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="estufa.html">
+                <img src="../../public/imagem/menu/estufa.png" alt="Estufa">
+                Estufa
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="relatorio.html">
+                <img src="../../public/imagem/menu/relatorio-seo.png" alt="Relatório">
+                Relatório
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="atividades.html">
+                <img src="../../public/imagem/menu/atividade.png" alt="Atividade">
+                Atividade 
+            </a>
+        </button>
+        
+        <button class="button-menu-exit">
+           <a href="loginPage.html">
+                <img class="footer" src="../../public/imagem/menu/sair.png" alt="Sair">
+                <p>Sair</p>
+            </a> 
+        </button>
+
+        <button class="button-menu-perfil">
+            <a href="perfil.html">
+                <img class="footer" src="../../public/imagem/menu/perfil.png" alt="Perfil">
+                <p>Perfil</p>
+            </a>
+        </button>        
+    </div>
+    
+    <div class="main">
+        <h1>
+            Venda
+            <a href="venda.html">
+                <img src="../../public/imagem/voltar.png" alt="">
+                Voltar
+            </a>
+        </h1>
+        
+        <form>
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Dados da Venda</legend>
+                </div>
+            </fieldset>
+
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados do Cliente</legend>
+                </div>
+                <div class="select-block">
+                    <div class="select">
+                        <label for="nomeCliente">Nome do Cliente:</label>
+                        <select name="nomeCliente" id="nomeCliente" >
+                            <option selected disabled>Selecione uma opção</option>
+                            <option value="0">Mercado Dia% - Butantã</option> 
+                            <option value="1">Mercado Vanessa</option>
+                            <option value="2">Feira de Terça - Butnatã</option>
+                        </select>
+                    </div>
+                    <button type="submit">
+                        <img src="../../public/imagem/mais.png" alt="Adicionar">
+                    </button>
+                </div>
+                <div class="read-block">
+                    <label for="nomeCliente">Nome do Cliete:</label>
+                    <input type="text" id="nomeCliente" name="nomeCliente" value="Mercado Dia% - Butantã" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="docCliente">CNPJ:</label>
+                    <input type="text" id="docCliente" name="docCliente" value="08.561.281/0001-63" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="telefoneCliente">Telefone:</label>
+                    <input type="text" id="telefoneCliente" name="telefoneCliente" value="(11)4002-1080" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="cepCliente">CEP:</label>
+                    <input type="text" id="cepCliente" name="cepCliente" value="05589-020" readonly>
+                </div>
+
+                <div class="foot-dados-Botton">
+                    <div class="aviso-foot">
+                         <img src="../../public/imagem/aviso.png" alt="Aviso">
+                         <p>Caso não tenha achado o Cliente é possivel adiciona-lo.</p>
+                    </div>
+                    <a href="vendaCriarCliente.html">
+                        <img src="../../public/imagem/criarcliente.png" alt="Cliente">
+                        <p>Adicionar Cliente</p>
+                    </a>
+                </div>               
+            </fieldset>
+
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Inserção das Hortaliça</legend>
+                </div>
+
+                <div class="select-block">
+                    <div class="select">
+                        <label for="nomehortalica">Hortaliças:</label>
+                        <select name="nomehortalica" id="nomehortalica">
+                            <option>Selecione uma opição</option>
+                            <option value="0">alface</option> 
+                            <option value="1">beterraba</option>
+                            <option value="2">feijão</option>
+                            <option value="3">cenoura</option>
+                            <option value="4">couve</option>
+                            <option value="5">rúcula</option>
+                        </select>
+                    </div>
+                    <button type="submit">
+                        <img src="../../public/imagem/mais.png" alt="Adicionar">
+                    </button>
+                </div>
+
+                <table class="table-Detalhe">
+                    <tr class="head">
+                        <th></th>
+                        <th>Nome</th>
+                        <th>Validade</th>
+                        <th>Quantidade</th>
+                        <th>Valor</th>
+                    </tr>
+                    <tr>
+                        <th class="lixo">
+                            <button>
+                                <img src="../../public/imagem/lixo.png" alt="Lixo">
+                            </button>
+                        </th>
+                        <td>alface</td>
+                        <td>30/09/2020</td>
+                        <td>50 pés</td>
+                        <td>R$ 100.00</td>
+                    </tr>
+                    <tr>
+                        <th class="lixo">
+                            <button>
+                                <img src="../../public/imagem/lixo.png" alt="Lixo">
+                            </button>
+                        </th>
+                        <td>muda de beterraba</td>
+                        <td>30/09/2020</td>
+                        <td>50 maço</td>
+                        <td>R$ 300.00</td>
+                    </tr>
+                </table>
+            </fieldset>
+
+            <button type="submit" class="button-Finalizar">
+                <a href="vendaFinalizar.html">Finalizar Venda</a>
+            </button>
+            
+        </form> 
+    </div>
+</body>
+</html>

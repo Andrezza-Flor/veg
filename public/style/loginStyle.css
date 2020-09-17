@@ -1,0 +1,151 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body,
+.conteiner-access,
+.conteiner-makefarm {
+    background: var(--color-background-menu);
+}
+
+body {
+    display: flex;
+}
+
+.conteiner-access {
+    margin-top: auto;
+    margin-right: 5rem;
+    margin-left: 3rem;
+    margin-bottom: auto;
+    padding-left: 3rem;
+}
+
+.head-access {    
+    margin-top: 6rem;
+    border-bottom: 1px solid;
+    padding-bottom: 0.5rem;
+    
+
+    color: var(--color-text)
+}
+
+h1 {
+    font-family: Poppins;
+    font-size: 3rem;
+    color: var(--color-text);
+
+    align-items: center;
+    text-align: center;
+}
+
+.input-block {
+    margin-left: 1rem;
+    margin-right: 2rem;
+    padding-top: 4rem;
+    font-family: Poppins;
+}
+
+label {
+    font-size: 1.8rem;
+    color: var(--color-text);
+    padding-left: 1.5rem;
+}
+
+input {
+    width: 98%;
+    height: 3rem;
+    border-radius: 0.5rem;
+    border-style: none;
+
+    padding: 0.8rem;
+    font-family: Poppins;
+    font-size: 2.4rem;
+}
+
+button {
+    margin-top: 4rem;
+    margin: 4rem auto 4rem auto;
+    width: 20rem;
+    height: 4.5rem;
+    border-radius: 0.8rem;
+    border-style: none;
+    background-color: var(--color-secondary);
+
+    display: block;
+
+    font-size: 2rem;
+    font-family: Poppins;
+}
+
+button a {
+    text-decoration: none;
+}
+
+a {
+    font-size: 2rem;
+    color: var(--color-text);
+    font-family: Poppins;
+
+    display: block;
+    text-align: center;
+}
+
+.conteiner-makefarm {
+    margin-top: auto;
+    margin-right: 2rem;
+    margin-left: 2rem;
+    margin-bottom: auto;
+
+    padding-left: 8rem;
+    padding-top: 10rem;
+}
+
+.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto; 
+}
+
+.logo img {
+    width: 20rem;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.logo p {
+    font-size: 3rem;
+    font-family: Poppins;
+    color: var(--color-text);
+
+    padding-top: 4rem;
+}
+
+.make-manager {
+    text-decoration: none;
+    margin-top: 10rem;
+
+    background-color: var(--color-primary);
+    border-radius: 0.8rem;
+    color: white;
+
+    width: 24rem;
+    height: 7rem;
+
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.make-manager p{
+    width: 20rem;
+    left: 7rem;
+    padding-top: 0.2rem;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: block;
+    text-align: center;
+}

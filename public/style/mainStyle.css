@@ -1,0 +1,170 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+body {
+    background: var(--color-background);
+}
+
+
+.menu {
+    position: fixed;
+
+    background: var(--color-background-menu);
+    width: 35rem;
+    height: 66.4rem;
+
+}
+
+.menu h1 {
+
+    margin-top: 1rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    margin-bottom: 1rem;
+
+    border-bottom: var(--color-text) solid;
+    border-width: 0.2rem;
+    
+    font-family: Poppins;
+    color: var(--color-text);
+    font-size: 3rem;
+    text-align: center;    
+}
+
+.button-menu {
+    background: var(--color-button-menu);
+    margin-top: 1rem;
+    margin-left: 1.5rem;
+    width: 15rem;
+    height: 12rem;
+
+    border-radius: 0.8rem;
+    border: none
+}
+
+button a {
+    text-decoration: none;
+    font-size: 2rem;
+    font-family: Poppins;
+    color: #000000;
+    font-weight: bold;
+}
+
+
+img {
+    padding-top: 0.5rem;
+    padding-bottom: 0.8rem;
+    width: 8rem;
+    display: block;
+    margin: auto;
+}
+
+.button-menu-exit {
+    background: var(--color-button-cancel);
+    margin-top: 1rem;
+    margin-left: 1.5rem;
+    width: 15rem;
+    height: 5rem;
+
+    border-radius: 0.8rem;
+    border: none;
+}
+
+.button-menu-perfil {
+    background: var(--color-secondary);
+    margin-top: 1rem;
+    margin-left: 1.5rem;
+    width: 15rem;
+    height: 5rem;
+
+    border-radius: 0.8rem;
+    border: none;
+}
+
+.button-menu-exit a,
+.button-menu-perfil a {
+    display: flex;
+    color: #000000;
+
+}
+
+.footer {
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+    width: 3rem;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
+.button-menu-exit p,
+.button-menu-perfil p {
+    padding-top: 0.8rem;
+    height: 100%;
+}
+
+.main {
+    position: absolute;
+    margin-left: 35rem;
+    
+    width: 75%;
+    height: 80rem;
+
+}
+
+.main h1 {
+    margin-left: 4rem;
+    margin-right: 10rem;
+
+    display: flex;
+
+    padding-top: 3rem;
+    padding-left: 0.8rem;
+    padding-right: auto;
+    padding-bottom: 2rem;
+
+    border-bottom: var(--color-text) solid;
+    border-width: 0.3rem;
+
+    font-size: 5rem;
+    font-family: Poppins;
+    color: var(--color-text);
+
+    justify-content: space-between;
+}
+
+.main h1 a {
+    background: var(--color-button-back);
+    /* margin-bottom: 2rem; */
+    padding-right: 2rem;
+    border-radius: 0.8rem;
+
+    display: flex;
+
+    width: 18rem;
+    height: 8rem;
+
+    font-size: 3rem;
+    color: #000000;
+    text-decoration: none;
+
+    font-weight: lighter;
+    align-items: center;
+
+}
+
+.main h1 img {
+    margin-left: 2rem;
+    width: 4rem;
+}
+
+.main .info {
+    padding-right: 5.4rem;
+    padding-left: 2rem;
+    padding-top: 2rem;
+
+    font-size: 3rem;
+    font-family: Poppins;
+    text-align: center;
+
+}

@@ -21,13 +21,16 @@ module.exports = {
             const { 
                 nome_Insumo,
                 tipo_Insumo,
-                nome_Hortalica
+                contagem_Insumo,
+                nome_Hortalica,
+                contagem_Hortalica
              } = req.body
 
             await knex('Insumos').insert({
                 cod_Insumo: null,
                 nome_Insumo,
-                tipo_Insumo
+                tipo_Insumo,
+                contagem_Insumo
             })
 
             const cod = await knex('Insumos')
@@ -44,7 +47,8 @@ module.exports = {
                 await knex('Hortalicas').insert({
                     cod_Hortalica: null,
                     nome_Hortalica,
-                    cod_Insumo: d
+                    cod_Insumo: d,
+                    contagem_Hortalica
                 })
             }
 

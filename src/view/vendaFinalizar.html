@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../../public/style/main.css">
+    <link rel="stylesheet" href="../../public/style/mainStyle.css">
+    <link rel="stylesheet" href="../../public/style/pagetable.css">
+    <link rel="stylesheet" href="../../public/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">
+        <h1>Escolha uma opção</h1>
+
+        <button class="button-menu">
+            <a href="celeiro.html">
+                <img src="../../public/imagem/menu/celeiro.png" alt="Celeiro">
+                Celeiro
+            </a>
+        </button>
+
+        <button class="button-menu">
+            <a href="armazem.html">
+                <img src="../../public/imagem/menu/armazem.png" alt="Armazem">
+                Armazém
+            </a>
+        </button>
+
+        <button class="button-menu">
+            <a href="compra.html">
+                <img src="../../public/imagem/menu/compra.png" alt="Compra">
+                Compra
+            </a>
+        </button> 
+
+        <button class="button-menu">
+            <a href="venda.html">
+                <img src="../../public/imagem/menu/vender.png" alt="Venda">
+                Venda
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="colaborador.html">
+                <img src="../../public/imagem/menu/colaborador.png" alt="Colaborador">
+                Colaborador
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="estufa.html">
+                <img src="../../public/imagem/menu/estufa.png" alt="Estufa">
+                Estufa
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="relatorio.html">
+                <img src="../../public/imagem/menu/relatorio-seo.png" alt="Relatório">
+                Relatório
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="atividades.html">
+                <img src="../../public/imagem/menu/atividade.png" alt="Atividade">
+                Atividade 
+            </a>
+        </button>
+        
+        <button class="button-menu-exit">
+           <a href="loginPage.html">
+                <img class="footer" src="../../public/imagem/menu/sair.png" alt="Sair">
+                <p>Sair</p>
+            </a> 
+        </button>
+
+        <button class="button-menu-perfil">
+            <a href="perfil.html">
+                <img class="footer" src="../../public/imagem/menu/perfil.png" alt="Perfil">
+                <p>Perfil</p>
+            </a>
+        </button>        
+    </div>
+    
+    <div class="main">
+        <h1>
+            Venda
+            <a href="vendaVender.html">
+                <img src="../../public/imagem/voltar.png" alt="">
+                Voltar
+            </a>
+        </h1>
+        
+        <form>
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Finalizar Venda</legend>
+                </div>
+                <div class="read-block">
+                    <label for="nomeColaborador">Nome do Colaborador:</label>
+                    <input type="text" id="nomeColaborador" name="nomeColaborador" value="Matheus de Barros Santos" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="dataCompra">Data da Compra:</label>
+                    <input type="text" id="dataCompra" name="dataCompra" value="2020/09/09" readonly>
+                </div>
+            </fieldset>
+
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados do Clinte</legend>
+                </div>
+                <div class="read-block">
+                    <label for="nomeFornecedor">Nome Cliente:</label>
+                    <input type="text" id="nomeFornecedor" name="nomeFornecedor" value="Mercado Dia% - Butantã" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="docCliente">CNPJ Cliente:</label>
+                    <input type="text" id="docCliente" name="docCliente" value="08.561.281/0001-63" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="telefoneCliente">Telefone Cliente:</label>
+                    <input type="text" id="telefoneCliente" name="telefoneCliente" value="(11)4002-1080" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="cepCliente">CEP Cliente:</label>
+                    <input type="text" id="cepCliente" name="cepCliente" value="05589-020" readonly>
+                </div>
+          
+            </fieldset>
+
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados da Hortaliça:</legend>
+                </div>
+                <table class="table-Detalhe">
+                    <tr class="head">
+                        <th>Nome</th>
+                        <th>Validade</th>
+                        <th>Quantidade</th>
+                        <th>Valor</th>
+                    </tr>
+                    <tr>
+                        <td>alface</td>
+                        <td>30/09/2020</td>
+                        <td>50 pés</td>
+                        <td>R$ 100.00</td>
+                    </tr>
+                    <tr>
+                        <td>colve</td>
+                        <td>30/09/2020</td>
+                        <td>50 maço</td>
+                        <td>R$ 100.00</td>
+                    </tr>
+                </table>
+                <div class="foot-block">
+                    <label for="totalVenda">Total da Venda:</label>
+                    <input type="text" id="totalVenda" name="totalVenda" value="RS 200.00" readonly>
+                </div>
+            </fieldset>
+            
+            <div class="botton-foot">
+                <button type="submit" class="button-Cancelar">
+                    <a href="venda.html">Cancelar</a>
+                </button>  
+
+                <button type="submit" class="button-Salvar">
+                    <a href="venda.html">Salvar</a>
+                </button>  
+            </div>
+
+        </form> 
+    </div>
+</body>
+</html>

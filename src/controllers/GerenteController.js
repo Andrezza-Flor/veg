@@ -1,48 +1,47 @@
 const knex = require('../database')
 const e = require('express')
+const { render } = require('nunjucks')
 
 module.exports = {
     // Função de apresentação de gerente
     async index(req,res) {
-        const results = await knex('Logins')
-            .where({tipo_Usuario: 'Gerente'})
-            .join('Usuarios', 'Logins.email_Usuario', '=', 'Usuarios.email_Usuario')
-            .select('Usuarios.*', 'Logins.tipo_Usuario')
-
-
-        return res.json(results)
+        try {
+            return  res.render('cadastro.html')
+        } catch (error) {
+            return next(error)
+        }
         
     },
 
     // Função de criação de gerente
     async create(req, res, next) {
 
-        try {
-
-            const { 
-                email_Usuario,
-                nome_Usuario,
-                telefone_Usuario,
-                cpf_Usuario,
-                dt_Nasc_Usuario,
-                senha_Usuario
-             } = req.body
+        try {            
+            const {
+                nomeUsuario,
+                cpfUsuario,
+                telefoneUsuario,
+                dtNascimento,
+                emailUsuario,
+                senhaUsuario1              
+             } = req.body;
 
             await knex('Usuarios').insert({
-                email_Usuario,
-                nome_Usuario,
-                telefone_Usuario,
-                cpf_Usuario,
-                dt_Nasc_Usuario
+                email_Usuario: emailUsuario,
+                nome_Usuario: nomeUsuario,
+                telefone_Usuario: telefoneUsuario,
+                cpf_Usuario: cpfUsuario,
+                dt_Nasc_Usuario: dtNascimento,
+                tipo_Usuario: 'Gerente'
             })
             
             await knex('Plantacoes').insert({
                 cod_Plantacao: null,
-                email_Gerente: email_Usuario
+                email_Gerente: emailUsuario
             })
 
             const cod = await knex('Plantacoes')
-            .where({email_Gerente: email_Usuario})
+            .where({email_Gerente: emailUsuario})
             .select('cod_Plantacao')
             
             // Para cresgatar o inteiro do dado [object Object]
@@ -51,14 +50,8 @@ module.exports = {
             var d = parseInt(s)
 
             await knex('Logins').insert({
-                email_Usuario,
-                senha_Usuario,
-                tipo_Usuario: 'Gerente',
-                cod_Plantacao: d
-            })
-
-            await knex('Armazens').insert({
-                cod_Armazem: null,
+                email_Usuario: emailUsuario,
+                senha_Usuario: senhaUsuario1,
                 cod_Plantacao: d
             })
 
@@ -67,50 +60,50 @@ module.exports = {
                 cod_Plantacao: d
             })
                 
-            return res.status(201).send()
+            return res.render('loginPage.html')
 
         } catch (error) {
             next(error)
         }        
     },
 
-    // Função de atualizar o gerente **
-    async update(req, res, next) {
-        try {
+    // // Função de atualizar o gerente **
+    // async update(req, res, next) {
+    //     try {
 
-            const { 
-                nome_Usuario
-             } = req.body
+    //         const { 
+    //             nome_Usuario
+    //          } = req.body
 
-             const { email_Usuario } = req.params
+    //          const { email_Usuario } = req.params
 
-            await knex('Usuarios')
-            .update({ 
-                nome_Usuario
-             })
-            .where({ email_Usuario })
+    //         await knex('Usuarios')
+    //         .update({ 
+    //             nome_Usuario
+    //          })
+    //         .where({ email_Usuario })
 
-            return res.send()
+    //     return  res.render('loginPage.html')
 
-        } catch (error) {
-            next(error)
-        }
-    },
+    //     } catch (error) {
+    //         next(error)
+    //     }
+    // },
 
-    //Função de deletar o gernete **
-    async delete(req, res, next) {
-        try {
-            const { email_Usuario } = req.params
+//     //Função de deletar o gernete **
+//     async delete(req, res, next) {
+//         try {
+//             const { email_Usuario } = req.params
 
-            await knex('Usuarios')
-            .where({ email_Usuario })
-            .del()
+//             await knex('Usuarios')
+//             .where({ email_Usuario })
+//             .del()
 
-            return res.send()
+//             return res.send()
 
-        } catch (error) {
-            next(error)
+//         } catch (error) {
+//             next(error)
             
-        }
-    }
+//         }
+//     }
 }

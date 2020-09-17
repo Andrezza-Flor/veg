@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="../../public/style/main.css">
+    <link rel="stylesheet" href="../../public/style/mainStyle.css">
+    <link rel="stylesheet" href="../../public/style/detale.css">
+    <link rel="stylesheet" href="../../public/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">
+        <h1>Escolha uma opção</h1>
+
+        <button class="button-menu">
+            <a href="celeiro.html">
+                <img src="../../public/imagem/menu/celeiro.png" alt="Celeiro">
+                Celeiro
+            </a>
+        </button>
+
+        <button class="button-menu">
+            <a href="armazem.html">
+                <img src="../../public/imagem/menu/armazem.png" alt="Armazem">
+                Armazém
+            </a>
+        </button>
+
+        <button class="button-menu">
+            <a href="compra.html">
+                <img src="../../public/imagem/menu/compra.png" alt="Compra">
+                Compra
+            </a>
+        </button> 
+
+        <button class="button-menu">
+            <a href="venda.html">
+                <img src="../../public/imagem/menu/vender.png" alt="Venda">
+                Venda
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="colaborador.html">
+                <img src="../../public/imagem/menu/colaborador.png" alt="Colaborador">
+                Colaborador
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="estufa.html">
+                <img src="../../public/imagem/menu/estufa.png" alt="Estufa">
+                Estufa
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="relatorio.html">
+                <img src="../../public/imagem/menu/relatorio-seo.png" alt="Relatório">
+                Relatório
+            </a>
+        </button>
+        
+        <button class="button-menu">
+            <a href="atividades.html">
+                <img src="../../public/imagem/menu/atividade.png" alt="Atividade">
+                Atividade 
+            </a>
+        </button>
+        
+        <button class="button-menu-exit">
+           <a href="loginPage.html">
+                <img class="footer" src="../../public/imagem/menu/sair.png" alt="Sair">
+                <p>Sair</p>
+            </a> 
+        </button>
+
+        <button class="button-menu-perfil">
+            <a href="perfil.html">
+                <img class="footer" src="../../public/imagem/menu/perfil.png" alt="Perfil">
+                <p>Perfil</p>
+            </a>
+        </button>        
+    </div>
+    
+    <div class="main">
+        <h1>
+            Celeiro 
+            <a href="celeiro.html">
+                <img src="../../public/imagem/voltar.png" alt="">
+                Voltar
+            </a>
+        </h1>
+
+        <form>
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Dados do Insumo</legend>
+                </div>
+                <div class="read-block">
+                    <label for="nomeInsumo">Nome:</label>
+                    <input type="text" id="nomeInsumo" name="nomeInsumo" value="muda de alface" readonly>
+                </div>
+               <div class="read-block">
+                    <label for="quantRestante">Quantidade:</label>
+                    <input type="text" id="quantRestante" name="quantRestante" value="50 mudas" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="valor">Valor:</label>
+                    <input type="text" id="valor" name="valor" value="R$ 0.25 por mudas" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="validade">Validade:</label>
+                    <input type="date" id="validade" name="validade" value="2020-10-20" readonly>
+                </div> 
+            </fieldset>
+
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados da Compra</legend>
+                </div>
+                <div class="read-block">
+                    <label for="nomeColaborador">Colaborador Financeiro:</label>
+                    <input type="text" id="nomeColaborador" name="nomeColaborador" value="Matheus de Barros Santos" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="tempoEntrega">Tempo de Entrega:</label>
+                    <input type="text" id="tempoEntrega" name="tempoEntrega" value="5 dias" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="dataCompra">Data da Compra:</label>
+                    <input type="date" id="dataCompra" name="dataCompra" value="2020-10-15" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="quantComprada">Validade:</label>
+                    <input type="text" id="quantComprada" name="quantComprada" value="50 unidades" readonly>
+                </div>
+            </fieldset>
+
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados do Fornecedor</legend>
+                </div>
+                
+                <div class="read-block">
+                    <label for="nomeFornecedor">Nome do Fornecedor:</label>
+                    <input type="text" id="nomeFornecedor" name="nomeFornecedor " value="Marketplace MF Rural" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="docFornecedor">CNPJ:</label>
+                    <input type="text" id="docFornecedor" name="docFornecedor" value="10.503.900/0001-05" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="telefoneFornecedor">Telefone:</label>
+                    <input type="text" id="telefoneFornecedor" name="telefoneFornecedor" value="(11)3546-0090" readonly>
+                </div>
+                <div class="read-block">
+                    <label for="cepFornecedor">Validade:</label>
+                    <input type="text" id="cepFornecedor" name="cepFornecedor" value="17502-020" readonly>
+                </div>
+            </fieldset>
+        </form>
+        
+    </div>
+</body>
+</html>

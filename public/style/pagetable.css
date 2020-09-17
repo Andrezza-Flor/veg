@@ -1,0 +1,99 @@
+th,
+td{
+    border: solid var(--color-text);
+    background: var(--color-button-menu);
+    border-radius: 0.5rem;
+}
+
+table {
+    margin-top: 3rem;
+    margin-left: 4rem;
+}
+
+th {
+    padding-left: 5rem;
+    padding-right: 5rem;
+
+    font-size: 4rem;
+    font-family: Poppins;
+    color: var(--color-text);
+
+   
+}
+
+.head th{
+    font-size: 3rem;        
+} 
+
+td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-right: 3rem;
+    padding-left: 3rem;
+    
+    font-size: 2rem;
+    font-family: Poppins;
+    text-align: center;
+    color: var(--color-text);
+}
+
+a {
+    color: var(--color-link);
+}
+
+.table-Detalhe {
+    position: relative;
+
+    margin-left: 0.1rem;
+    margin-right: auto;
+}
+
+.table-Detalhe th{
+    padding-left: 4rem;
+    padding-right: 4rem;
+
+    font-size: 2rem;
+    font-family: Poppins;
+    color: var(--color-text);
+}
+
+.table-Detalhe .head th{
+    font-size: 1.5rem;        
+} 
+
+.table-Detalhe td {
+    
+    font-size: 1.5rem;
+    font-family: Poppins;
+    text-align: center;
+    color: var(--color-text);
+}
+
+.main .button-main  {
+    margin-top: 3rem;
+    margin-left: 9rem;
+
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+
+    justify-content: center;
+    text-align: center;
+
+    background: var(--color-secondary);
+
+    width: 80%;
+
+    border-radius: 0.8rem;
+}
+
+.main .button-main a {
+    justify-content: center;
+    text-align: center;
+
+    font-size: 4rem;
+
+    color: #000000;
+    font-family: Poppins;
+    text-decoration: none;
+
+}

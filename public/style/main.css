@@ -1,0 +1,26 @@
+/* CSS
+    Cascading: Em Cascata
+    StyleSheet: Folha de Estilo*/
+
+    :root {
+        --color-background: #E6E6F0;
+        --color-background-menu: #78AC7C;
+        --color-primary: #5E4F33;
+        --color-primary-dark: #3B3220;
+        --color-logo-text: #3B322C;
+        --color-secondary: #9CCD11;
+        --color-secondary-dark: #557109;
+        --color-text-light: #9B9B9B;
+        --color-text: #383838;
+        --color-text-edit: #313131;
+        --color-button-back: #EBE100;
+        --color-button-back-dark: #B8AE00;
+        --color-button-cancel: #FF5A26;
+        --color-button-cancel-dark: #E03400;
+        --color-button-menu: #FAFAFC;
+        --color-button-menu-dark: #D7D7D7;
+        --color-link: #007FFF;
+        
+        font-size: 60%; /* controle das medidas rem */
+    }
+    

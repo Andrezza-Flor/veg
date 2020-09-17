@@ -1,0 +1,476 @@
+h1.main-title {
+    margin-left: 4rem;
+    margin-right: 10rem;
+
+    display: flex;
+
+    padding-top: 3rem;
+    padding-left: 0.8rem;
+    padding-right: auto;
+    padding-bottom: 2rem;
+
+    border-bottom: var(--color-text) solid;
+    border-width: 0.3rem;
+
+    font-size: 5rem;
+    font-family: Poppins;
+    color: var(--color-text);
+}
+ 
+ form {
+    margin-top: 2rem;
+    margin-left: 4rem;
+    margin-bottom: 2rem;
+    margin-right: 10rem;
+
+    padding-top: 2rem;
+    padding-left: 5rem;
+    padding-right: 2rem;
+
+    background: var(--color-button-menu);
+
+    border-radius: 0.8rem;
+}
+
+fieldset {
+    border: 0;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+}
+
+legend {
+    border-bottom: solid;
+    border-width: 0.2rem;
+    border-color: var(--color-text);
+}
+
+.title legend {
+    width: 95%;
+}
+
+.dados-Top legend {
+    margin-bottom: 1rem;
+
+    font-size: 3rem;
+    font-family: Poppins;
+
+    color: var(--color-text);
+}
+
+.read-block,
+.write-block {
+    display: block;
+
+    padding-right: 5rem;
+
+    font-size: 1.5rem;
+    font-family: Poppins;
+    color: var(--color-text);
+
+    margin: 0rem;
+}
+
+.read-block label,
+.write-block label,
+.select-block label {
+    margin-left: 0.8rem;
+    margin-right: 2rem;
+    font-size: 1.8rem;
+}
+
+.foot-block label {
+    padding-top: 0.8rem;
+
+    width: 18rem;
+    font-size: 2rem;
+    font-family: Poppins;
+    color: var(--color-text);
+}
+
+.select-block {
+    display: flex;
+    padding-right: 5rem;
+
+    font-size: 1.5rem;
+    font-family: Poppins;
+    color: var(--color-text);
+
+    margin: 0rem;
+}
+
+.read-block input,
+.write-block input,
+.select-block select,
+.read-block textarea,
+.write-block textarea  {
+    position: relative;
+
+    margin-bottom: 0.8rem;
+
+    padding-left: 1rem;
+    width: 100%;
+    height: 3rem;
+
+    background: var(--color-background);
+    border-radius: 0.5rem;
+    border-style: none;
+
+    font-size: 1.5rem;
+    color: var(--color-text);
+    font-family: Poppins;
+}
+
+.read-block textarea,
+.write-block textarea {
+    padding-top: 2rem;
+    padding-left: 2rem;
+    height: 16rem;
+
+    text-align: start;
+
+    resize: vertical;
+}
+
+
+.foot-block input {
+    margin-left: 0.5rem;
+    padding-left: 2rem;
+
+    font-size: 2rem;
+    color: var(--color-text);
+    font-family: Poppins;
+
+    width: 20rem;
+    height: 5rem;
+
+    background: var(--color-background);
+    border-radius: 0.5rem;
+    border-style: none;
+
+}
+
+.select-block select,
+.write-block select {
+    position: relative;
+
+    margin-bottom: 3rem;
+
+    padding-left: 1rem;
+    width: 70rem;
+    height: 4rem;
+
+    background: var(--color-background);
+    border-radius: 0.5rem;
+    border-style: none;
+
+    font-size: 1.8rem;
+    color: var(--color-text);
+    font-family: Poppins;
+}
+
+.write-block select {
+    width: 100%;
+}
+
+.select-block button {
+
+    padding-right: 2rem;
+    margin-left: 2.5rem;
+    background: none;
+    border: none;
+}
+
+.select-block button img{
+    width: 5rem;
+}
+
+.write-block input,
+.foot-block input {
+    color: #000000;
+}
+
+.foot-block {
+    display: flex;
+    
+    padding-top: 2rem;
+    padding-left: 40%;
+}
+
+.dados-Botton legend{
+    margin-bottom: 1rem;
+
+    font-size: 2rem;
+    font-family: Poppins;
+
+    color: var(--color-text);
+}
+
+.dados-Botton table {
+    padding-right: 3rem;
+}
+
+.dados-Botton table .lixo {
+    padding: 0;
+    width: 2rem;
+} 
+
+.dados-Botton table .lixo button{
+    background: none;
+    border: none;
+}
+
+.dados-Botton table img {
+    padding-top: 0.5rem;
+    padding-bottom: 0;
+    width: 3rem;
+}
+
+.foot-dados-Botton {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 4rem;
+    margin-right: 5rem;
+    margin-left: 4rem;
+}
+
+.foot-dados-Botton .aviso-foot {
+    display: flex;
+}
+
+.foot-dados-Botton .aviso-foot p {
+    margin: auto;
+
+    padding-left: 3rem;
+    line-height: 3rem;
+
+    width: 25rem;
+
+    font-size: 2rem;
+    font-family: Poppins;
+    color: var(--color-text);
+
+}
+
+.foot-dados-Botton a {
+    margin-top: 1rem;
+    display: flex;
+
+    border-radius: 0.8rem;
+
+    background: var(--color-secondary);
+    height: 8rem;
+    width: 27rem;
+
+    text-decoration: none;
+}
+
+.foot-dados-Botton a img {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 1rem;
+
+    height: 7rem;
+    width: 7rem;
+}
+
+.foot-dados-Botton a p {
+    padding-left: 2rem;
+    padding-right: 1rem;
+
+    font-size: 2.5rem;
+    font-family: Poppins;
+    color: #000000;
+    text-decoration: none;
+    text-align: center;
+}
+
+.button-Editar {
+    position: absolute;
+    margin-left: 65%;
+    margin-right: 5rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    display: block;
+
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-right: 3rem;
+    padding-left: 3rem;
+
+    border-radius: 0.8rem;
+
+    font-size: 3rem;
+    font-family: Poppins;
+
+    background: var(--color-secondary);
+    color: #000000;
+    text-decoration: none;
+}
+
+.button-Editar-Colaborador {
+    position: absolute;
+    margin-left: 50%;
+    margin-right: 5rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    display: block;
+
+    width: 25rem;
+
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-right: 3rem;
+    padding-left: 3rem;
+
+    border-radius: 0.8rem;
+
+    font-size: 3rem;
+    font-family: Poppins;
+    text-align: center;
+
+    background: var(--color-secondary);
+    color: #000000;
+    text-decoration: none;
+}
+
+.button-Salvar img,
+.button-Cancelar img {
+    margin: 0;
+    display: flex;
+    width: 4rem;
+}
+
+.button-Salvar {
+    position: absolute;
+    margin-left: 45%;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    display: block;
+
+    width: 32rem;
+
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-right: 5rem;
+    padding-left: 5rem;
+
+    background: var(--color-secondary);
+
+    border: 0rem;
+    border-radius: 0.8rem;
+}
+
+.button-Salvar button a {
+    color: #000000;
+    text-decoration: none;
+}
+
+.button-Salvar a {
+    display: flex;
+    font-size: 3rem;
+    font-family: Poppins;
+    font-weight: lighter;
+
+    width: auto;
+
+    color: #000000;
+    text-decoration: none;
+}
+.button-Salvar a img {
+    margin-right: 3rem;
+}
+
+.button-Finalizar {
+    position: absolute;
+    margin-left: 50%;
+    margin-right: 5rem;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    display: block;
+
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    padding-right: 3rem;
+    padding-left: 3rem;
+
+    background: var(--color-secondary);
+
+    border-style: none;
+    border-radius: 0.8rem;
+}
+
+.button-Finalizar button a {
+    /*  */
+    color: #000000;
+    text-decoration: none;
+}
+
+.button-Finalizar a {
+    font-size: 3rem;
+    font-family: Poppins;
+    font-weight: lighter;
+}
+
+.botton-foot {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-Cancelar {
+    position: absolute;
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    display: block;
+
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-right: 5rem;
+    padding-left: 5rem;
+
+    background: var(--color-button-cancel);
+
+    border: 0rem;
+    border-radius: 0.8rem;
+
+    color: #000000;
+    text-decoration: none;
+
+    text-align: center;
+
+    font-size: 3rem;
+    font-family: Poppins;
+    font-weight: lighter;
+}
+
+.button-Cancelar button a {
+    padding:0;
+
+    width: 40rem;
+
+    color: #000000;
+    text-decoration: none;
+    text-align: center;
+}
+
+a.button-Cancelar{
+
+    width: 22rem;
+
+    display: flex;
+    font-size: 3rem;
+    font-family: Poppins;
+    font-weight: lighter;
+}
+
+a.button-Cancelar img {
+    margin-right: 3rem;
+}
+
+.button-Cancelar a{
+
+    font-size: 3rem;
+    font-family: Poppins;
+    font-weight: lighter;
+}
+

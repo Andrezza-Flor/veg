@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+   
+    <div class="form-criacao">
+        <h1 class="main-title">
+            Perfil
+        </h1>
+
+        <form action="/cadastrar" method="POST">
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Dados Pessoais</legend>
+                </div>
+                <div class="write-block">
+                    <label for="nomeUsuario">Nome:</label>
+                    <input type="text" id="nomeUsuario" name="nomeUsuario">
+                </div>
+               <div class="write-block">
+                    <label for="cpfUsuario">CPF:</label>
+                    <input type="text" id="cpfUsuario" name="cpfUsuario">
+                </div>
+                <div class="write-block">
+                    <label for="telefoneUsuario">Telefone:</label>
+                    <input type="text" id="telefoneUsuario" name="telefoneUsuario">
+                </div>
+                <div class="write-block">
+                    <label for="dtNascimento">Data de Nascimento:</label>
+                    <input type="date" id="dtNascimento" name="dtNascimento">
+                </div> 
+            </fieldset>
+
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados da Acesso</legend>
+                </div>
+                <div class="write-block">
+                    <label for="emailUsuario">Email:</label>
+                    <input type="text" id="emailUsuario" name="emailUsuario" >
+                </div>
+                <div class="write-block">
+                    <label for="senhaUsuario1">Senha:</label>
+                    <input type="text" id="senhaUsuario1" name="senhaUsuario1">
+                </div>
+                <div class="write-block">
+                    <label for="senhaUsuario2">Repita Senha:</label>
+                    <input type="text" id="senhaUsuario2" name="senhaUsuario2">
+                </div>
+                <div class="read-block">
+                    <label for="funcaoUsuario">Função:</label>
+                    <input type="text" id="funcaoUsuario" name="funcaoUsuario"readonly>
+                </div>
+                
+            </fieldset>
+
+            <div class="botton-foot">
+                <a class="button-Cancelar" href="/">Cancelar</a>
+
+                <button type="submit" class="button-Salvar">Salvar</button>  
+            </div>
+        </form>        
+    </div>
+</body>
+</html>
