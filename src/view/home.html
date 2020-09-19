@@ -17,56 +17,56 @@
         <h1>Escolha uma opção</h1>
 
         <button class="button-menu">
-            <a href="celeiro.html">
+            <a href="/celeiro">
                 <img src="/imagem/menu/celeiro.png" alt="Celeiro">
                 Celeiro
             </a>
         </button>
 
         <button class="button-menu">
-            <a href="armazem.html">
+            <a href="/armazem">
                 <img src="/imagem/menu/armazem.png" alt="Armazem">
                 Armazém
             </a>
         </button>
 
         <button class="button-menu">
-            <a href="compra.html">
+            <a href="/compra">
                 <img src="/imagem/menu/compra.png" alt="Compra">
                 Compra
             </a>
         </button> 
 
         <button class="button-menu">
-            <a href="venda.html">
+            <a href="/venda">
                 <img src="/imagem/menu/vender.png" alt="Venda">
                 Venda
             </a>
         </button>
         
         <button class="button-menu">
-            <a href="colaborador.html">
+            <a href="/colaborador">
                 <img src="/imagem/menu/colaborador.png" alt="Colaborador">
                 Colaborador
             </a>
         </button>
         
         <button class="button-menu">
-            <a href="estufa.html">
+            <a href="/estufa">
                 <img src="/imagem/menu/estufa.png" alt="Estufa">
                 Estufa
             </a>
         </button>
         
         <button class="button-menu">
-            <a href="relatorio.html">
+            <a href="/relatorio">
                 <img src="/imagem/menu/relatorio-seo.png" alt="Relatório">
                 Relatório
             </a>
         </button>
         
         <button class="button-menu">
-            <a href="atividades.html">
+            <a href="/atividade">
                 <img src="/imagem/menu/atividade.png" alt="Atividade">
                 Atividade 
             </a>
@@ -80,7 +80,7 @@
         </button>
 
         <button class="button-menu-perfil">
-            <a href="perfil.html">
+            <a href="/perfil">
                 <img class="footer" src="/imagem/menu/perfil.png" alt="Perfil">
                 <p>Perfil</p>
             </a>
@@ -88,7 +88,11 @@
     </div>
     
     <div class="main">
-        <h1>Home</h1>
+        <div class="head">
+            <h1>Home</h1>
+            <p name="email">{{ email }}</p>
+        </div>
+        
 
         <div class="show-container">
             <div class="title">
@@ -97,7 +101,7 @@
             </div>
             <p>Número de insumo dispónível:</p>
             <div class="number">
-                <p>6</p>
+                <p name="numItemCeleiro">{{ numCeleiro }}</p>
             </div>
         </div>
         <div class="show-container">
@@ -107,7 +111,7 @@
             </div>
             <p>Número de hortaliças dispónível:</p>
             <div class="number">
-                <p>6</p>
+                <p name="numItemArmazem" >{{ numArmazem }}</p>
             </div>
         </div>
 
@@ -118,7 +122,7 @@
             </div>
             <p>Número de hortaliças sendo produzido:</p>
             <div class="number">
-                <p>4</p>
+                <p name="numItemProducao" >{{ numEstufa }}</p>
             </div>
         </div>
 
@@ -129,7 +133,7 @@
             </div>
             <p>Número de atividades pendentes:</p>
             <div class="number">
-                <p>3</p>
+                <p name="numAtividade">{{ numAtividade }}</p>
             </div>
         </div>
 

@@ -1,6 +1,5 @@
 const knex = require('../database')
 const e = require('express')
-const { render } = require('nunjucks')
 
 module.exports = {
     // Função de apresentação de gerente
@@ -90,20 +89,20 @@ module.exports = {
     //     }
     // },
 
-//     //Função de deletar o gernete **
-//     async delete(req, res, next) {
-//         try {
-//             const { email_Usuario } = req.params
+    //Função de deletar o gernete **
+    async delete(req, res, next) {
+        try {
+            const { email_Usuario } = req.params
 
-//             await knex('Usuarios')
-//             .where({ email_Usuario })
-//             .del()
+            await knex('Usuarios')
+            .where({ email_Usuario })
+            .del()
 
-//             return res.send()
+            return res.send()
 
-//         } catch (error) {
-//             next(error)
+        } catch (error) {
+            next(error)
             
-//         }
-//     }
+        }
+    }
 }

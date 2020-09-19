@@ -10,15 +10,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
 
     <title>Veg</title>
+
+
 </head>
 <body>
     <div class="conteiner-access">
-        <form action="/home" method="POST">
+        <form action="/access" method="POST">
             <div class="head-access">
                 <h1>Acesse sua plantação por aqui</h1>
             </div>
             <div>
-                <p>{{ message }}</p>
+                <p id="message">{{ message }}</p>
             </div>
             <div class="input-block">
                 <label for="email">Email</label>
@@ -29,7 +31,7 @@
                 <input name="senha" id="senha" type="password" required>
             </div>
 
-            <button class="botao">Entrar</button>
+            <button class="botao" type="submit">Entrar</button>
 
             <a href="esqueceuSenha.html">Esqueci minha senha</a>
         </form>
@@ -46,8 +48,6 @@
             </p> 
         </a>
     </div>
-        <script>
-            console.log(req.body)
-        </script>
+
 </body>
 </html>

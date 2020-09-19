@@ -98,6 +98,24 @@ legend {
     margin: 0rem;
 }
 
+.read-block .input{
+    position: relative;
+
+    margin-bottom: 0.8rem;
+
+    padding-left: 1rem;
+    width: 100%;
+    height: 3rem;
+
+    background: var(--color-background);
+    border-radius: 0.5rem;
+    border-style: none;
+
+    font-size: 1.5rem;
+    color: var(--color-text);
+    font-family: Poppins;
+}
+
 .read-block input,
 .write-block input,
 .select-block select,

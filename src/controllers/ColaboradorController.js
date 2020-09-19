@@ -1,61 +1,65 @@
 const knex = require('../database')
-const e = require('express')
+const e = require('express');
+const local = require('local-storage');
+const { query } = require('express');
+const { render } = require('nunjucks');
+const { use } = require('../routes');
 
 module.exports = {
     // Função de apresentação de Colaborador
     async index(req,res) {
-
-        const results = await knex('Logins')
-            .whereNot({tipo_Usuario: 'Gerente'})
-            .join('Usuarios', 'Logins.email_Usuario', '=', 'Usuarios.email_Usuario')
-            .select('Usuarios.*', 'Logins.tipo_Usuario')
-
-
-        return res.json(results)
+        return res.render('colaboradorCriarColaborador.html')
     },
-
     // Função de criação de Colaborador **
     async create(req, res, next) {
+
+        const email = local.get(' email ');
 
         try {
 
             const { 
-                email_Usuario,
-                nome_Usuario,
-                telefone_Usuario,
-                cpf_Usuario,
-                dt_Nasc_Usuario,
-                senha_Usuario,
-                tipo_Usuario,
-                email_Gerente
+                nomeColaborador,
+                cpfColaborador,
+                telefoneColaborador,
+                dtNasciColaborador,
+                emailColaborador,
+                senhaColaboradorI,
+                senhaColaboradorII,
+                funcaoColaborador
              } = req.body
 
-            await knex('Usuarios').insert({
-                email_Usuario,
-                nome_Usuario,
-                telefone_Usuario,
-                cpf_Usuario,
-                dt_Nasc_Usuario
-            })
-            
-            var cod = knex('Plantacoes')
-            .where({ email_Gerente })
-            .join('Usuarios', 'email_Usuario', '=', 'Plantacoes.email_Gerente')
-            .select('Plantacoes.cod_Plantacao')
-
-            const results = await cod
-
-
-            await knex('Logins').insert({
-                email_Usuario,
-                senha_Usuario,
-                tipo_Usuario,
-                cod_Plantacao: cod
-            })
+            if (senhaColaboradorI === senhaColaboradorII) {
+                // await knex('Usuarios').insert({
+                //     email_Usuario: emailColaborador,
+                //     nome_Usuario: nomeColaborador,
+                //     telefone_Usuario: telefoneColaborador,
+                //     cpf_Usuario: cpfColaborador,
+                //     dt_Nasc_Usuario: dtNasciColaborador,
+                //     tipo_Usuario: funcaoColaborador
+                // })
                 
+                const cod = await knex.from('Plantacoes')
+                .where({email_Gerente: email})
+                .select('Plantacoes.cod_Plantacao')
 
-            return res.status(201).send()
 
+                const codPlantacao = cod[0].cod_Plantacao;
+    
+    
+                await knex('Logins').insert({
+                    email_Usuario: emailColaborador,
+                    senha_Usuario: senhaColaboradorI,
+                    cod_Plantacao: codPlantacao,
+                })
+                  
+    
+                return res.render('colaborador.html')
+    
+            } else {
+                const message = "Senha incompativeis"
+                return res.render('colaboradorCriarColaborador.html', { message })
+            }
+            
         } catch (error) {
             next(error)
         }        
@@ -85,7 +89,7 @@ module.exports = {
     },
 
     //Função de deletar o Colaborador **
-    async delete(req, res, next) {
+    async disable(req, res, next) {
         try {
             const { email_Usuario } = req.params
 

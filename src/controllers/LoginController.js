@@ -1,7 +1,9 @@
 const knex = require('../database')
 const e = require('express');
+const local = require('local-storage');
 const { query } = require('express');
 const { render } = require('nunjucks');
+const { use } = require('../routes');
 
 module.exports = {
     // Função de apresentação de Login
@@ -28,20 +30,22 @@ module.exports = {
                 })
                 .select('email_Usuario')
             
+            
             if (dadoAcesso.length == []) {
                 var message = "Dados informados incorretos"
-                return res.render('loginPage.html', { message })
-            } else {
-                const {
-                    email_Usuario
-                } = dadoAcesso[0]
-                
-                let queryString = "?email=" + 'andrezza';
 
-                return res.render("/home" + queryString)
+                console.log("Entrou aqui")
+                
+                return res.render('loginPage.html', { message } )
+               
+            } else {
+                // Selects para ver o numero de elementos no Celeiro, Armazém, Estufa e atividades
+                
+                local (' email ', email);
+
+                return res.render('home.html')
             }
-            
-            
+
         } catch (error) {
             next(error)
         }             
@@ -70,20 +74,20 @@ module.exports = {
     //     }
     // },
 
-//     //Função de deletar o Login **
-//     async delete(req, res, next) {
-//         try {
-//             const { email_Usuario } = req.params
+    //Função de deletar o Login **
+    // async delete(req, res, next) {
+    //     try {
+    //         const { email_Usuario } = req.params
 
-//             await knex('Usuarios')
-//             .where({ email_Usuario })
-//             .del()
+    //         await knex('Usuarios')
+    //         .where({ email_Usuario })
+    //         .del()
 
-//             return res.send()
+    //         return res.send()
 
-//         } catch (error) {
-//             next(error)
+    //     } catch (error) {
+    //         next(error)
             
-//         }
-//     }
+    //     }
+    // }
 }
