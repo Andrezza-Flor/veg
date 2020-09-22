@@ -33,15 +33,21 @@ module.exports = {
             
             if (dadoAcesso.length == []) {
                 var message = "Dados informados incorretos"
-
-                console.log("Entrou aqui")
                 
                 return res.render('loginPage.html', { message } )
                
             } else {
                 // Selects para ver o numero de elementos no Celeiro, Armazém, Estufa e atividades
-                
-                local (' email ', email);
+
+                local('email', email);
+
+                const cod = await knex.from('Logins')
+                .where({email_Usuario: email})
+                .select('Logins.cod_Plantacao')
+
+                const codPlantacao = String(cod[0].cod_Plantacao);
+
+                local ('plantacao', codPlantacao)
 
                 return res.render('home.html')
             }

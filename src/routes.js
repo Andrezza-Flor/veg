@@ -6,6 +6,9 @@ const GerenteController = require('./controllers/GerenteController')
 const LoginController = require('./controllers/LoginController')
 const MenuController = require('./controllers/MenuController')
 const ColaboradorController = require('./controllers/ColaboradorController')
+const AtividadeController = require('./controllers/AtividadeController')
+const CompraController = require('./controllers/ComprasController')
+
 
 routes
 //Login
@@ -25,7 +28,30 @@ routes
     .get('/armazem', MenuController.armazem)
 
 // Compra
-    .get('/compra', MenuController.compra)    
+    .get('/compra', MenuController.compra)
+    .get('/realizarCompra', CompraController.realizarCompra)
+    .post('/buscarFornecedor', CompraController.buscarFornecedor)
+    .get('/comprarInsumo', CompraController.comprarInsumo)
+    .post('/escolherInsumo', CompraController.escolherInsumo)
+    .post('/adicionarItem', CompraController.adicionarItem)
+    .get('/finalizaCompra', CompraController.finalizaCompra)
+
+    //Fornecedor
+    .get('/criarFornecedor', CompraController.apresentarCriarFornecedor)
+    .post('/criarFornecedor', CompraController.criarFornecedor)
+    .post('/buscaInsumo', CompraController.buscaInsumo)
+    .post('/adicionarInsumo', CompraController.adicionarInsumo)
+    .get('/adicionarInsumo', CompraController.adicionarInsumoII)
+
+    //Insumo
+    .get('/criarInsumo', CompraController.insumo)
+    .post('/criarInsumo', CompraController.criarInsumo)
+
+    //Hortaliça
+    .post('/criarHortalica', CompraController.criarHortalica)
+
+
+
 
 // Venda
     .get('/venda', MenuController.venda) 
@@ -42,7 +68,9 @@ routes
     .get('/relatorio', MenuController.relatorio) 
 
 // Atividade
-    .get('/atividade', MenuController.atividade) 
+    .get('/atividade', MenuController.atividade)
+    .get('/criarAtividade', AtividadeController.indexCriar)
+    .post('/criarAtividade', AtividadeController.create)
 
 // Perfil
     .get('/perfil', MenuController.perfil)

@@ -96,38 +96,41 @@
             </a>
         </h1>
 
-        <form>
+        <form action="/criarAtividade" method="POST">
             <fieldset class="dados-Top">
                 <div class="title">
                     <legend>Dados da Hortaliça</legend>
                 </div>
                 <div class="write-block">
                     <label for="nomeAtividade">Nome da Atividade:</label>
-                    <input type="text" id="nomeAtividade" name="nomeAtividade" value="Comprar adubo nitrogênado " required>
+                    <input type="text" id="nomeAtividade" name="nomeAtividade" required>
                 </div>
                 <div class="write-block">
                     <label for="dtAtividade">Data da Atividade:</label>
-                    <input type="date" id="dtPlantio" name="dtPlantio" value="2020-02-02" required>
+                    <input type="date" id="dtAtividade" name="dtAtividade" required>
                 </div> 
                 <div class="write-block">
                     <label for="descAtividade">Descrição da Atividade</label>
                     <textarea name="descAtividade" id="descAtividade" required>
-                        Comprar 20 Kg de adubo nitrogênado;
-                        Adubos Fertipol Indústria e Comércio.
+
                     </textarea>
                 </div>
                 <div class="write-block">
-                    <label for="autoAtividade">Autor da Atividade:</label>
-                    <input type="text" id="autoAtividade" name="autoAtividade" value="Katia Pereira" required>
+                    <label for="atorAtividade">Quem vai fazer a atividade:</label>
+                    <select name="atorAtividade" id="atorAtividade">
+                        <option value="" disable="" hidden="">Selecione uma opição</option>
+                            {%for usuario in usuarios%}
+                                <option value={{loop.index}}>{{usuario}}</option>
+                            {%endfor%}
+
+                    </select>
                 </div>
 
             </fieldset>
 
             <div class="botton-foot">
                 <button type="submit" class="button-Salvar">
-                    <a href="armazem.html">
                         Salvar
-                    </a>
                 </button>  
             </div>
 

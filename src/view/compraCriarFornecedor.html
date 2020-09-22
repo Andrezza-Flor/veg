@@ -91,116 +91,41 @@
     <div class="main">
         <h1>
             Compra
-            <a href="compraComprar.html">
+            <a href="/realizarCompra">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
         
-        <form>
+        <form action="/criarFornecedor" method="POST">
             <fieldset class="dados-Top">
                 <div class="title">
                     <legend>Dados do Fornecedor</legend>
                 </div>
-                <div class="write-block">
-                    <label for="nomeFornecedor">Nome do Fornecedor:</label>
-                    <input type="text" id="nomeFornecedor" name="nomeFornecedor">
+                <div class="read-block">
+                    <label for="nomeFornecedor">Nome Fornecedor:</label>
+                    <input type="text" id="nomeFornecedor" name="nomeFornecedor" required>
                 </div>
-                <div class="write-block">
-                    <label for="nomeFornecedor">Documanto do Fornecedor (CNPJ ou CPF) :</label>
-                    <input type="text" id="nomeFornecedor" name="nomeFornecedor">
+                <div class="read-block">
+                    <label for="docFornecedor">CNPJ Fornecedor:</label>
+                    <input type="text" id="docFornecedor" name="docFornecedor" required>
                 </div>
-                <div class="write-block">
-                    <label for="telefoneFornecedor">Telefone:</label>
-                    <input type="text" id="telefoneFornecedor" name="telefoneFornecedor">
+                <div class="read-block">
+                    <label for="telefoneFornecedor">Telefone Fornecedor::</label>
+                    <input type="text" id="telefoneFornecedor" name="telefoneFornecedor" required>
                 </div>
-                <div class="write-block">
-                    <label for="cepFornecedor">CEP:</label>
-                    <input type="text" id="cepFornecedor" name="cepFornecedor">
+                <div class="read-block">
+                    <label for="cepFornecedor">CEP Fornecedor::</label>
+                    <input type="text" id="cepFornecedor" name="cepFornecedor" required>
                 </div>
+                <div class="read-block">
+                    <label for="emailFornecedor">Email Fornecedor:</label>
+                    <input type="text" id="emailFornecedor" name="emailFornecedor" required>
+                </div>
+ 
             </fieldset>
 
-            <fieldset class="dados-Botton">
-                <div class="title">
-                    <legend>Insumos Fornecidos</legend>
-                </div>
-                <div class="select-block">
-                    <div class="select">
-                        <label for="nomeInsumo">Insumo:</label>
-                        <select name="nomeInsumo" id="nomeInsumo">
-                            <option>Selecione uma opição</option>
-                            <option value="0">muda alface</option> 
-                            <option value="1">muda beterraba</option>
-                            <option value="2">adubo nitrogênado</option>
-                            <option value="3">adubo fosfatado</option>
-                            <option value="4">adubo potássico</option>
-                            <option value="5">pesticida</option>
-                        </select>
-                    </div>
-                    <button type="submit">
-                        <img src="/imagem/mais.png" alt="Adicionar">
-                    </button>
-                </div>
-
-                <table class="table-Detalhe">
-                    <tr class="head">
-                        <th></th>
-                        <th>Nome</th>
-                        <th>Tipo</th>
-                        <th>Valor</th>
-                        <th>Quantidade</th>
-                        
-                    </tr>
-                    <tr>
-                        <th class="lixo">
-                            <button>
-                                <img src="/imagem/lixo.png" alt="Lixo">
-                            </button>
-                        </th>
-                        <td>adubo nitrogênado</td>
-                        <td>plantar</td>
-                        <td>R$ 300.00</td>
-                        <td>15/09/2020</td>
-                    </tr>
-                    <tr>
-                        <th class="lixo">
-                            <button>
-                                <img src="/imagem/lixo.png" alt="Lixo">
-                            </button>
-                        </th>
-                        <td>adudo fosfatado</td>
-                        <td>plantar</td>
-                        <td>R$ 300.00</td>
-                        <td>15/09/2020</td>                        
-                    </tr>
-                    <tr>
-                        <th class="lixo">
-                            <button>
-                                <img src="/imagem/lixo.png" alt="Lixo">
-                            </button>
-                        </th>
-                        <td>semente cenoura</td>
-                        <td>plantar</td>
-                        <td>R$ 100.00</td>
-                        <td>15/09/2020</td>
-                    </tr>
-                </table>
-
-                <div class="foot-dados-Botton">
-                    <div class="aviso-foot">
-                         <img src="/imagem/aviso.png" alt="Aviso">
-                         <p>Caso não tenha achado o Fornecedor é possivel adiciona-lo</p>
-                    </div>
-                    <a href="compraCriarInsumo.html">
-                        <img src="/imagem/insumo.png" alt="Insumo">
-                        <p>Criar Insumo</p>
-                    </a>
-                </div>
-            </fieldset>
-
-            <button type="submit" class="button-Salvar">
-                <a href="compraComprar.html">Salvar</a>
-            </button>
+            <button type="submit" class="button-Salvar">Salvar</button>
         </form> 
     </div>
 </body>

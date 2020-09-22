@@ -29,22 +29,20 @@ module.exports = {
              } = req.body
 
             if (senhaColaboradorI === senhaColaboradorII) {
-                // await knex('Usuarios').insert({
-                //     email_Usuario: emailColaborador,
-                //     nome_Usuario: nomeColaborador,
-                //     telefone_Usuario: telefoneColaborador,
-                //     cpf_Usuario: cpfColaborador,
-                //     dt_Nasc_Usuario: dtNasciColaborador,
-                //     tipo_Usuario: funcaoColaborador
-                // })
+                await knex('Usuarios').insert({
+                    email_Usuario: emailColaborador,
+                    nome_Usuario: nomeColaborador,
+                    telefone_Usuario: telefoneColaborador,
+                    cpf_Usuario: cpfColaborador,
+                    dt_Nasc_Usuario: dtNasciColaborador,
+                    tipo_Usuario: funcaoColaborador
+                })
                 
                 const cod = await knex.from('Plantacoes')
                 .where({email_Gerente: email})
                 .select('Plantacoes.cod_Plantacao')
 
-
                 const codPlantacao = cod[0].cod_Plantacao;
-    
     
                 await knex('Logins').insert({
                     email_Usuario: emailColaborador,

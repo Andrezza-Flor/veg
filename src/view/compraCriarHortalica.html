@@ -91,53 +91,43 @@
     <div class="main">
         <h1>
             Compra
-            <a href="/adicionarInsumo">
+            <a href="/criarInsumo">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
         
-        <form action="/criarInsumo" method="POST">
+        <form action="/criarHortalica" method="POST">
             <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Criar Insumo</legend>
+                    <legend>Dados da Hortaliça - que o seu insumo vai gerar</legend>
                 </div>
-                <div class="write-block">
+                <div class="read-block">
                     <label for="nomeInsumo">Nome do Insumo:</label>
-                    <input type="text" id="nomeInsumo" name="nomeInsumo" required>
+                    <p class="input" name="nomeInsumo">{{ nomeInsumo }}</p>
                 </div>
                 <div class="write-block">
-                    <label for="contagemInsumo">Como você gostaria que contássemos esse insumo:</label>
-                    <select name="contagemInsumo" id="contagemInsumo" required>
+                    <label for="nomeHortalica">Nome do Hortaliça:</label>
+                    <input type="text" id="nomeHortalica" name="nomeHortalica" required>
+                </div>
+
+                <div class="write-block">
+                    <label for="contagemHortalica">Como você gostaria que contássemos essa hortalica:</label>
+                    <select name="contagemHortalica" id="contagemHortalica" required>
                         <option value="" disable="" hidden="">Selecione uma opição</option> 
                         <option value="U">U - Unidade</option> 
                         <option value="Kg">Kg - Quilograma</option>
                         <option value="L">L - Litro</option>
                     </select>
                 </div>
-                <div class="write-block">
-                    <label for="tipoInsumo">Tipo de Insumo:</label>
-                    <select name="tipoInsumo" id="tipoInsumo" required>
-                        <option value="" disable="" hidden="">Selecione uma opição</option>
-                        <option value="plantar">Plantar</option> 
-                        <option value="aplicar">Aplicar</option>
-                    </select>
-                </div>               
+
+                             
             </fieldset>
 
-            {% if message != "" %}
-                 <div class="foot-dados-Botton">
-                    <div class="aviso-foot">
-                        <img src="/imagem/aviso.png" alt="Aviso">
-                        <p>{{message}}</p>
-                    </div>
-                </div>               
-            {% endif %}
             <button type="submit" class="button-Salvar">
                 Salvar
             </button>
         </form> 
-        
     </div>
 </body>
 </html>

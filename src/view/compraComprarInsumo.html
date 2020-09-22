@@ -91,101 +91,94 @@
     <div class="main">
         <h1>
             Compra
-            <a href="compraComprar.html">
+            <a href="/compra">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
-        
-        <form>
+               
+
+        <form action="/escolherInsumo" method="POST">
             <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Finalizar Compra</legend>
+                    <legend>Busca de Insumo</legend>
                 </div>
-                <div class="read-block">
-                    <label for="nomeUsuario">Nome do Usuairo:</label>
-                    <p class="input">{{dadoUsuario.nome_Usuario}}</p>
+                <div class="select-block">
+                    <div class="select">
+                        <label for="codInsumo">Insumo:</label>
+                        <select name="codInsumo" id="codInsumo">
+                            <option value="" disable="" hidden="">Selecione uma opição</option> 
+                            {%for insumo in listaInsumo%}
+                                <option value={{insumo.cod_Insumo}}>{{ insumo.nome_Insumo }}</option>
+                            {%endfor%}  
+                        </select>
+                    </div>
+                    <button type="submit">
+                        <img src="/imagem/procurar.png" alt="Adicionar">
+                    </button>
                 </div>
-                <div class="read-block">
-                    <label for="tipoUsuario">Tipo do Usuairo:</label>
-                    <p class="input">{{dadoUsuario.tipo_Usuario}}</p>
-                </div>
-                <div class="read-block">
-                    <label for="dataCompra">Data da Compra:</label>
-                    <p class="input">{{dadoCompra.dt_Pedido_Compra}}</p>
+                <div class="foot-dados-Botton">
+                    <div class="aviso-foot">
+                        <img src="/imagem/aviso.png" alt="Aviso">
+                         <p>Caso não tenha achado o insumo é possivel adiciona-lo para esse fornecedor.</p>
+                    </div>
+                    <a href="/adicionarInsumo">
+                        <img src="/imagem/insumo.png" alt="Insumo">
+                        <p>Adicionar Insumo</p>
+                    </a>
                 </div>
             </fieldset>
+        </form>
 
+        <form action="/adicionarItem" method="POST">
             <fieldset class="dados-Botton">
                 <div class="title">
-                    <legend>Dados do Fornecedor</legend>
+                    <legend>Dados do item da compra</legend>
                 </div>
                 <div class="read-block">
-                    <label for="nomeFornecedor">Nome do Fornecedor:</label>
-                    <p class="input">{{dadoFornecedor.nome_Fornecedor}}</p>
+                    <label for="nomeInsumo">Nome do Insumo:</label>
+                    <p class="input">{{nomeInsumo}}</p>
                 </div>
-                <div class="read-block">
-                    <label for="docFornecedor">CNPJ do Fornecedor:</label>
-                    <p class="input">{{dadoFornecedor.doc_Fornecedor}}</p>
+                <div class="write-block">
+                    <label for="validadeInsumo">Validade do Insumo:</label>
+                    <input type="date" id="validadeInsumo" name="validadeInsumo" required>
                 </div>
-                <div class="read-block">
-                    <label for="telefoneFornecedor">Telefone do Fornecedor:</label>
-                    <p class="input">{{dadoFornecedor.telefone_Fornecedor}}</p>
+                <div class="write-block">
+                    <label for="quantInsumo">Quantidade em <strong>{{contagemInsumo}}</strong> :</label>
+                    <input type="number" id="quantInsumo" name="quantInsumo" required>
                 </div>
-                <div class="read-block">
-                    <label for="cepFornecedor">CEP do Fornecedor:</label>
-                    <p class="input">{{dadoFornecedor.cep_Fornecedor}}</p>
+                <div class="write-block">
+                    <label for="valorInsumo">Valor do Insumo em <strong>1 {{contagemInsumo}}</strong>:</label>
+                    <input type="number" id="valorInsumo" name="valorInsumo" required>
                 </div>
-                <div class="read-block">
-                    <label for="emailFornecedor">Email do Fornecedor:</label>
-                    <p class="input">{{dadoFornecedor.email_Fornecedor}}</p>
-                </div>
-          
+                <button type="submit"> Adicionar na lista </button>
             </fieldset>
-
             <fieldset class="dados-Botton">
-                <div class="title">
-                    <legend>Dados do Insumo</legend>
-                </div>
-
                 <table class="table-Detalhe">
+                    <tr>
+                        <th colspan="4">Lista de itens da compra</th>
+                    </tr>
                     <tr class="head">
                         <th>Nome</th>
                         <th>Validade</th>
                         <th>Quantidade</th>
                         <th>Valor</th>
                     </tr>
-                    
-                    {%for item in dadoItem%}
+                    {%for Item in Itens%}
                         <tr>
-                            <td>{{item.nome_Insumo}}</td>
-                            <td>{{item.validade_Item}}</td>
-                            <td>{{item.quant_Total_Insumo}} {{item.contagem_Insumo}}</td>
-                            <td>R$ {{item.valor_Item}}</td>
-                         </tr>   
-                    {%endfor%}  
-                    
-                    <tr>
-                        
-                    </tr>
+                            <td>{{Item.nome_Insumo}}</td>
+                            <td>{{Item.validade_Item}}</td>
+                            <td>{{Item.quant_Total_Insumo}}</td>
+                            <td>{{Item.valor_Item}}</td>
+                        </tr>
+                    {%endfor%}
                 </table>
-                <div class="read-block">
-                    <label for="totalCompra">Total da Compra: </label>
-                    <p class="input">R$ {{dadoCompra.total_Compra}}</p>
-                </div>
             </fieldset>
             
-            <div class="botton-foot">
-                <button type="submit" class="button-Cancelar">
-                    <a href="compra.html">Cancelar</a>
-                </button>  
-
-                <button type="submit" class="button-Salvar">
-                    <a href="compra.html">Salvar</a>
-                </button>  
-            </div>
-
-        </form> 
+        </form>
+        <button type="submit" class="button-Finalizar">
+            <a href="/finalizaCompra">Finalizar Compra</a>
+        </button>
     </div>
 </body>
 </html>
