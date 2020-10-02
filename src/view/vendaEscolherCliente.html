@@ -96,11 +96,24 @@
                 Voltar
             </a>
         </h1>
-        
-        <form>
+        <form action="/escolherCliente" method="POST">
             <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Dados da Venda</legend>
+                    <legend>Selecione um Cliente</legend>
+                </div>
+                <div class="select-block">
+                    <div class="select">
+                        <label for="nomeCliente">Nome do Cliente:</label>
+                        <select name="codCliente" id="codCliente" required>
+                            <option value="" disable="" hidden="">Selecione uma opção</option> 
+                            {%for cliente in listaCliente%}
+                                <option value={{cliente.cod_Cliente}}>{{cliente.nome_Cliente}}</option>
+                            {%endfor%}  
+                        </select>
+                    </div>
+                    <button type="submit">
+                        <img src="/imagem/procurar.png" alt="Adicionar">
+                    </button>
                 </div>
             </fieldset>
 
@@ -108,110 +121,44 @@
                 <div class="title">
                     <legend>Dados do Cliente</legend>
                 </div>
-                <div class="select-block">
-                    <div class="select">
-                        <label for="nomeCliente">Nome do Cliente:</label>
-                        <select name="nomeCliente" id="nomeCliente" >
-                            <option selected disabled>Selecione uma opção</option>
-                            <option value="0">Mercado Dia% - Butantã</option> 
-                            <option value="1">Mercado Vanessa</option>
-                            <option value="2">Feira de Terça - Butnatã</option>
-                        </select>
-                    </div>
-                    <button type="submit">
-                        <img src="/imagem/mais.png" alt="Adicionar">
-                    </button>
-                </div>
                 <div class="read-block">
                     <label for="nomeCliente">Nome do Cliete:</label>
-                    <input type="text" id="nomeCliente" name="nomeCliente" value="Mercado Dia% - Butantã" readonly>
+                   <p class="input">{{cliente.nome_Cliente}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="docCliente">CNPJ:</label>
-                    <input type="text" id="docCliente" name="docCliente" value="08.561.281/0001-63" readonly>
+                    <label for="docCliente">CNPJ do Cliente:</label>
+                    <p class="input">{{cliente.doc_Cliente}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="telefoneCliente">Telefone:</label>
-                    <input type="text" id="telefoneCliente" name="telefoneCliente" value="(11)4002-1080" readonly>
+                    <label for="telefoneCliente">Telefone do Cliente:</label>
+                    <p class="input">{{cliente.telefone_Cliente}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="cepCliente">CEP:</label>
-                    <input type="text" id="cepCliente" name="cepCliente" value="05589-020" readonly>
+                    <label for="cepCliente">CEP do Cliente:</label>
+                    <p class="input">{{cliente.cep_Cliente}}</p>
                 </div>
-
+                <div class="read-block">
+                    <label for="emailCliente">E-mail do Cliente:</label>
+                    <p class="input">{{cliente.email_Cliente}}</p>
+                </div>
                 <div class="foot-dados-Botton">
                     <div class="aviso-foot">
                          <img src="/imagem/aviso.png" alt="Aviso">
                          <p>Caso não tenha achado o Cliente é possivel adiciona-lo.</p>
                     </div>
-                    <a href="vendaCriarCliente.html">
+                    <a href="/adicionarCliente">
                         <img src="/imagem/criarcliente.png" alt="Cliente">
                         <p>Adicionar Cliente</p>
                     </a>
                 </div>               
-            </fieldset>
-
-            <fieldset class="dados-Botton">
-                <div class="title">
-                    <legend>Inserção das Hortaliça</legend>
-                </div>
-
-                <div class="select-block">
-                    <div class="select">
-                        <label for="nomehortalica">Hortaliças:</label>
-                        <select name="nomehortalica" id="nomehortalica">
-                            <option>Selecione uma opição</option>
-                            <option value="0">alface</option> 
-                            <option value="1">beterraba</option>
-                            <option value="2">feijão</option>
-                            <option value="3">cenoura</option>
-                            <option value="4">couve</option>
-                            <option value="5">rúcula</option>
-                        </select>
-                    </div>
-                    <button type="submit">
-                        <img src="/imagem/mais.png" alt="Adicionar">
-                    </button>
-                </div>
-
-                <table class="table-Detalhe">
-                    <tr class="head">
-                        <th></th>
-                        <th>Nome</th>
-                        <th>Validade</th>
-                        <th>Quantidade</th>
-                        <th>Valor</th>
-                    </tr>
-                    <tr>
-                        <th class="lixo">
-                            <button>
-                                <img src="/imagem/lixo.png" alt="Lixo">
-                            </button>
-                        </th>
-                        <td>alface</td>
-                        <td>30/09/2020</td>
-                        <td>50 pés</td>
-                        <td>R$ 100.00</td>
-                    </tr>
-                    <tr>
-                        <th class="lixo">
-                            <button>
-                                <img src="/imagem/lixo.png" alt="Lixo">
-                            </button>
-                        </th>
-                        <td>muda de beterraba</td>
-                        <td>30/09/2020</td>
-                        <td>50 maço</td>
-                        <td>R$ 300.00</td>
-                    </tr>
-                </table>
-            </fieldset>
-
-            <button type="submit" class="button-Finalizar">
-                <a href="vendaFinalizar.html">Finalizar Venda</a>
-            </button>
-            
+            </fieldset> 
         </form> 
+
+        <div class="button-main">
+            <a href="/escolherHortalica">
+                Próxima Etapa
+            </a>
+        </div>
     </div>
 </body>
 </html>

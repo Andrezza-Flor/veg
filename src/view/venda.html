@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/style/main.css">
     <link rel="stylesheet" href="/style/mainStyle.css">
     <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
 
@@ -89,48 +90,36 @@
     
     <div class="main">
         <h1>Venda</h1>
-        <table>
-            <tr>
-                <th colspan="3">Lista de hortaliças para serem vendidas</th>
-            </tr>
-            <tr class="head">
-                <th>Hortaliça</th>
-                <th>Quantidade</th>
-                <th></th>
-            </tr>
-            <tr>
-                <td>alface</td>
-                <td>50 pés</td>
-                <td><a href="vendaDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>beterraba</td>
-                <td>30 kg</td>
-                <td><a href="vendaDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>feijão</td>
-                <td>100 kg</td>
-                <td><a href="vendaDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>cenoura</td>
-                <td>30 kg</td>
-                <td><a href="vendaDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>couve</td>
-                <td>20 pés</td>
-                <td><a href="vendaDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>rúcula</td>
-                <td>20 pés</td>
-                <td><a href="vendaDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-        </table>
+        <form>
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Liberado para ser vendido:</legend>
+                </div>
+                <table class="table-Detalhe">
+                    <thead>
+                        <tr class="head">
+                            <th>Códido</th>
+                            <th>Nome da Hortalica</th>
+                            <th>Quantidade</th>
+                            <th>Valor:</th>
+                        </tr>
+                        <tr>
+                            {%for hortalica in listaHortalica%}
+                                <tr>
+                                    <td>{{hortalica.cod_Posicao_Armazem}}</td>
+                                    <td>{{hortalica.nome_Hortalica}}</td>
+                                    <td>{{hortalica.quant_Restante_Hortalica}} {{hortalica.contagem_Hortalica}}</td>
+                                    <td>R$ {{hortalica.valor_Hortalica}} {{hortalica.contagem_Hortalica}}</td>
+                                </tr>   
+                            {%endfor%} 
+                        </tr>
+                    </thead>
+                </table>
+            </fieldset>
+        </form>
+        
         <div class="button-main">
-            <a href="vendaVender.html">Vender</a>
+            <a href="/escolherCliete">Vender</a>
         </div>
     </div>
 </body>

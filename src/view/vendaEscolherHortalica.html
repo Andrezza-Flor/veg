@@ -97,43 +97,85 @@
             </a>
         </h1>
 
-        <form>
+        <form action="/escolherHortalica" method="POST">
             <fieldset class="dados-Top">
-                <div class="title">
-                    <legend>Dados da Hortaliça</legend>
-                </div>
                 <div class="read-block">
-                    <label for="nomeHortalca">Nome:</label>
-                    <input type="text" id="nomeHortalica" name="nomeHortalica" value="alface" readonly>
+                    <label for="docCliente">Cliente da Venda:</label>
+                    <p class="input">{{cliente}}</p>
                 </div>
-               <div class="read-block">
-                    <label for="quantRestante">Quantidade:</label>
-                    <input type="text" id="quantRestante" name="quantRestante" value="50 pés" readonly>
-                </div>
-                <div class="read-block">
-                    <label for="valor">Valor:</label>
-                    <input type="text" id="valor" name="valor" value="R$ 2.00 por pé" readonly>
-                </div>
-                <div class="read-block">
-                    <label for="validade">Validade:</label>
-                    <input type="date" id="validade" name="validade" value="2020-10-25" readonly>
-                </div> 
             </fieldset>
-
+            
             <fieldset class="dados-Botton">
                 <div class="title">
-                    <legend>Dados da Produção</legend>
+                    <legend>Selecione uma Hortaliça</legend>
                 </div>
-                <div class="read-block">
-                    <label for="nomeColaborador">Colaborador Produção   :</label>
-                    <input type="text" id="nomeColaborador" name="nomeColaborador" value="Matheus de Barros Santos" readonly>
-                </div>
-                <div class="read-block">
-                    <label for="tempoProducao">Tempo de Produção:</label>
-                    <input type="text" id="tempoProducao" name="tempoProducao" value="30 dias" readonly>
+                <div class="select-block">
+                    <div class="select">
+                        <label for="codPosicao">Nome da Hortaliça:</label>
+                        <select name="codPosicao" id="codPosicao" required>
+                            <option value="" disable="" hidden="">Selecione uma opção</option> 
+                            {%for hortalica in listaHortalica%}
+                                <option value={{hortalica.cod_Posicao_Armazem}}>{{hortalica.nome_Hortalica}}</option>
+                            {%endfor%}  
+                        </select>
+                    </div>
+                    <button type="submit">
+                        <img src="/imagem/procurar.png" alt="Adicionar">
+                    </button>
                 </div>
             </fieldset>
-        </form>        
+        </form>
+        
+        <form action="/adicionarHortalica" method="POST">
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados da Hortaliças</legend>
+                </div>
+                <div class="read-block">
+                    <label for="nomeHortalica">Nome da Hortaliça:</label>
+                   <p class="input">{{hortalica.nome_Hortalica}}</p>
+                </div>
+                <div class="write-block">
+                    <label for="quantHortalica">Quantidade em <strong>{{hortalica.contagem_Hortalica}}</strong>:</label>
+                    <input type="number" name="quantHortalica" min='1' max={{hortalica.quant_Restante_Hortalica}} required>
+                </div>
+                <div class="read-block">
+                    <label for="valoHortalica">Valor da <strong>{{hortalica.contagem_Hortalica}}</strong> de <strong>{{hortalica.nome_Hortalica}}</strong>:</label>
+                    <p class="input">R$ {{hortalica.valor_Hortalica}}</p>
+                </div>   
+                <button type="submit"> Adicionar na lista </button>
+            </fieldset> 
+        </form>
+        
+        <form>
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Lista da Venda</legend>
+                </div>
+
+                <table class="table-Detalhe">
+                    <tr class="head">
+                        <th></th>
+                        <th>Nome</th>
+                        <th>Quantidade</th>
+                        <th>Valor</th>
+                    </tr>
+                    {%for item in arrayItensVenda%}
+                        <tr>
+                            <td>{{loop.index0}}</td>
+                            <td>{{item.nome_Hortalica}}</td>
+                            <td>{{item.quant_Vendida}} {{item.contagem_Hortalica}}</td>
+                            <td>R$ {{item.valor_Hortalica}}</td>
+                        </tr>
+                    {%endfor%}
+                </table>
+            </fieldset>
+
+            <button type="submit" class="button-Finalizar">
+                <a href="vendaFinalizar.html">Finalizar Venda</a>
+            </button>
+            
+        </form> 
     </div>
 </body>
 </html>

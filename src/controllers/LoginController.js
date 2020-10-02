@@ -18,11 +18,12 @@ module.exports = {
 
     async access(req, res, next) {
         try {
+            // Resgate dos dados dos inputs.
             const {
                 email,
                 senha
             } = req.body;
-            
+            // Busca dos email e senha iguais no banco de dados.
             const dadoAcesso = await knex('Logins')
                 .where({
                     email_Usuario: email,
@@ -30,29 +31,31 @@ module.exports = {
                 })
                 .select('email_Usuario')
             
-            
+            // Condição para verificar se a resposta da busca foi vazia.
             if (dadoAcesso.length == []) {
                 var message = "Dados informados incorretos"
-                
+                // Retorno da mensagem de erro.
                 return res.render('loginPage.html', { message } )
                
             } else {
-                // Selects para ver o numero de elementos no Celeiro, Armazém, Estufa e atividades
-
+                // Salvar o email inserido no Local Storage, para atividades dentro do Sistema
                 local('email', email);
 
+                //Busca do código da Plantação
                 const cod = await knex.from('Logins')
                 .where({email_Usuario: email})
                 .select('Logins.cod_Plantacao')
 
                 const codPlantacao = String(cod[0].cod_Plantacao);
-
+                // Salvar o código da Plantação no Local Storage, para atividades dentro do Sistema
                 local ('plantacao', codPlantacao)
 
+                // Retorno positivo, reinderizando para dentro do sistema 
                 return res.render('home.html')
             }
 
         } catch (error) {
+            // Captura de erro
             next(error)
         }             
     },

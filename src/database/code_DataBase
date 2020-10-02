@@ -1,15 +1,23 @@
-CREATE TABLE Usuarios {
+CREATE TABLE Usuarios (
     email_Usuario VARCHAR(500) NOT NULL,
     nome_Usuario VARCHAR(200) NOT NULL,
     telefone_Usuario VARCHAR(15) NOT NULL,
-    doc_Usuario VARCHAR(20) NOT NULL,
     dt_Nasc_Usuario DATE NOT NULL,
+    cpf_Usuario VARCAHR(20) NOT NULL,
     tipo_Usuario VARCHAR(50) NOT NULL,
     PRIMARY KEY (email_Usuario)
-}
+);
+
+CREATE TABLE Plantacoes (
+  cod_Plantacao int(4) NOT NULL AUTO_INCREMENT,
+  dt_Criacao_Plantacao timestamp NOT NULL DEFAULT current_timestamp(),
+  email_Gerente varchar(500) NOT NULL,
+  PRIMARY KEY (cod_Plantacao),
+  FOREIGN KEY (email_Gerente) REFERENCES Usuarios (email_Usuario)
+);
 
 CREATE TABLE Atividades (
-    cod_Atividade INT(4) AUTO_INCREMENT,
+    cod_Atividade INT(10) AUTO_INCREMENT,
     nome_Atividade VARCHAR(100) NOT NULL,
     data_Atividade DATE NOT NULL,
     descricao_Atividade VARCHAR(1000) NOT NULL,
@@ -22,13 +30,7 @@ CREATE TABLE Atividades (
     FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao)
 );
 
-CREATE TABLE Plantacoes (
-  cod_Plantacao int(4) NOT NULL AUTO_INCREMENT,
-  dt_Criacao_Plantacao timestamp NOT NULL DEFAULT current_timestamp(),
-  email_Gerente varchar(500) NOT NULL,
-  PRIMARY KEY (cod_Plantacao),
-  FOREIGN KEY (email_Gerente) REFERENCES Usuarios (email_Usuario)
-);
+
 
 CREATE TABLE Logins (
   email_Usuario VARCHAR(500) NOT NULL,
@@ -40,17 +42,6 @@ CREATE TABLE Logins (
   FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao)
 );
 
-CREATE TABLE Pedidos_Compra (
-  cod_Pedido_Compra INT(4) AUTO_INCREMENT,
-  dt_Pedido_Compra timestamp NOT NULL DEFAULT current_timestamp(),
-  total_Compra DECIMAL(10,2) NOT NULL,
-  cod_Plantacao INT(4) NOT NULL,
-  email_Usuario_Comprou VARCHAR(500) NOT NULL,
-  PRIMARY KEY (cod_Pedido_Compra),
-  FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao),
-  FOREIGN KEY (email_Usuario_Comprou) REFERENCES Usuarios(email_Usuario),
-);
-
 CREATE TABLE Fornecedores (
   cod_Fornecedor int(4) NOT NULL AUTO_INCREMENT,
   doc_Fornecedor varchar(20) NOT NULL,
@@ -59,75 +50,116 @@ CREATE TABLE Fornecedores (
   cep_Fornecedor varchar(10) NOT NULL,
   email_Fornecedor varchar(500) NOT NULL,
   PRIMARY KEY (cod_Fornecedor)
-) 
+);
 
 CREATE TABLE Insumos (
   cod_Insumo int(4) NOT NULL AUTO_INCREMENT,
   nome_Insumo varchar(200) NOT NULL,
   tipo_Insumo varchar(200) NOT NULL,
   contagem_Insumo varchar(10) NOT NULL,
-  PRIMARY KEY (cod_Insumo,nome_Insumo)
-)
+  PRIMARY KEY (cod_Insumo, nome_Insumo)
+);
 
 CREATE TABLE Hortalicas (
   cod_Hortalica int(4) NOT NULL AUTO_INCREMENT,
   nome_Hortalica varchar(200) NOT NULL,
   cod_Insumo int(4) NOT NULL,
   contagem_Hortalica varchar(10) NOT NULL,
-  PRIMARY KEY (cod_Hortalica),
+  PRIMARY KEY (cod_Hortalica, nome_Hortalica),
   FOREIGN KEY (cod_Insumo) REFERENCES Insumos (cod_Insumo)
-)
+);
 
 CREATE TABLE Fornecedores_Insumos (
   cod_Insumo int(4) NOT NULL,
   cod_Fornecedor int(4) NOT NULL,
   cod_Plantacao INT(4) NOT NULL,
-  valor_Insumo decimal(10,2) NOT NULL,
   tempo_Entrega int(4) NOT NULL,
   PRIMARY KEY (cod_Fornecedor, cod_Insumo, cod_Plantacao),
-  FOREIGN KEY (cod_Insumo) REFERENCES Insumos (cod_Insumo),
+  FOREIGN KEY (cod_Insumo) REFERENCES Insumos(cod_Insumo),
   FOREIGN KEY (cod_Fornecedor) REFERENCES Fornecedores (cod_Fornecedor),
-  FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes (cod_Plantacao)
-)
+  FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao)
+);
 
+CREATE TABLE Pedidos_Compra (
+  cod_Pedido_Compra INT(4) AUTO_INCREMENT,
+  dt_Pedido_Compra timestamp NOT NULL DEFAULT current_timestamp(),
+  total_Compra DECIMAL(10,2) NOT NULL,
+  cod_Plantacao INT(4) NOT NULL,
+  email_Usuario_Comprou VARCHAR(500) NOT NULL,
+  cod_Fornecedor INT(4) NOT NULL,
+  status_Pedido VARCHAR(10) NOT NULL,
+  PRIMARY KEY (cod_Pedido_Compra),
+  FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao),
+  FOREIGN KEY (email_Usuario_Comprou) REFERENCES Usuarios(email_Usuario),
+  FOREIGN KEY (cod_Fornecedor) REFERENCES Fornecedores_Insumos(cod_Fornecedor)
+);
 
 CREATE TABLE Itens_Compra (
   cod_Item_Compra INT(4) AUTO_INCREMENT,
   quant_Total_Insumo INT(10) NOT NULL,
-  quant_Restante_Insumo INT(10) NOT NULL,
   cod_Pedido_Compra INT(4) NOT NULL,
   cod_Insumo int(4) NOT NULL,
+  valor_Item DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (cod_Item_Compra),
   FOREIGN KEY (cod_Pedido_Compra) REFERENCES Pedidos_Compra(cod_Pedido_Compra),
   FOREIGN KEY (cod_Insumo) REFERENCES Fornecedores_Insumos(cod_Insumo)
+);
+
+CREATE TABLE Celeiros (
+  cod_posicao_celeiro int(4) AUTO_INCREMENT,
+  cod_Insumo int(4) NOT NULL,
+  cod_Fornecedor int(4) NOT NULL,
+  cod_Plantacao int(4) NOT NULL,
+  quant_Insumo decimal(10,2) NOT NULL,
+  PRIMARY KEY (cod_posicao_celeiro, cod_Insumo,cod_Fornecedor, cod_Plantacao),
+  FOREIGN KEY (cod_Insumo) REFERENCES Fornecedores_Insumos (cod_Insumo),
+  FOREIGN KEY (cod_Fornecedor) REFERENCES Fornecedores_Insumos (cod_Fornecedor),
+  FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes (cod_Plantacao)
 );
 
 
 CREATE TABLE Plantio (
     cod_Plantacao_Hortalica INT(10) AUTO_INCREMENT,
     cod_Plantacao INT(4) not null,
-    cod_Hortalica INT(4) not null,
+    cod_Insumo INT(4) not null,
+    cod_Fornecedor INT(4) not null,
     quant_Plantada INT(10) not null,
     dt_Plantio timestamp NOT NULL DEFAULT current_timestamp(),
     email_Usuario_Plantou VARCHAR(500) NOT NULL,
     status_Plantio VARCHAR(10) not null,
+    tipo_Plantio VARCHAR(10) not null,  
     PRIMARY KEY (cod_Plantacao_Hortalica),
     FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao),
-    FOREIGN KEY (cod_Hortalica) REFERENCES Hortalicas(cod_Hortalica),
+    FOREIGN KEY (cod_Insumo) REFERENCES Insumos(cod_Insumo),
+    FOREIGN KEY (cod_Fornecedor) REFERENCES Fornecedores(cod_Fornecedor),
     FOREIGN KEY (email_Usuario_Plantou) REFERENCES Usuarios(email_Usuario)
+);
+
+CREATE TABLE Armazens (
+  cod_Posicao_Armazem int(4) AUTO_INCREMENT,
+  cod_Hortalica INT(4) NOT NULL,
+  cod_Fornecedor INT(4) NOT NULL,
+  cod_Plantacao INT(4) NOT NULL,
+  quant_Restante_Hortalica DECIMAL(10,2) not null,
+  valor_Hortalica DECIMAL(10,2) not null,
+  PRIMARY KEY (cod_Posicao_Armazem, cod_Hortalica, cod_Fornecedor, cod_Plantacao),
+  FOREIGN KEY (cod_Hortalica) REFERENCES Hortalicas(cod_Hortalica),
+  FOREIGN KEY (cod_Fornecedor) REFERENCES Fornecedores(cod_Fornecedor),
+  FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao)
 );
 
 CREATE TABLE Colheita (
     cod_Plantacao_Hortalica INT(10),
-    quant_Restante_Colida decimal(10,2) not null,
+    cod_Posicao_Armazem int(4) NOT NULL,
     quant_Total_Colida decimal(10,2) not null,
     dt_Colheita timestamp NOT NULL DEFAULT current_timestamp(),
-    valor_Venda_Hortalica DECIMAL(10,2) NOT NULL,
     email_Usuario_Colheu VARCHAR(500) NOT NULL,
     PRIMARY KEY (cod_Plantacao_Hortalica),
     FOREIGN KEY (cod_Plantacao_Hortalica) REFERENCES Plantio(cod_Plantacao_Hortalica),
-    FOREIGN KEY (email_Usuario_Colheu) REFERENCES Usuarios(email_Usuario)
+    FOREIGN KEY (email_Usuario_Colheu) REFERENCES Usuarios(email_Usuario),
+    FOREIGN KEY (cod_Posicao_Armazem) REFERENCES Armazens(cod_Posicao_Armazem)
 );
+
 
 CREATE TABLE Clientes (
   cod_Cliente int(4) NOT NULL AUTO_INCREMENT,
@@ -141,23 +173,27 @@ CREATE TABLE Clientes (
   FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao)
 );
 
-CREATE TABLE Pedidos_Compra (
+CREATE TABLE Pedidos_Venda (
   cod_Pedido_Venda INT(4) AUTO_INCREMENT,
   dt_Pedido_Venda timestamp NOT NULL DEFAULT current_timestamp(),
   total_Venda DECIMAL(10,2) NOT NULL,
   cod_Cliente INT(4) NOT NULL,
   email_Usuario_Vendeu VARCHAR(500) NOT NULL,
-  cod_Fornecedor INT(4) NOT NULL,
+  cod_Plantacao INT(4) not null,
   PRIMARY KEY (cod_Pedido_Venda),
+  FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao),
   FOREIGN KEY (cod_Cliente) REFERENCES Clientes(cod_Cliente),
-  FOREIGN KEY (cod_Fornecedor) REFERENCES Fornecedores_Insumos(cod_Fornecedor),
-  FOREIGN KEY (email_Usuario_Vendeu) REFERENCES Usuarios(email_Usuario),
+  FOREIGN KEY (email_Usuario_Vendeu) REFERENCES Usuarios(email_Usuario)
 );
 
 CREATE TABLE Itens_Venda (
   cod_Item_Venda INT(4) AUTO_INCREMENT,
   quant_vendida INT(5) NOT NULL,
-  cod_Plantacao_Hortalica INT(10) NOT NULL,
+  cod_Posicao_Armazem int(4) not null,
+  cod_Hortalica INT(4) NOT NULL,
+  cod_Plantacao INT(10) NOT NULL,
   PRIMARY KEY (cod_Item_Venda),
-  FOREIGN KEY (cod_Plantacao_Hortalica) REFERENCES Colheita(cod_Plantacao_Hortalica)
+  FOREIGN KEY(cod_Hortalica) REFERENCES Hortalicas(cod_Hortalica),
+  FOREIGN KEY (cod_Posicao_Armazem) REFERENCES Armazens(cod_Posicao_Armazem)
 );
+

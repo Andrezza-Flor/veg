@@ -14,7 +14,7 @@ module.exports = {
 
     // Função de criação de gerente
     async create(req, res, next) {
-
+        // Captura dos dados no body
         try {            
             const {
                 nomeUsuario,
@@ -25,6 +25,7 @@ module.exports = {
                 senhaUsuario1              
              } = req.body;
 
+            // Inserção de dados no Banco de Dados - Tabela Usuarios
             await knex('Usuarios').insert({
                 email_Usuario: emailUsuario,
                 nome_Usuario: nomeUsuario,
@@ -34,11 +35,13 @@ module.exports = {
                 tipo_Usuario: 'Gerente'
             })
             
+            // Inserção de dados no Banco de Dado - Tabela Platacoes
             await knex('Plantacoes').insert({
                 cod_Plantacao: null,
                 email_Gerente: emailUsuario
             })
 
+            // Captura do codigo da plantação
             const cod = await knex('Plantacoes')
             .where({email_Gerente: emailUsuario})
             .select('cod_Plantacao')
@@ -48,17 +51,14 @@ module.exports = {
             var s = data[0].cod_Plantacao + "";
             var d = parseInt(s)
 
+            // Inserção de dados no Banco de Dados - Tabela Logins
             await knex('Logins').insert({
                 email_Usuario: emailUsuario,
                 senha_Usuario: senhaUsuario1,
                 cod_Plantacao: d
             })
-
-            await knex('Celeiros').insert({
-                cod_Celeiro: null,
-                cod_Plantacao: d
-            })
-                
+            
+            // Reiderizando a página
             return res.render('loginPage.html')
 
         } catch (error) {

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/style/main.css">
     <link rel="stylesheet" href="/style/mainStyle.css">
     <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css"> 
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
 
@@ -89,33 +90,48 @@
     
     <div class="main">
         <h1>Celeiro</h1>
-        <table>
-            <tr>
-                <th colspan="3">Lista de Insumos no Celeiro</th>
-            </tr>
-            <tr class="head">
-                <th>Insumo</th>
-                <th>Quantidade</th>
-                <th></th>
-            </tr>
-            <tr>
-                <td name="nomeInsumo">{{nomeInsumo}}</td>
-                <td>50 mudas</td>
-                <td><a href="celeiroDetalhe.html"> Ver Detalhe</a></td>
-                {%for insumo in insumos %}
-                    <article class="teacher-item">
-                        <header>
-                            <img src="{{proffy.avatar}}" alt="{{proffy.name}}">
-                        <div>
-                            <strong>{{proffy.name}}</strong>
-                            <span>{{proffy.subject}}</span>
-                        </div>    
-                    </header>
-                {%endfor%}
-            </tr>
-            <tr>
-              
-        </table>
+        <form action="/detalheInsumo" method="POST">
+             <!--<fieldset class="dados-Top">
+                 
+               <div class="select-block">
+                    <div class="select">
+                        <label for="codPedido">Insumo:</label>
+                        <select name="codPedido" id="codPedido">
+                            <option value="" disable="" hidden="">Selecione uma opção</option> 
+                            {%for insumo in listaInsumo%}
+                                <option value={{insumo.cod_Insumo}}>{{insumo.nome_Insumo }}</option>
+                            {%endfor%}  
+                        </select>
+                    </div>
+                    <button type="submit" class="salvar">
+                        <img src="/imagem/procurar.png" alt="Buscar">
+                    </button>
+                </div> 
+            </fieldset>-->
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Lista de Insumos</legend>
+                </div>
+                <table class="table-Detalhe">
+                    <thead>
+                        <tr class="head">
+                            <th>Nome de Insumo</th>
+                            <th>Quantidade de Insumo</th>
+                            <th>Fornecedor do Insumo</th>
+                        </tr>
+                        <tr>
+                            {%for insumo in listaInsumo%}
+                                <tr>
+                                    <td>{{insumo.nome_Insumo}}</td>
+                                    <td>{{insumo.quant_Insumo}} {{insumo.contagem_Insumo}}</td>
+                                    <td>{{insumo.nome_Fornecedor}}</td>
+                                </tr>   
+                            {%endfor%} 
+                        </tr>
+                    </thead>
+                </table>
+            </fieldset>
+        </form>
     </div>
 </body>
 </html>

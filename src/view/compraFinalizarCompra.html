@@ -151,7 +151,6 @@
                 <table class="table-Detalhe">
                     <tr class="head">
                         <th>Nome</th>
-                        <th>Validade</th>
                         <th>Quantidade</th>
                         <th>Valor</th>
                     </tr>
@@ -159,7 +158,6 @@
                     {%for item in dadoItem%}
                         <tr>
                             <td>{{item.nome_Insumo}}</td>
-                            <td>{{item.validade_Item}}</td>
                             <td>{{item.quant_Total_Insumo}} {{item.contagem_Insumo}}</td>
                             <td>R$ {{item.valor_Item}}</td>
                          </tr>   
@@ -177,11 +175,11 @@
             
             <div class="botton-foot">
                 <button type="submit" class="button-Cancelar">
-                    <a href="compra.html">Cancelar</a>
+                    <a href="/compra">Cancelar</a>
                 </button>  
 
                 <button type="submit" class="button-Salvar">
-                    <a href="compra.html">Salvar</a>
+                    <a href="/compra">Salvar</a>
                 </button>  
             </div>
 

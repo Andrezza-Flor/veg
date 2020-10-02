@@ -8,7 +8,10 @@ const MenuController = require('./controllers/MenuController')
 const ColaboradorController = require('./controllers/ColaboradorController')
 const AtividadeController = require('./controllers/AtividadeController')
 const CompraController = require('./controllers/ComprasController')
-
+const EstufaController = require('./controllers/EstufaController')
+const CeleiroController = require('./controllers/CeleiroController')
+const ArmazemController = require('./controllers/ArmazemController')
+const VendaController = require('./controllers/VendaController')
 
 routes
 //Login
@@ -26,9 +29,18 @@ routes
 
 // Armazem
     .get('/armazem', MenuController.armazem)
-
+    .post('/detalheHortalica', ArmazemController.detalheHortalica)
+    .get('/editarHortalica', ArmazemController.paginaEdicao)
+    .post('/editarHortalica', ArmazemController.editarHortalica)
+    
 // Compra
     .get('/compra', MenuController.compra)
+    
+    //Detalhe-Compra
+    .post('/detalhePedido', CompraController.detalhePedido)
+    .get('/entrarCeleiro', CompraController.entrarCeleiro)
+
+    //Comprar
     .get('/realizarCompra', CompraController.realizarCompra)
     .post('/buscarFornecedor', CompraController.buscarFornecedor)
     .get('/comprarInsumo', CompraController.comprarInsumo)
@@ -51,10 +63,20 @@ routes
     .post('/criarHortalica', CompraController.criarHortalica)
 
 
-
-
 // Venda
-    .get('/venda', MenuController.venda) 
+    .get('/venda', MenuController.venda)
+    
+    //Vender
+    .get('/escolherCliete', VendaController.vender)
+    .post('/escolherCliente', VendaController.escolherCliente)
+    .get('/escolherHortalica', VendaController.buscaHortalica)
+    .post('/escolherHortalica', VendaController.escolherHortalica)
+    .post('/adicionarHortalica', VendaController.adicioanarItem)
+
+    //Cliente
+    .get('/adicionarCliente', VendaController.adicionarCliente)
+    .post('/adicionarCliente', VendaController.salvarCliente)
+
 
 // Colaborador
     .get('/colaborador', MenuController.colaborador)
@@ -62,7 +84,13 @@ routes
     .post('/criarColaborador', ColaboradorController.create)
 
 // Estufa
-    .get('/estufa', MenuController.estufa) 
+    .get('/estufa', MenuController.estufa)
+    .get('/aplicarInsumo', EstufaController.paginaAplicarInsumo)
+    .post('/buscarInsumo', EstufaController.buscarInsumo)
+    .post('/aplicarInsumo', EstufaController.aplicarInsumo)
+    .post('/detalheInsumo', EstufaController.detalhePoduto)
+    .post('/colherInsumo', EstufaController.colherProduto)
+
 
 // Relatório
     .get('/relatorio', MenuController.relatorio) 

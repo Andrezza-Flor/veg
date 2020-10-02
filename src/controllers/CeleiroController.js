@@ -4,27 +4,16 @@ const { render } = require('nunjucks')
 
 module.exports = {
     // Função de apresentação de Celeiro
-    async index(req, res, next) {
+    async detalheInsumo(req, res, next) {
         try {
-
-            const itensProdutos = await knex('produtos')
-            .select('produtos.nome_produto');
-            const produtos = []
-
-            for (var i = 0; i < itensProdutos.length; i++) {
-                for (var j = 0; j < 1; j++) {
-                    produtos.push(itensProdutos[i].nome_produto)
-                }
-            }
-            
-            return res.render('consulta_produto.html' , {produtos})
-
-            return res.render('celeiro.html', { nomeInsumo })
+            //prparar parâmetro insumo
+           
+            return res.render('celeiroDetalhe.html', {insumo, fornecedor})
         } catch (error) {
             next(error)
         }
         
-    },
+    }
 
     // // Função de criação de Celeiro
     // async create(req, res, next) {

@@ -107,7 +107,7 @@
                     <div class="select">
                         <label for="codInsumo">Insumo:</label>
                         <select name="codInsumo" id="codInsumo">
-                            <option value="" disable="" hidden="">Selecione uma opição</option> 
+                            <option value="" disable="" hidden="">Selecione uma opção</option> 
                             {%for insumo in listaInsumo%}
                                 <option value={{insumo.cod_Insumo}}>{{ insumo.nome_Insumo }}</option>
                             {%endfor%}  
@@ -140,10 +140,6 @@
                     <p class="input">{{nomeInsumo}}</p>
                 </div>
                 <div class="write-block">
-                    <label for="validadeInsumo">Validade do Insumo:</label>
-                    <input type="date" id="validadeInsumo" name="validadeInsumo" required>
-                </div>
-                <div class="write-block">
                     <label for="quantInsumo">Quantidade em <strong>{{contagemInsumo}}</strong> :</label>
                     <input type="number" id="quantInsumo" name="quantInsumo" required>
                 </div>
@@ -160,16 +156,14 @@
                     </tr>
                     <tr class="head">
                         <th>Nome</th>
-                        <th>Validade</th>
                         <th>Quantidade</th>
                         <th>Valor</th>
                     </tr>
                     {%for Item in Itens%}
                         <tr>
                             <td>{{Item.nome_Insumo}}</td>
-                            <td>{{Item.validade_Item}}</td>
-                            <td>{{Item.quant_Total_Insumo}}</td>
-                            <td>{{Item.valor_Item}}</td>
+                            <td>{{Item.quant_Total_Insumo}} {{Item.contagem_Insumo}}</td>
+                            <td>R$ {{Item.valor_Item}}</td>
                         </tr>
                     {%endfor%}
                 </table>

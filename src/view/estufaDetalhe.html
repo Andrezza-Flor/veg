@@ -90,50 +90,50 @@
     <div class="main">
 
         <h1>Estufa
-            <a href="estufa.html">
+            <a href="/estufa">
                 <img src="/imagem/voltar.png" alt="Voltar">
                 Voltar
             </a>
         </h1>
 
-        <form>
+        <form action="/colherInsumo" method="POST">
             <fieldset class="dados-Top">
                 <div class="title">
                     <legend>Dados do Produto</legend>
                 </div>
                 <div class="read-block">
                     <label for="nomeProduto">Nome do Produto:</label>
-                    <input type="text" id="nomeProduto" name="nomeProduto" value="alface" readonly>
+                    <p class="input">{{produto.nome_Hortalica}}</p>
                 </div>
-               <div class="read-block">
-                    <label for="quant">Quantidade:</label>
-                    <input type="text" id="quant" name="quant" value="30 pés" readonly>
+               <div class="write-block">
+                    <label for="quantProduto">Quantidade de produto Colido:</label>
+                    <input type="number" id="quantProduto" name="quantProduto" min='1' required>
                 </div>
                 <div class="read-block">
                     <label for="dtPlantio">Data de Plantio:</label>
-                    <input type="date" id="dtPlantio" name="dtPlantio" value="2020-08-19" readonly>
+                    <p class="input">{{produto.dt_Plantio}}</p>
                 </div> 
                 <div class="read-block">
                     <label for="diasProducao">Dias de Produção:</label>
-                    <input type="text" id="valor" name="valor" value="R$ 2.00 por pé" readonly>
+                    <p class="input">{{days}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="nomeColaborador">Colaborador de Produção:</label>
-                    <input type="text" id="nomeColaborador" name="nomeColaborador" value="Katia Pereira" readonly>
+                    <label for="nomeColaborador">Nome do {{produto.tipo_Usuario}}:</label>
+                    <p class="input">{{produto.nome_Usuario}}</p>
                 </div>
 
-                <div class="foot-dados-Botton">
-                    <div class="aviso-foot">
-                        <img src="/imagem/aviso.png" alt="Aviso">
-                        <p>Se o produto estivar pronto para colher.</p>
-                   </div>
-
-                    <a href="estufaColher.html">
-                        <img src="/imagem/hortalica.png" alt="Insumo">
-                        <p>Colher Produto</p>
-                    </a>
-                </div> 
             </fieldset>
+            <div class="foot-dados-Botton">
+                <div class="aviso-foot">
+                    <img src="/imagem/aviso.png" alt="Aviso">
+                    <p>Se o produto já estivar pronto para colher.</p>
+               </div>
+
+                <button>
+                    <img src="/imagem/hortalica.png" alt="Insumo">
+                    <p>Colher Produto</p>
+                </button>
+            </div> 
 
         </form>
     </div>

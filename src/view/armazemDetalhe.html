@@ -102,21 +102,17 @@
                     <legend>Dados da Hortaliça</legend>
                 </div>
                 <div class="read-block">
-                    <label for="nomeHortalca">Nome:</label>
-                    <input type="text" id="nomeHortalica" name="nomeHortalica" value="alface" readonly>
+                    <label for="nomeHortalca">Nome da Hortaiça:</label>
+                    <p class="input">{{hortalica.nome_Hortalica}}</p>
                 </div>
                <div class="read-block">
                     <label for="quantRestante">Quantidade:</label>
-                    <input type="text" id="quantRestante" name="quantRestante" value="50 pés" readonly>
+                    <p class="input">{{hortalica.quant_Restante_Hortalica}} {{hortalica.contagem_Hortalica}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="valor">Valor:</label>
-                    <input type="text" id="valor" name="valor" value="R$ 2.00 por pé" readonly>
+                    <label for="valor">Valor por {{hortalica.contagem_Hortalica}}:</label>
+                    <p class="input">R$ {{hortalica.valor_Hortalica}}</p>
                 </div>
-                <div class="read-block">
-                    <label for="validade">Validade:</label>
-                    <input type="date" id="validade" name="validade" value="2020-10-25" readonly>
-                </div> 
             </fieldset>
 
             <fieldset class="dados-Botton">
@@ -124,17 +120,17 @@
                     <legend>Dados da Produção</legend>
                 </div>
                 <div class="read-block">
-                    <label for="nomeColaborador">Colaborador Produção   :</label>
-                    <input type="text" id="nomeColaborador" name="nomeColaborador" value="Matheus de Barros Santos" readonly>
+                    <label for="nomeColaborador">Nome do {{hortalica.tipo_Usuario}}:</label>
+                    <p class="input">{{hortalica.nome_Usuario}}</p>
                 </div>
                 <div class="read-block">
                     <label for="tempoProducao">Tempo de Produção:</label>
-                    <input type="text" id="tempoProducao" name="tempoProducao" value="30 dias" readonly>
+                    <p class="input">{{days}} {{contagem}}</p>
                 </div>
             </fieldset>
         </form>
 
-        <a class="button-Editar" href="armazemEditar.html">Editar Dados</a>
+        <a class="button-Editar" href="/editarHortalica">Editar Dados</a>
     </div>
 </body>
 </html>

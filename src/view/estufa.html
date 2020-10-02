@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/style/main.css">
     <link rel="stylesheet" href="/style/mainStyle.css">
     <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
 
@@ -89,39 +90,55 @@
     
     <div class="main">
         <h1>Estufa</h1>
-        <table>
-            <tr>
-                <th colspan="3">O que está sendo produzido</th>
-            </tr>
-            <tr class="head">
-                <th>Hortaliça</th>
-                <th>Dias de Produção</th>
-                <th></th>
-            </tr>
-            <tr>
-                <td>alface </td>
-                <td>15 dias</td>
-                <td><a href="estufaDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>cenoura</td>
-                <td>20 dias</td>
-                <td><a href="estufaDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>beterraba</td>
-                <td>21 dias</td>
-                <td><a href="estufaDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>couve</td>
-                <td>8 diass</td>
-                <td><a href="estufaDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-        </table>
+        <form action="/detalheInsumo" method="POST">
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Busca do produto:</legend>
+                </div>
+                <div class="select-block">
+                    <div class="select">
+                        <label for="codPlantio">Produto:</label>
+                        <select name="codPlantio" id="codPlantio" required>
+                            <option value="" disable="" hidden="">Selecione uma opção</option> 
+                            {%for produto in producao%}
+                                <option value={{produto.cod_Plantacao_Hortalica}}>{{produto.cod_Plantacao_Hortalica}} - {{produto.nome_Hortalica}}</option>
+                            {%endfor%}  
+                        </select>
+                    </div>
+                    <button type="submit" class="salvar">
+                        <img src="/imagem/procurar.png" alt="Buscar">
+                    </button>
+                </div>
+            </fieldset>
+            <fieldset class="dados-Top">
+                <table class="table-Detalhe">
+                    <thead>
+                        <tr>
+                            <th colspan="4">O que está sendo produzido</th>
+                        </tr>
+                        <tr class="head">
+                            <th>Códido</th>
+                            <th>Nome da Produto</th>
+                            <th>Quantidade</th>
+                            <th>Dias de Produção</th>
+                        </tr>
+                        <tr>
+                            {%for produto in producao%}
+                                <tr>
+                                    <td>{{produto.cod_Plantacao_Hortalica}}</td>
+                                    <td>{{produto.nome_Hortalica}}</td>
+                                    <td>{{produto.quant_Plantada}}</td>
+                                    <td>{{produto.dt_Plantio}}</td>
+                                </tr>   
+                            {%endfor%} 
+                        </tr>
+                    </thead>
+                </table>
+            </fieldset>
+        </form>
 
         <div class="button-main">
-            <a href="estufaAdicionarInsumo.html">Adicionar Insumo</a>
+            <a href="/aplicarInsumo">Aplicar Insumo</a>
         </div>
     </div>
 </body>

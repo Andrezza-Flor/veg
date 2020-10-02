@@ -91,7 +91,7 @@
     <div class="main">
         <h1>
             Compra
-            <a href="compra.html">
+            <a href="/compra">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
@@ -103,21 +103,13 @@
                     <legend>Dados do Pedido</legend>
                 </div>
                 <div class="read-block">
-                    <label for="dataEntrega">Nome:</label>
-                    <input type="text" id="dataEntrega" name="dataEntrega" value="10/09/2020" readonly>
-                </div>
-               <div class="read-block">
-                    <label for="nomeColaborador">Colaborador Financeiro:</label>
-                    <input type="text" id="nomeColaborador" name="nomeColaborador" value="Matheus de Barros Santos" readonly>
+                    <label for="nomeUsuario">Nome do {{pedido.tipo_Usuario}}</label>
+                    <p class="input">{{pedido.nome_Usuario}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="tempoEntrega">Valor:</label>
-                    <input type="text" id="tempoEntrega" name="tempoEntrega" value="5 dias" readonly>
+                    <label for="tempoEntrega">Data do Pedido:</label>
+                    <p class="input">{{pedido.dt_Pedido_Compra}}</p>
                 </div>
-                <div class="read-block">
-                    <label for="dataCompra">Data da Compra:</label>
-                    <input type="date" id="dataCompra" name="dataCompra" value="2020-09-05" readonly>
-                </div> 
             </fieldset>
 
             <fieldset class="dados-Botton">
@@ -126,19 +118,23 @@
                 </div>
                 <div class="read-block">
                     <label for="nomeFornecedor">Nome do Fornecedor:</label>
-                    <input type="text" id="nomeFornecedor" name="nomeFornecedor" value="Adubos Fertipol Indústria e Comércio" readonly>
+                    <p class="input">{{fornecedor.nome_Fornecedor}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="docFornecedor">CNPJ:</label>
-                    <input type="text" id="docFornecedor" name="docFornecedor" value="09.122.329/0001-08" readonly>
+                    <label for="docFornecedor">CNPJ do Fornecedor:</label>
+                    <p class="input">{{fornecedor.doc_Fornecedor}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="telefoneFornecedor">Telefone:</label>
-                    <input type="text" id="telefoneFornecedor" name="telefoneFornecedor" value="(11) 3251-1266" readonly>
+                    <label for="telefoneFornecedor">Telefone do Fornecedor:</label>
+                    <p class="input">{{fornecedor.telefone_Fornecedor}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="cepFornecedor">CEP:</label>
-                    <input type="text" id="cepFornecedor" name="cepFornecedor" value="01310-200" readonly>
+                    <label for="cepFornecedor">CEP do Fornecedor:</label>
+                    <p class="input">{{fornecedor.cep_Fornecedor}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="cepFornecedor">Email do Fornecedor:</label>
+                    <p class="input">{{fornecedor.email_Fornecedor}}</p>
                 </div>
 
                 <table class="table-Detalhe">
@@ -147,35 +143,30 @@
                     </tr>
                     <tr class="head">
                         <th>Nome</th>
-                        <th>Tipo</th>
                         <th>Quantidade</th>
-                        <th>Validade</th>
                         <th>Valor</th>
                     </tr>
-                    <tr>
-                        <td>muda de alface</td>
-                        <td>plantar</td>
-                        <td>50 mudas</td>
-                        <td>15/09/2020</td>
-                        <td>R$ 300.00</td>
-                    </tr>
-                    <tr>
-                        <td>muda de beterraba</td>
-                        <td>plantar</td>
-                        <td>50 mudas</td>
-                        <td>15/09/2020</td>
-                        <td>R$ 300.00</td>
-                    </tr>
-                    <tr>
-                        <td>semente cenoura</td>
-                        <td>plantar</td>
-                        <td>7 Kg</td>
-                        <td>15/09/2020</td>
-                        <td>R$ 100.00</td>
-                    </tr>
+                    {%for Item in Itens%}
+                        <tr>
+                            <td>{{Item.nome_Insumo}}</td>
+                            <td>{{Item.quant_Total_Insumo}} {{Item.contagem_Insumo}}</td>
+                            <td>R$ {{Item.valor_Item}}</td>
+                        </tr>
+                    {%endfor%}
                 </table>
+                <div class="read-block">
+                    <label for="valorCompra">Valor do Pedido:</label>
+                    <p class="input">{{pedido.total_Compra}}</p>
+                </div>
             </fieldset>
-        </form>        
+        </form> 
+        
+        <div class="button-Salvar">
+            <a href="/entrarCeleiro">
+                <img src="/imagem/aprovar.png" alt="Entregue">
+                Pedido Entregue
+            </a>
+        </div>
     </div>
 </body>
 </html>

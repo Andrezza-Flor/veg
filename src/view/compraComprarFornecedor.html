@@ -111,7 +111,7 @@
                     <div class="select">
                         <label for="codFornecedorInsumo">Nome do Fornecedor:</label>
                         <select name="codFornecedorInsumo" id="codFornecedorInsumo">
-                            <option value="" disable="" hidden="">Selecione uma opição</option> 
+                            <option value="" disable="" hidden="">Selecione uma opção</option> 
                             {%for fornecedor in listaFornecedor%}
                                 <option value={{fornecedor.cod_Fornecedor}}>{{ fornecedor.nome_Fornecedor }}</option>
                             {%endfor%}  
@@ -159,15 +159,12 @@
                 </div>               
             </fieldset>
         </form>
-           
         
-
-            <button type="submit" class="button-Finalizar">
-                <a href="/comprarInsumo">
-                    Próxima Etapa
-                </a>
-            </button>
-        </form>
+        <div class="button-main">
+            <a href="/comprarInsumo">
+                Próxima Etapa
+            </a>
+        </div>
     </div>
 </body>
 </html>

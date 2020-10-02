@@ -91,7 +91,7 @@
     <div class="main">
         <h1>
             Celeiro 
-            <a href="celeiro.html">
+            <a href="/celeiro">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
@@ -104,64 +104,38 @@
                 </div>
                 <div class="read-block">
                     <label for="nomeInsumo">Nome:</label>
-                    <input type="text" id="nomeInsumo" name="nomeInsumo" value="muda de alface" readonly>
+                    <p class="input">{{insumo.nome_Insumo}}</p>
                 </div>
                <div class="read-block">
                     <label for="quantRestante">Quantidade:</label>
-                    <input type="text" id="quantRestante" name="quantRestante" value="50 mudas" readonly>
-                </div>
-                <div class="read-block">
-                    <label for="valor">Valor:</label>
-                    <input type="text" id="valor" name="valor" value="R$ 0.25 por mudas" readonly>
-                </div>
-                <div class="read-block">
-                    <label for="validade">Validade:</label>
-                    <input type="date" id="validade" name="validade" value="2020-10-20" readonly>
-                </div> 
-            </fieldset>
-
-            <fieldset class="dados-Botton">
-                <div class="title">
-                    <legend>Dados da Compra</legend>
-                </div>
-                <div class="read-block">
-                    <label for="nomeColaborador">Colaborador Financeiro:</label>
-                    <input type="text" id="nomeColaborador" name="nomeColaborador" value="Matheus de Barros Santos" readonly>
-                </div>
-                <div class="read-block">
-                    <label for="tempoEntrega">Tempo de Entrega:</label>
-                    <input type="text" id="tempoEntrega" name="tempoEntrega" value="5 dias" readonly>
-                </div>
-                <div class="read-block">
-                    <label for="dataCompra">Data da Compra:</label>
-                    <input type="date" id="dataCompra" name="dataCompra" value="2020-10-15" readonly>
-                </div>
-                <div class="read-block">
-                    <label for="quantComprada">Validade:</label>
-                    <input type="text" id="quantComprada" name="quantComprada" value="50 unidades" readonly>
+                    <p class="input">{{insumo.quant_Insumo}}</p>
                 </div>
             </fieldset>
 
-            <fieldset class="dados-Botton">
+            <fieldset class="dados-Top">
                 <div class="title">
                     <legend>Dados do Fornecedor</legend>
                 </div>
                 
                 <div class="read-block">
                     <label for="nomeFornecedor">Nome do Fornecedor:</label>
-                    <input type="text" id="nomeFornecedor" name="nomeFornecedor " value="Marketplace MF Rural" readonly>
+                    <p class="input">{{fornecedor.nome_Fornecedor</p>
                 </div>
                 <div class="read-block">
-                    <label for="docFornecedor">CNPJ:</label>
-                    <input type="text" id="docFornecedor" name="docFornecedor" value="10.503.900/0001-05" readonly>
+                    <label for="docFornecedor">CNPJ do Fornecedor:</label>
+                    <p class="input">{{fornecedor.doc_Fornecedor}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="telefoneFornecedor">Telefone:</label>
-                    <input type="text" id="telefoneFornecedor" name="telefoneFornecedor" value="(11)3546-0090" readonly>
+                    <label for="telefoneFornecedor">Telefone do Fornecedor:</label>
+                    <p class="input">{{fornecedor.telefone_Fornecedor}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="cepFornecedor">Validade:</label>
-                    <input type="text" id="cepFornecedor" name="cepFornecedor" value="17502-020" readonly>
+                    <label for="cepFornecedor">Email do Fornecedor:</label>
+                    <p class="input">{{fornecedor.email_Fornecedor}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="cepFornecedor">CEP do Fornecedor:</label>
+                    <p class="input">{{fornecedor.cep_Fornecedor}}</p>
                 </div>
             </fieldset>
         </form>

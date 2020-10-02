@@ -38,11 +38,7 @@ module.exports = {
                     tipo_Usuario: funcaoColaborador
                 })
                 
-                const cod = await knex.from('Plantacoes')
-                .where({email_Gerente: email})
-                .select('Plantacoes.cod_Plantacao')
-
-                const codPlantacao = cod[0].cod_Plantacao;
+                const codPlantacao = Number(local('plantacao'))
     
                 await knex('Logins').insert({
                     email_Usuario: emailColaborador,

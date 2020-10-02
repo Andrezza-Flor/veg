@@ -97,7 +97,7 @@
             </a>
         </h1>
         
-        <form>
+        <form action="/adicionarCliente" method="POST">
             <fieldset class="dados-Top">
                 <div class="title">
                     <legend>Dados do Cliente</legend>
@@ -115,13 +115,17 @@
                     <input type="text" id="telefoneCliente" name="telefoneCliente">
                 </div>
                 <div class="write-block">
-                    <label for="cepClienter">CEP do Cliente:</label>
-                    <input type="text" id="cepClienter" name="cepClienter">
+                    <label for="cepCliente">CEP do Cliente:</label>
+                    <input type="text" id="cepCliente" name="cepCliente">
+                </div>
+                <div class="write-block">
+                    <label for="emailCliente">E-mail do Cliente:</label>
+                    <input type="text" id="emailCliente" name="emailCliente">
                 </div>
             </fieldset>
 
             <button type="submit" class="button-Salvar">
-                <a href="vendaVender.html">Salvar</a>
+                Salvar
             </button>
         </form> 
     </div>

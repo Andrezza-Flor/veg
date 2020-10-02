@@ -4,8 +4,111 @@ const local = require('local-storage');
 const { query } = require('express');
 const { render, runtime } = require('nunjucks');
 const { use, search } = require('../routes');
+const { insert } = require('../database');
 
 module.exports = {
+
+    //Função para Ver detalhe do Pedido de Compra
+    async detalhePedido(req, res, next) {
+        try {
+            // Preparar parâmetro pedido
+            const {
+                codPedido
+            } = req.body
+            local('pedidoCompra', Number(codPedido))
+            const arrayPedido = await knex('Pedidos_Compra')
+            .where({'cod_Pedido_Compra': codPedido})
+            .join('Usuarios', 'Usuarios.email_Usuario', '=', 'Pedidos_Compra.email_Usuario_Comprou')
+            .select('Usuarios.nome_Usuario', 'Usuarios.tipo_Usuario', 'Pedidos_Compra.total_Compra', 'Pedidos_Compra.dt_Pedido_Compra')
+
+            const pedido = arrayPedido[0]
+
+            // Preparar parâmetro fornecedor
+            const arrayFornecedor = await knex('Pedidos_Compra')
+            .where({'cod_Pedido_Compra': codPedido})
+            .join('Fornecedores', 'Fornecedores.cod_Fornecedor', '=', 'Pedidos_Compra.cod_Fornecedor')
+            .select('Fornecedores.*')
+
+            const fornecedor = arrayFornecedor[0]
+            
+            // Preparar parâmentro Itens
+            const Itens = await knex('Itens_Compra')
+            .where({'cod_Pedido_Compra': codPedido})
+            .join('Insumos', 'Insumos.cod_Insumo', '=', 'Itens_Compra.cod_Insumo')
+            .select('Insumos.nome_Insumo','Insumos.contagem_Insumo','Itens_Compra.valor_Item', 'Itens_Compra.quant_Total_Insumo')
+            // Reiderização da página, com os dados
+            return res.render('compraDetalhe.html', {pedido, fornecedor, Itens})
+        } catch (error) {
+            next(error)
+        }
+    },
+    async entrarCeleiro (req, res, next){
+        try {
+            // inserir na tabela Celeiro
+            const codPlantacao = Number(local('plantacao'))
+            const codPedido = Number(local('pedidoCompra'))
+            const arrayItens = await knex('Itens_Compra')
+            .where({'Itens_Compra.cod_Pedido_Compra': codPedido})
+            .join('Pedidos_Compra', 'Pedidos_Compra.cod_Pedido_Compra', '=', 'Itens_Compra.cod_Pedido_Compra')
+            .select('Itens_Compra.cod_Insumo', 'Pedidos_Compra.cod_Fornecedor', 'Itens_Compra.quant_Total_Insumo')
+
+            const arrayCeleiro = await knex('Celeiros')
+            .where({'cod_Plantacao': codPlantacao})
+            .select('cod_Insumo', 'cod_Fornecedor')
+
+            for (var i = 0; i < arrayItens.length; i++) { 
+                const insumo = arrayItens[i].cod_Insumo
+                const fornecedor = arrayItens[i].cod_Fornecedor
+                try {
+                    await knex('Celeiros').insert({
+                        cod_Insumo: arrayItens[i].cod_Insumo,
+                        cod_Fornecedor: arrayItens[i].cod_Fornecedor,
+                        cod_Plantacao: codPlantacao,
+                        quant_Insumo: arrayItens[i].quant_Total_Insumo,
+                    }) 
+                } catch (error) {
+                    const arrayQuantInsumo = await knex('Celeiros')
+                        .where({'cod_Insumo': insumo})
+                        .where({'cod_Fornecedor': fornecedor})
+                        .select('quant_Insumo')
+
+                        // Soma as quantidades
+                        const quantInsumo = arrayQuantInsumo[0].quant_Insumo + arrayItens[i].quant_Total_Insumo
+
+                        // Insere o novo valor na tabela 
+                        await knex('Celeiros')
+                        .where({'cod_Insumo': insumo})
+                        .where({'cod_Fornecedor': fornecedor})
+                        .update({
+                            quant_Insumo: quantInsumo
+                        })
+                }
+                    
+                
+            }
+
+            // Atualizar o status do Pedido de Compra
+            await knex('Pedidos_Compra')
+            .where({'cod_Pedido_Compra': codPedido})
+            .update({
+                status_Pedido: 'entregue'
+            })
+
+            // Preparando listaPedido
+            const listaPedido = await knex('Pedidos_Compra')
+            .where({'cod_Plantacao': codPlantacao})
+            .where({'status_Pedido': 'esperando'})
+            .join('Fornecedores', 'Fornecedores.cod_Fornecedor', 'Pedidos_Compra.cod_Fornecedor')
+            .select('Pedidos_Compra.cod_Pedido_Compra', 'Pedidos_Compra.dt_Pedido_Compra', 'Fornecedores.nome_Fornecedor')
+            
+            
+            return  res.render('compra.html', {listaPedido})
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    // Função para Comprar
     async realizarCompra(req, res, next){
         try {
             // Preparando o parâmetro listaFornecedor
@@ -13,7 +116,7 @@ module.exports = {
             const listaFornecedor = await knex('Fornecedores')
             .join('Fornecedores_Insumos', 'Fornecedores_Insumos.cod_Fornecedor', '=' , 'Fornecedores.cod_Fornecedor')
             .where({'Fornecedores_Insumos.cod_Plantacao': codPlantacao})
-            .select('Fornecedores_Insumos.cod_Fornecedor', 'Fornecedores.nome_Fornecedor')
+            .distinct('Fornecedores_Insumos.cod_Fornecedor', 'Fornecedores.nome_Fornecedor')
 
             return res.render('compraComprarFornecedor.html', {listaFornecedor})
         } catch (error) {
@@ -27,7 +130,7 @@ module.exports = {
             const listaFornecedor = await knex('Fornecedores')
             .join('Fornecedores_Insumos', 'Fornecedores_Insumos.cod_Fornecedor', '=' , 'Fornecedores.cod_Fornecedor')
             .where({'Fornecedores_Insumos.cod_Plantacao': codPlantacao})
-            .select('Fornecedores_Insumos.cod_Fornecedor', 'Fornecedores.nome_Fornecedor')
+            .distinct('Fornecedores_Insumos.cod_Fornecedor', 'Fornecedores.nome_Fornecedor')
 
             //Preparanso parâmetro dadosFornecedor
             const {
@@ -55,9 +158,10 @@ module.exports = {
             await knex('Pedidos_Compra').insert({
                 cod_Pedido_Compra: null,
                 total_Compra: 0,
-                email_Usuario_Compra: emailUsuario,
+                email_Usuario_Comprou: emailUsuario,
                 cod_Fornecedor: codFornecedorInsumo,
                 cod_Plantacao: codPlantacao,
+                status_Pedido: 'esperando'
             })
 
             // Pegando o codigo do Pedido
@@ -106,7 +210,7 @@ module.exports = {
             const Itens = await knex('Itens_Compra')
             .where({'cod_Pedido_Compra': codPedido})
             .join('Insumos', 'Insumos.cod_Insumo', '=', 'Itens_Compra.cod_Insumo')
-            .select('Itens_Compra.validade_Item', 'Itens_Compra.quant_Total_Insumo', 'Itens_Compra.valor_Item', 'Insumos.nome_Insumo')
+            .select('Itens_Compra.valor_Item', 'Insumos.nome_Insumo', 'Insumos.contagem_Insumo')
 
             return res.render('compraComprarInsumo.html', {listaInsumo, nomeInsumo, contagemInsumo, Itens})
         } catch (error) {
@@ -137,7 +241,6 @@ module.exports = {
 
             // Adicionar no banco Itens_Compra
             const {
-                validadeInsumo,
                 quantInsumo,
                 valorInsumo
             } = req.body
@@ -146,10 +249,8 @@ module.exports = {
             await knex('Itens_Compra').insert({
                 cod_Item_Compra: null,
                 quant_Total_Insumo: quantInsumo,
-                quant_Restante_Insumo: quantInsumo,
                 cod_Pedido_Compra: codPedido,
                 cod_Insumo: codInsumo,
-                validade_Item: validadeInsumo,
                 valor_Item: valorInsumo
             })
 
@@ -157,7 +258,7 @@ module.exports = {
             const Itens = await knex('Itens_Compra')
             .where({'cod_Pedido_Compra': codPedido})
             .join('Insumos', 'Insumos.cod_Insumo', '=', 'Itens_Compra.cod_Insumo')
-            .select('Itens_Compra.validade_Item', 'Itens_Compra.quant_Total_Insumo', 'Itens_Compra.valor_Item', 'Insumos.nome_Insumo')
+            .select('Itens_Compra.quant_Total_Insumo', 'Itens_Compra.valor_Item', 'Insumos.nome_Insumo', 'Insumos.contagem_Insumo')
 
             return res.render('compraComprarInsumo.html', {listaInsumo, nomeInsumo, contagemInsumo, Itens})
         } catch (error) {
@@ -191,7 +292,7 @@ module.exports = {
             // Prepara parâmetro dadoCompra
             var total = 0
             for (var i = 0; i < dadoItem.length; i++) {
-                total = total + dadoItem[i].valor_Item
+                total = total + (dadoItem[i].valor_Item * dadoItem[i].quant_Total_Insumo)
             }
 
             await knex('Pedidos_Compra')
@@ -464,6 +565,4 @@ module.exports = {
         }
             
     }
-
-
 }

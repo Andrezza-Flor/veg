@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/style/main.css">
-    <link rel="stylesheet" href="/style/mainStyle.css">
+    <link rel="stylesheet" href="/style/mainStyle.css"> 
     <link rel="stylesheet" href="/style/formStyle.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
@@ -88,52 +88,65 @@
     </div>
     
     <div class="main">
-
-        <h1>Estufa
-            <a href="estufaDetalhe.html">
-                <img src="/imagem/voltar.png" alt="Voltar">
+        <h1>
+            Estufa 
+            <a href="estufa.html">
+                <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
 
-        <form>
-            <fieldset class="dados-Top">
+        <form action="/buscarInsumo" method="POST">
+            <fieldset class="dados-Botton">
                 <div class="title">
-                    <legend>Dados da Hortaliça</legend>
+                    <legend>Escolha do Insumo</legend>
                 </div>
-                <div class="read-block">
-                    <label for="nomeProduto">Nome do Produto:</label>
-                    <input type="text" id="nomeProduto" name="nomeProduto" value="alface" readonly>
+                <div class="select-block">
+                    <div class="select">
+                        <label for="codPosicao">Nome do Insumo:</label>
+                        <select name="codPosicao" id="codPosicao" required>
+                            <option value="" disable="" hidden="">Selecione uma opção</option> 
+                            {%for insumo in listaInsumo%}
+                                <option value={{insumo.cod_posicao_celeiro}}>{{ insumo.nome_Insumo }} - {{insumo.nome_Fornecedor}}</option>
+                            {%endfor%}  
+                        </select>
+                    </div>
+                    <button type="submit">
+                        <img src="/imagem/procurar.png" alt="Adicionar">
+                    </button>
                 </div>
-               <div class="write-block">
-                    <label for="quant">Quantidade:</label>
-                    <input type="text" id="quant" name="quant" value="30 pés">
-                </div>
-                <div class="read-block">
-                    <label for="dtPlantio">Data de Plantio:</label>
-                    <input type="date" id="dtPlantio" name="dtPlantio" value="2020-08-19" readonly>
-                </div> 
-                <div class="read-block">
-                    <label for="diasProducao">Dias de Produção:</label>
-                    <input type="text" id="valor" name="valor" value="R$ 2.00 por pé" readonly>
-                </div>
-                <div class="read-block">
-                    <label for="nomeColaborador">Colaborador de Produção:</label>
-                    <input type="text" id="nomeColaborador" name="nomeColaborador" value="Katia Pereira" readonly>
-                </div>
-
-            </fieldset>
-
-            <div class="botton-foot">
-                <a class="button-Cancelar" href="estufa.html">Cancelar</a>
-
-                <button type="submit" class="button-Salvar">
-                    <a href="armazem.html">
-                        Colher Hortaliça
+                <div class="foot-dados-Botton">
+                    <div class="aviso-foot">
+                         <img src="/imagem/aviso.png" alt="Aviso">
+                         <p>Caso não tenha achado o insumo é possivel compra-lo.</p>
+                    </div>
+                    <a href="/realizarCompra">
+                        <img src="/imagem/insumo.png" alt="Insumo">
+                        <p>Comprar Insumo</p>
                     </a>
-                </button>  
-            </div>
+                </div>
+            </fieldset>
+        </form>
 
+        <form action="/aplicarInsumo" method="POST">
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Preencha os dados da aplicação do {{Insumo.nome_Insumo}}</legend>
+                </div>
+                <div class="read-block">
+                    <label for="nomeInsumo">Nome do Insumo:</label>
+                    <p class="input">{{Insumo.nome_Insumo}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="nomeInsumo">Nome do Fornecedor:</label>
+                    <p class="input">{{Insumo.nome_Fornecedor}}</p>
+                </div>
+                <div class="write-block">
+                    <label for="quantInsumo">Quantidade de Insumo em {{Insumo.contagem_Insumo}}:</label>
+                    <input type="number" id="quantInsumo" name="quantInsumo" min="1" max={{Insumo.quant_Insumo}} required>
+                </div>
+            </fieldset>
+            <button type="submit" class="button-Salvar">Aplicar</button>       
         </form>
     </div>
 </body>

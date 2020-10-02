@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/style/main.css">
     <link rel="stylesheet" href="/style/mainStyle.css">
     <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
 
@@ -89,46 +90,50 @@
     
     <div class="main">
         <h1>Armazém</h1>
-        <table>
-            <tr>
-                <th colspan="3">Lista de Hortaliças no Armazém</th>
-            </tr>
-            <tr class="head">
-                <th>Hortaliça</th>
-                <th>Quantidade</th>
-                <th></th>
-            </tr>
-            <tr>
-                <td>alface </td>
-                <td>50 pés</td>
-                <td><a href="armazemDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>beterraba</td>
-                <td>30 Kg</td>
-                <td><a href="armazemDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>feijão</td>
-                <td>100 Kg</td>
-                <td><a href="armazemDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>cenoura</td>
-                <td>30 Kg</td>
-                <td><a href="armazemDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>couve</td>
-                <td>20 pés</td>
-                <td><a href="armazemDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>rúcula</td>
-                <td>20 pés</td>
-                <td><a href="armazemDetalhe.html"> Ver Detalhe</a></td>
-            </tr>
-        </table>
+        <form action="/detalheHortalica" method="POST">
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Busca da Hortalica:</legend>
+                </div>
+                <div class="select-block">
+                    <div class="select">
+                        <label for="codPosicao">Produto:</label>
+                        <select name="codPosicao" id="codPosicao" required>
+                            <option value="" disable="" hidden="">Selecione uma opção</option> 
+                            {%for hortalica in listaHortalica%}
+                                <option value={{hortalica.cod_Posicao_Armazem}}>{{hortalica.cod_Posicao_Armazem}} - {{hortalica.nome_Hortalica}}</option>
+                            {%endfor%}  
+                        </select>
+                    </div>
+                    <button type="submit" class="salvar">
+                        <img src="/imagem/procurar.png" alt="Buscar">
+                    </button>
+                </div>
+            </fieldset>
+            <fieldset class="dados-Top">
+                <table class="table-Detalhe">
+                    <thead>
+                        <tr>
+                            <th colspan="4">Hortaliças Armazendas</th>
+                        </tr>
+                        <tr class="head">
+                            <th>Códido</th>
+                            <th>Nome da Hortalica</th>
+                            <th>Quantidade</th>
+                        </tr>
+                        <tr>
+                            {%for hortalica in listaHortalica%}
+                                <tr>
+                                    <td>{{hortalica.cod_Posicao_Armazem}}</td>
+                                    <td>{{hortalica.nome_Hortalica}}</td>
+                                    <td>{{hortalica.quant_Restante_Hortalica}} {{hortalica.contagem_Hortalica}}</td>
+                                </tr>   
+                            {%endfor%} 
+                        </tr>
+                    </thead>
+                </table>
+            </fieldset>
+        </form>
     </div>
 </body>
 </html>
