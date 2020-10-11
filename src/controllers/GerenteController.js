@@ -1,5 +1,8 @@
 const knex = require('../database')
 const e = require('express')
+const local = require('local-storage');
+const { editarHortalica } = require('./ArmazemController');
+const { returning } = require('../database');
 
 module.exports = {
     // Função de apresentação de gerente
@@ -66,39 +69,112 @@ module.exports = {
         }        
     },
 
-    // // Função de atualizar o gerente **
-    // async update(req, res, next) {
-    //     try {
-
-    //         const { 
-    //             nome_Usuario
-    //          } = req.body
-
-    //          const { email_Usuario } = req.params
-
-    //         await knex('Usuarios')
-    //         .update({ 
-    //             nome_Usuario
-    //          })
-    //         .where({ email_Usuario })
-
-    //     return  res.render('loginPage.html')
-
-    //     } catch (error) {
-    //         next(error)
-    //     }
-    // },
-
-    //Função de deletar o gernete **
-    async delete(req, res, next) {
+    // Função de atualizar o dados do Usuário **
+    async paginaEditar(req, res, next) {
         try {
-            const { email_Usuario } = req.params
+            const email = local('email')
+            
+            const arrayUsuario = await knex('Usuarios')
+            .where({'Usuarios.email_Usuario': email})
+            .join('Logins', 'Logins.email_Usuario', '=', 'Usuarios.email_Usuario')
+            .select('Logins.*', 'Usuarios.*')
+
+            var dadosUsuario = arrayUsuario[0]
+            var dt = String(dadosUsuario.dt_Admisso_Usuario)
+            var mes = dt.slice(4, 7)
+            var dia = dt.slice(8,10)
+            var ano = dt.slice(11, 15)
+
+            var data = dia + ' de ' + mes + '. ' + ano
+            dadosUsuario.dt_Admisso_Usuario= data;
+
+            dt = String(dadosUsuario.dt_Nasc_Usuario )
+            mes = dt.slice(4, 7)
+            dia = dt.slice(8,10)
+            ano = dt.slice(11, 15)
+
+            data = dia + ' de ' + mes + '. ' + ano
+            dadosUsuario.dt_Nasc_Usuario = data; 
+
+        return  res.render('perfilEditar.html', {dadosUsuario})
+
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    async editarPerfil(req, res, next){
+        try {
+            const email = local('email')
+
+            const {
+                nomeUsuario,
+                telefoneUsuario,
+                passUsuario
+            } = req.body
+
+            console.log(nomeUsuario, telefoneUsuario, passUsuario)
 
             await knex('Usuarios')
-            .where({ email_Usuario })
+            .where({'Usuarios.email_Usuario': email})
+            .join('Logins', 'Logins.email_Usuario', '=', 'Usuarios.email_Usuario')
+            .update({ 
+                'nome_Usuario': nomeUsuario,
+                'telefone_Usuario': telefoneUsuario,
+                'senha_Usuario': passUsuario
+             })
+
+            const dadosPerfil = await knex.from('Usuarios')
+            .where({'Usuarios.email_Usuario': email})
+            .join('Logins', 'Logins.email_Usuario', '=', 'Usuarios.email_Usuario')
+            .select('Usuarios.*', 'Logins.dt_Admisso_Usuario')
+
+            var dt = String(dadosPerfil[0].dt_Admisso_Usuario)
+            var mes = dt.slice(4, 7)
+            var dia = dt.slice(8,10)
+            var ano = dt.slice(11, 15)
+
+            var data = dia + ' de ' + mes + '. ' + ano
+
+            dadosPerfil[0].dt_Admisso_Usuario = data;
+
+
+            var dt = String(dadosPerfil[0].dt_Nasc_Usuario)
+            var mes = dt.slice(4, 7)
+            var dia = dt.slice(8,10)
+            var ano = dt.slice(11, 15)
+
+            var data = dia + ' de ' + mes + '. ' + ano
+
+            dadosPerfil[0].dt_Nasc_Usuario = data;
+            
+            const usuario = dadosPerfil[0]
+
+            return res.render('perfil.html', { usuario });
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    //Função de deletar o gernete **
+    async inabilitar(req, res, next) {
+        try {
+            const email = local('email')
+            const codPlantacao = local('plantacao')
+
+            await knex('Logins')
+            .where({'email_Usuario': email })
             .del()
 
-            return res.send()
+            const listaColaborador = await knex('Logins')
+            .where({'cod_Plantacao': codPlantacao})
+            .whereNot({'tipo_Usuario': 'Gerente'})
+            .join('Usuarios', 'Usuarios.email_Usuario', '=', 'Logins.email_Usuario')
+            .select('Usuarios.nome_Usuario',
+                    'Usuarios.email_Usuario',
+                    'Usuarios.tipo_Usuario')
+            
+            return  res.render('loginPage.html')
 
         } catch (error) {
             next(error)

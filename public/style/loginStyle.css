@@ -13,6 +13,17 @@ body {
     display: flex;
 }
 
+#message {
+    position: fixed;
+    font-size: 2rem;
+    text-align: center;
+    color: var(--color-button-cancel);
+    font-family: Poppins;
+
+    padding-left: 15rem;
+    padding-top: 1rem;
+}
+
 .conteiner-access {
     margin-top: auto;
     margin-right: 5rem;
@@ -78,6 +89,11 @@ button {
     font-family: Poppins;
 }
 
+button:hover{
+    transition: 0.2s;
+    background-color: var(--color-secondary-dark);
+}
+
 button a {
     text-decoration: none;
 }
@@ -137,6 +153,11 @@ a {
     margin-left: auto;
     margin-right: auto;
 
+}
+
+.make-manager:hover{
+    transition: 0.2s;
+    background-color: var(--color-primary-dark);
 }
 
 .make-manager p{

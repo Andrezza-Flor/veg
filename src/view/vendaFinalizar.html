@@ -91,7 +91,7 @@
     <div class="main">
         <h1>
             Venda
-            <a href="vendaVender.html">
+            <a href="/escolherHortalica">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
@@ -100,15 +100,15 @@
         <form>
             <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Finalizar Venda</legend>
+                    <legend>Dados da Venda</legend>
                 </div>
                 <div class="read-block">
-                    <label for="nomeColaborador">Nome do Colaborador:</label>
-                    <input type="text" id="nomeColaborador" name="nomeColaborador" value="Matheus de Barros Santos" readonly>
+                    <label for="nomeColaborador">Nome do {{usuario.tipo_Usuario}}:</label>
+                    <p class="input">{{usuario.nome_Usuario}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="dataCompra">Data da Compra:</label>
-                    <input type="text" id="dataCompra" name="dataCompra" value="2020/09/09" readonly>
+                    <label for="dataCompra">Data da Venda:</label>
+                    <p class="input">{{data}}</p>
                 </div>
             </fieldset>
 
@@ -117,22 +117,25 @@
                     <legend>Dados do Clinte</legend>
                 </div>
                 <div class="read-block">
-                    <label for="nomeFornecedor">Nome Cliente:</label>
-                    <input type="text" id="nomeFornecedor" name="nomeFornecedor" value="Mercado Dia% - Butantã" readonly>
+                    <label for="nomeCliente">Nome do Cliente:</label>
+                    <p class="input">{{cliente.nome_Cliente}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="docCliente">CNPJ Cliente:</label>
-                    <input type="text" id="docCliente" name="docCliente" value="08.561.281/0001-63" readonly>
+                    <label for="docCliente">Documento do Cliente:</label>
+                    <p class="input">{{cliente.doc_Cliente}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="telefoneCliente">Telefone Cliente:</label>
-                    <input type="text" id="telefoneCliente" name="telefoneCliente" value="(11)4002-1080" readonly>
+                    <label for="telefoneCliente">Telefone do Cliente:</label>
+                    <p class="input">{{cliente.telefone_Cliente}}</p>    
                 </div>
                 <div class="read-block">
-                    <label for="cepCliente">CEP Cliente:</label>
-                    <input type="text" id="cepCliente" name="cepCliente" value="05589-020" readonly>
+                    <label for="cepCliente">CEP do Cliente:</label>
+                    <p class="input">{{cliente.cep_Cliente}}</p>
                 </div>
-          
+                <div class="read-block">
+                    <label for="emailCliente">E-mail do Cliente:</label>
+                    <p class="input">{{cliente.email_Cliente}}</p>
+                </div>
             </fieldset>
 
             <fieldset class="dados-Botton">
@@ -141,37 +144,34 @@
                 </div>
                 <table class="table-Detalhe">
                     <tr class="head">
+                        <th></th>
                         <th>Nome</th>
-                        <th>Validade</th>
                         <th>Quantidade</th>
                         <th>Valor</th>
                     </tr>
-                    <tr>
-                        <td>alface</td>
-                        <td>30/09/2020</td>
-                        <td>50 pés</td>
-                        <td>R$ 100.00</td>
-                    </tr>
-                    <tr>
-                        <td>colve</td>
-                        <td>30/09/2020</td>
-                        <td>50 maço</td>
-                        <td>R$ 100.00</td>
-                    </tr>
+                    {%for item in arrayItensVenda%}
+                        <tr>
+                                <td>{{loop.index0}}</td>
+                            <td>{{item.nome_Hortalica}}</td>
+                            <td>{{item.quant_Vendida}} {{item.contagem_Hortalica}}</td>
+                            <td>R$ {{item.valor_Hortalica}}</td>
+                        </tr>
+                    {%endfor%}
+                    
                 </table>
-                <div class="foot-block">
-                    <label for="totalVenda">Total da Venda:</label>
-                    <input type="text" id="totalVenda" name="totalVenda" value="RS 200.00" readonly>
+                <div class="read-block-botton">
+                    <label for="totalCompra">Total da Compra: </label>
+                    <p class="button-input"> <strong>R$ {{total}}</strong></p>
                 </div>
             </fieldset>
             
             <div class="botton-foot">
                 <button type="submit" class="button-Cancelar">
-                    <a href="venda.html">Cancelar</a>
+                    <a href="/venda">Cancelar</a>
                 </button>  
 
                 <button type="submit" class="button-Salvar">
-                    <a href="venda.html">Salvar</a>
+                    <a href="/salvarVenda">Salvar</a>
                 </button>  
             </div>
 

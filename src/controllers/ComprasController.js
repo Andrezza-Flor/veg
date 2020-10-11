@@ -6,6 +6,8 @@ const { render, runtime } = require('nunjucks');
 const { use, search } = require('../routes');
 const { insert } = require('../database');
 
+const arrayItensCompra = []
+
 module.exports = {
 
     //Função para Ver detalhe do Pedido de Compra
@@ -109,7 +111,7 @@ module.exports = {
     },
 
     // Função para Comprar
-    async realizarCompra(req, res, next){
+    async comprar(req, res, next){
         try {
             // Preparando o parâmetro listaFornecedor
             const codPlantacao = local('plantacao')
@@ -123,7 +125,7 @@ module.exports = {
             next(error)
         }
     },
-    async buscarFornecedor(req, res, next ){
+    async escolherFornecedor(req, res, next ){
         try {
             //Preparando parametro listaFornecedor
             const codPlantacao = Number(local('plantacao'))
@@ -143,6 +145,10 @@ module.exports = {
             const dadosFornecedor = arrayFornecedor[0]
 
             local('fornecedor', String(codFornecedorInsumo))
+
+            while (arrayItensCompra.length) {
+                arrayItensCompra.pop()
+            }
             
             return res.render('compraComprarFornecedor.html', {listaFornecedor, dadosFornecedor})
         } catch (error) {
@@ -153,31 +159,24 @@ module.exports = {
         try {
             // Inserinrdo dados na tabela Pedidos_Compra
             const emailUsuario = local('email')
-            const codFornecedorInsumo = Number(local('fornecedor'))
+            const codFornecedor = Number(local('fornecedor'))
             const codPlantacao = Number(local('plantacao'))
-            await knex('Pedidos_Compra').insert({
-                cod_Pedido_Compra: null,
-                total_Compra: 0,
-                email_Usuario_Comprou: emailUsuario,
-                cod_Fornecedor: codFornecedorInsumo,
-                cod_Plantacao: codPlantacao,
-                status_Pedido: 'esperando'
-            })
+           
 
-            // Pegando o codigo do Pedido
-            const codigos = await knex('Pedidos_Compra')
-            .where({'cod_Plantacao': codPlantacao})
-            .select('cod_Pedido_Compra')
-            const codPedidoCompra = String(codigos[codigos.length -1].cod_Pedido_Compra)
-            local('pedidoCompra', codPedidoCompra)
+            // Preparando o parametro fornecedor
+            const arrayFornecedor = await knex('Fornecedores')
+            .where({'cod_Fornecedor': codFornecedor})
+            .select('Fornecedores.nome_Fornecedor')
+
+            const fornecedor = arrayFornecedor[0].nome_Fornecedor
 
             //Preparando parâmetro listaInsumo
             const listaInsumo = await knex('Fornecedores_Insumos')
-            .where({'cod_Fornecedor': codFornecedorInsumo})
+            .where({'cod_Fornecedor': codFornecedor})
             .join('Insumos', 'Fornecedores_Insumos.cod_Insumo', '=', 'Insumos.cod_Insumo')
             .select('Insumos.cod_Insumo', 'Insumos.nome_Insumo')
 
-            return res.render('compraComprarInsumo.html', {listaInsumo})
+            return res.render('compraComprarInsumo.html', {fornecedor, listaInsumo})
                 
         } catch (error) {
             next(error)
@@ -185,8 +184,17 @@ module.exports = {
     },
     async escolherInsumo(req, res, next){
         try {
-            //Preparando parâmetro listaInsumo
             const codFornecedorInsumo = Number(local('fornecedor'))
+
+            // Preparando o parametro fornecedor
+            const arrayFornecedor = await knex('Fornecedores')
+            .where({'cod_Fornecedor': codFornecedorInsumo})
+            .select('Fornecedores.nome_Fornecedor')
+
+            const fornecedor = arrayFornecedor[0].nome_Fornecedor
+
+            //Preparando parâmetro listaInsumo
+            
 
             const listaInsumo = await knex('Fornecedores_Insumos')
             .where({'cod_Fornecedor': codFornecedorInsumo})
@@ -205,107 +213,166 @@ module.exports = {
 
             local('insumo', String(codInsumo))
 
-            // Preparar Itens
-            const codPedido = Number(local('pedidoCompra'))
-            const Itens = await knex('Itens_Compra')
-            .where({'cod_Pedido_Compra': codPedido})
-            .join('Insumos', 'Insumos.cod_Insumo', '=', 'Itens_Compra.cod_Insumo')
-            .select('Itens_Compra.valor_Item', 'Insumos.nome_Insumo', 'Insumos.contagem_Insumo')
-
-            return res.render('compraComprarInsumo.html', {listaInsumo, nomeInsumo, contagemInsumo, Itens})
+            return res.render('compraComprarInsumo.html', {fornecedor, listaInsumo, nomeInsumo, contagemInsumo, arrayItensCompra})
         } catch (error) {
             next(error)
         }
     },
     async adicionarItem(req, res, next){
         try {
-            // Preparar listaInsumo
             const codFornecedorInsumo = Number(local('fornecedor'))
+            const codInsumo = Number(local('insumo'))
 
+            // Preparando o parametro fornecedor
+            const arrayFornecedor = await knex('Fornecedores')
+            .where({'cod_Fornecedor': codFornecedorInsumo})
+            .select('Fornecedores.nome_Fornecedor')
+
+            const fornecedor = arrayFornecedor[0].nome_Fornecedor
+
+            // Preparar listaInsumo
+            
             const listaInsumo = await knex('Fornecedores_Insumos')
             .where({'cod_Fornecedor': codFornecedorInsumo})
             .join('Insumos', 'Fornecedores_Insumos.cod_Insumo', '=', 'Insumos.cod_Insumo')
-            .select('Insumos.cod_Insumo', 'Insumos.nome_Insumo')
-
+            .select('Insumos.cod_Insumo', 
+                    'Insumos.nome_Insumo')
 
             //Preparar nomeInsumo
-            const codInsumo = Number(local('insumo'))
             const arrayInsumo = await knex('Insumos')
             .where({'cod_Insumo': codInsumo})
             .select('nome_Insumo', 'contagem_Insumo')
 
             const nomeInsumo = arrayInsumo[0].nome_Insumo
             
-            //Preparar conatgemInsumo
+            //Preparar contagemInsumo
             const contagemInsumo = arrayInsumo[0].contagem_Insumo
 
             // Adicionar no banco Itens_Compra
+
             const {
                 quantInsumo,
                 valorInsumo
             } = req.body
             const codPedido = Number(local('pedidoCompra'))
 
-            await knex('Itens_Compra').insert({
-                cod_Item_Compra: null,
+            const itemCompra = {
                 quant_Total_Insumo: quantInsumo,
                 cod_Pedido_Compra: codPedido,
                 cod_Insumo: codInsumo,
-                valor_Item: valorInsumo
-            })
+                nome_Insumo: arrayInsumo[0].nome_Insumo,
+                valor_Insumo: valorInsumo,
+                contagem_Insumo: arrayInsumo[0].contagem_Insumo
+            }
 
-            // Preparar Itens
-            const Itens = await knex('Itens_Compra')
-            .where({'cod_Pedido_Compra': codPedido})
-            .join('Insumos', 'Insumos.cod_Insumo', '=', 'Itens_Compra.cod_Insumo')
-            .select('Itens_Compra.quant_Total_Insumo', 'Itens_Compra.valor_Item', 'Insumos.nome_Insumo', 'Insumos.contagem_Insumo')
+            // Preparar arrayItensCompra
+            if (quantInsumo > 0) {
+                arrayItensCompra.push(itemCompra)
+            }
 
-            return res.render('compraComprarInsumo.html', {listaInsumo, nomeInsumo, contagemInsumo, Itens})
+            return res.render('compraComprarInsumo.html', {fornecedor, listaInsumo, nomeInsumo, contagemInsumo, arrayItensCompra})
         } catch (error) {
             next(error)
         }
     },
     async finalizaCompra(req, res, next){
         try {
-            // Preparar parâmetro dadosUsuario
             const emailUsuario = local('email')
+            const codFornecedor = Number(local('fornecedor'))
+
+            // Preparar parâmetro dadosUsuario
             const arrayDadoUsuario = await knex('Usuarios')
             .where({'email_Usuario': emailUsuario})
             .select('Usuarios.nome_Usuario', 'Usuarios.tipo_Usuario')
             const dadoUsuario = arrayDadoUsuario[0]
 
+            const dt = String(new Date)
+            const mes = dt.slice(4, 7)
+            const dia = dt.slice(8,10)
+            const ano = dt.slice(11, 15)
+
+            const data = dia + ' de ' + mes + '. ' + ano
+
             // Preparar parâmetro dadoFornecedor
-            const codFornecedor = Number(local('fornecedor'))
             const arrayFornecedor = await knex('Fornecedores')
             .where({'cod_Fornecedor': codFornecedor})
-            .select('Fornecedores.doc_Fornecedor', 'Fornecedores.nome_Fornecedor', 'Fornecedores.telefone_Fornecedor', 'Fornecedores.cep_Fornecedor', 'Fornecedores.email_Fornecedor')
+            .select('Fornecedores.doc_Fornecedor',
+                    'Fornecedores.nome_Fornecedor', 
+                    'Fornecedores.telefone_Fornecedor', 
+                    'Fornecedores.cep_Fornecedor', 
+                    'Fornecedores.email_Fornecedor')
 
-            const dadoFornecedor = arrayFornecedor[arrayFornecedor.length -1]
+            const dadoFornecedor = arrayFornecedor[0]
 
             // Preparar parâmetro dadoItem
-            const codPedido = Number(local('pedidoCompra'))
-            const dadoItem = await knex('Itens_Compra')
-            .where({'cod_Pedido_Compra': codPedido})
-            .join('Insumos', 'Insumos.cod_Insumo', '=', 'Itens_Compra.cod_Insumo')
-            .select('Insumos.nome_Insumo', 'Insumos.contagem_Insumo', 'Itens_Compra.*')
-            
-            // Prepara parâmetro dadoCompra
             var total = 0
-            for (var i = 0; i < dadoItem.length; i++) {
-                total = total + (dadoItem[i].valor_Item * dadoItem[i].quant_Total_Insumo)
+            for (let index = 0; index < arrayItensCompra.length; index++) {
+                total = (arrayItensCompra[index].quant_Total_Insumo * arrayItensCompra[index].valor_Insumo)+ total;
             }
 
-            await knex('Pedidos_Compra')
-            .where({'cod_Pedido_Compra': codPedido})
-            .update({
-                total_Compra: total,
-            })
-            const arrayPedidos = await knex('Pedidos_Compra')
-            .where({'cod_Pedido_Compra': codPedido})
-            .select('Pedidos_Compra.dt_Pedido_Compra', 'Pedidos_Compra.total_Compra')
+            return res.render('compraFinalizarCompra.html', {dadoUsuario, data, dadoFornecedor, arrayItensCompra, total})
+        } catch (error) {
+            next(error)
+        }
+    },
+    async salvarCompra(req, res, next){
+        try {
+            const emailUsuario = local('email')
+            const codFornecedor = Number(local('fornecedor'))
+            const codPlantacao = Number(local('plantacao'))
 
-            const dadoCompra = arrayPedidos[0]
-            return res.render('compraFinalizarCompra.html', {dadoUsuario, dadoFornecedor, dadoItem, dadoCompra})
+            var total = 0
+            for (let index = 0; index < arrayItensCompra.length; index++) {
+                total = (arrayItensCompra[index].quant_Total_Insumo * arrayItensCompra[index].valor_Insumo)+ total;
+            }
+
+            // Inserir os dados na tabela Pedido_Compra
+            await knex('Pedidos_Compra').insert({
+                'cod_Pedido_Compra': null,
+                'total_Compra': total,
+                'email_Usuario_Comprou': emailUsuario,
+                'cod_Fornecedor': codFornecedor,
+                'cod_Plantacao': codPlantacao,
+                'status_Pedido': 'esperando'
+            })
+
+            // Pegando o codigo do Pedido
+            const codigos = await knex('Pedidos_Compra')
+            .where({'cod_Plantacao': codPlantacao})
+            .select('cod_Pedido_Compra')
+            const codPedidoCompra = Number(codigos[codigos.length -1].cod_Pedido_Compra)
+           
+            
+            //Inserir os dados na tabela Itens_Compra
+            for (let index = 0; index < arrayItensCompra.length; index++) {
+                await knex('Itens_Compra').insert({
+                    'cod_Item_Compra': null,
+                    'quant_Total_Insumo': arrayItensCompra[index].quant_Total_Insumo,
+                    'cod_Pedido_Compra': codPedidoCompra,
+                    'cod_Insumo': arrayItensCompra[index].cod_Insumo,
+                    'valor_Item': arrayItensCompra[index].valor_Insumo
+                })
+            }
+
+            // Trazendo dados da tabela
+            const listaPedido = await knex('Pedidos_Compra')
+            .where({'cod_Plantacao': codPlantacao})
+            .where({'status_Pedido': 'esperando'})
+            .join('Fornecedores', 'Fornecedores.cod_Fornecedor', 'Pedidos_Compra.cod_Fornecedor')
+            .select('Pedidos_Compra.cod_Pedido_Compra', 'Pedidos_Compra.dt_Pedido_Compra', 'Fornecedores.nome_Fornecedor')
+
+            for (let index = 0; index < listaPedido.length; index++) {
+                const dt = String(listaPedido[index].dt_Pedido_Compra)
+                const mes = dt.slice(4, 7)
+                const dia = dt.slice(8,10)
+                const ano = dt.slice(11, 15)
+
+                const data = dia + ' de ' + mes + '. ' + ano
+
+                listaPedido[index].dt_Pedido_Compra = data;                
+            }
+
+            return  res.render('compra.html', {listaPedido})
         } catch (error) {
             next(error)
         }

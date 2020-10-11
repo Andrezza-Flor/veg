@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="/style/main.css">
-    <link rel="stylesheet" href="/style/formStyle.css">
+    <link rel="stylesheet" href="/style/formCadastro.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
 
@@ -14,11 +14,7 @@
 <body>
    
     <div class="form-criacao">
-        <h1 class="main-title">
-            Perfil
-        </h1>
-
-        <form action="/cadastrar" method="POST">
+           <form action="/cadastrar" method="POST">
             <fieldset class="dados-Top">
                 <div class="title">
                     <legend>Dados Pessoais</legend>
@@ -61,14 +57,13 @@
                     <label for="funcaoUsuario">Função:</label>
                     <p class="input">Gerente</p>
                 </div>
-                
+                <div class="botton-foot">
+                    <a class="button-Cancelar" href="/">Cancelar</a>
+    
+                    <button type="submit" class="button-Salvar">Salvar</button>  
+                </div>
             </fieldset>
-
-            <div class="botton-foot">
-                <a class="button-Cancelar" href="/">Cancelar</a>
-
-                <button type="submit" class="button-Salvar">Salvar</button>  
-            </div>
+            
         </form>        
     </div>
 </body>

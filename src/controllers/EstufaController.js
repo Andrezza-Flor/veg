@@ -17,6 +17,7 @@ module.exports = {
             // Lista de Insumos no Celeiro
             const listaInsumo = await knex('Celeiros')
             .where({'cod_Plantacao': codPlantacao})
+            .whereNot({'Celeiros.quant_Insumo': 0})
             .join('Insumos', 'Insumos.cod_Insumo', 'Celeiros.cod_Insumo')
             .join('Fornecedores', 'Fornecedores.cod_Fornecedor', '=', 'Celeiros.cod_Fornecedor')
             .select('Celeiros.cod_Insumo', 'Celeiros.cod_posicao_celeiro', 'Insumos.nome_Insumo', 'Fornecedores.nome_Fornecedor')
@@ -45,8 +46,6 @@ module.exports = {
                 codPosicao
             } = req.body
 
-            local('insumo', String(codPosicao))
-
             const arrayInsumo = await knex('Celeiros')
             .where({'cod_posicao_celeiro': codPosicao})
             .join('Insumos', 'Insumos.cod_Insumo', '=', 'Celeiros.cod_Insumo')
@@ -54,6 +53,8 @@ module.exports = {
             .select('Insumos.nome_Insumo', 'Fornecedores.nome_Fornecedor', 'Insumos.contagem_Insumo', 'Celeiros.quant_Insumo')
             
             const Insumo = arrayInsumo[0]
+
+            local('insumo', String(codPosicao))
 
             return res.render('estufaAplicarInsumo.html', {listaInsumo, Insumo})
         } catch (error) {
@@ -63,15 +64,15 @@ module.exports = {
 
     async aplicarInsumo(req, res, next){
         try {
-            const {
-                quantInsumo
-            } = req.body
-
             const codPlantacao = Number(local('plantacao'))
             const emailUsuario = local('email');
             const codPosicaoCeleiro = Number(local('insumo'))
 
+            const {
+                quantInsumo
+            } = req.body
 
+           
             // Atualizar a tabela celeiro
             const arrayQuantInsumo = await knex('Celeiros')
             .where({'cod_posicao_celeiro': codPosicaoCeleiro})
@@ -82,17 +83,16 @@ module.exports = {
             await knex('Celeiros')
             .where({'cod_posicao_celeiro': codPosicaoCeleiro})
             .update({
-                quant_Insumo: quantidadeInsumo
+                'quant_Insumo': quantidadeInsumo
             })
 
-            // Busca de dados do plantio
+            // Busca de dados para o  Plantio
             const arrayInsumo = await knex('Celeiros')
             .where({'cod_posicao_celeiro': codPosicaoCeleiro})
-            .whereNot({'Celeiros.quant_Insumo': 0})
             .join('Insumos', 'Insumos.cod_Insumo', '=', 'Celeiros.cod_Insumo')
             .select('Insumos.*', 'Celeiros.*')
 
-            // Inserção de dados na Tabela Plantio
+                // Inserção de dados na Tabela Plantio
             await knex('Plantio').insert({
                 cod_Plantacao_Hortalica: null,
                 cod_Plantacao: codPlantacao,
@@ -102,7 +102,7 @@ module.exports = {
                 tipo_Plantio: arrayInsumo[0].tipo_Insumo,
                 cod_Insumo: arrayInsumo[0].cod_Insumo,
                 cod_Fornecedor: arrayInsumo[0].cod_Fornecedor,
-            })
+            })  
 
             // Preparando parâmetro produção
             const producao = await knex('Plantio')
@@ -173,46 +173,40 @@ module.exports = {
                 'quant_Plantada': 0,
                 'status_Plantio': 'colido'
             })
-            
-            // Cadastrar Colheita
-            // Caso já tenha colido parte da produção
-            try {
-                await knex('Colheita').insert({
-                    cod_Plantacao_Hortalica: codPlantio,
-                    quant_Total_Colida: quantProduto,
-                    email_Usuario_Colheu: usuario,
-                })
-            } catch {
-                // Caso não consiga atualiza o que já existe
-                const quantColheita = await knex('Colheita')
-                .where({'cod_Plantacao_Hortalica': codPlantio})
-                .select('quant_Total_Colida')
-                
-                const quantTotalColheita = quantColheita[0].quant_Total_Colida + Number(quantProduto)
-
-                await knex('Colheita')
-                .where({'cod_Plantacao_Hortalica': codPlantio})
-                .update({
-                    'quant_Total_Colida': quantTotalColheita
-                })
-            }
-                
+                            
             //Entrada do produto no Armazem com dados de venda nulo
                 //Busca de dados para a inserção
             const arrayProduto = await knex('Plantio')
             .where({'cod_Plantacao_Hortalica': codPlantio})
             .join('Hortalicas', 'Hortalicas.cod_Insumo', '=', 'Plantio.cod_Insumo')
             .select('Hortalicas.cod_Hortalica', 'Plantio.cod_Fornecedor')
-            
+                // Inersão na tabela Armazens
             await knex('Armazens').insert({
-                cod_Hortalica: arrayProduto[0].cod_Hortalica,
-                cod_Fornecedor: arrayProduto[0].cod_Fornecedor,
-                cod_Plantacao: codPlantacao,
-                quant_Restante_Hortalica: quantProduto,
-                valor_Hortalica: 0
+                'cod_Posicao_Armazem': null,
+                'cod_Hortalica': arrayProduto[0].cod_Hortalica,
+                'cod_Fornecedor': arrayProduto[0].cod_Fornecedor,
+                'cod_Plantacao': codPlantacao,
+                'quant_Restante_Hortalica': quantProduto,
+                'valor_Hortalica': 0
             })
             
 
+            // Cadastrar Colheita
+                // reunir os dadoa para o Insert
+            const arrayCodPosicao = await knex('Armazens')
+            .where({'cod_Plantacao': codPlantacao})
+            .select('Armazens.cod_Posicao_Armazem')
+
+            const codPosicao = Number(arrayCodPosicao[arrayCodPosicao.length -1 ].cod_Posicao_Armazem)
+
+                // realizar o cadastro
+            await knex('Colheita').insert({
+                'cod_Posicao_Armazem': codPosicao,
+                'cod_Plantacao_Hortalica': codPlantio,
+                'quant_Total_Colida': quantProduto,
+                'email_Usuario_Colheu': usuario,
+            })
+            
             // Preparando parâmetro produção
             const producao = await knex('Plantio')
             .where({'cod_Plantacao': codPlantacao})
@@ -236,4 +230,4 @@ module.exports = {
             next(error)
         }
     }
-}
+}   

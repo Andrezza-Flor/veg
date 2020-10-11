@@ -118,8 +118,9 @@
                         </tr>
                         <tr class="head">
                             <th>Códido</th>
-                            <th>Nome da Hortalica</th>
-                            <th>Quantidade</th>
+                            <th>Nome da Hortaliça</th>
+                            <th>Quantidade de Hortaliça</th>
+                            <th>Valor da Hortaliça</th>
                         </tr>
                         <tr>
                             {%for hortalica in listaHortalica%}
@@ -127,6 +128,7 @@
                                     <td>{{hortalica.cod_Posicao_Armazem}}</td>
                                     <td>{{hortalica.nome_Hortalica}}</td>
                                     <td>{{hortalica.quant_Restante_Hortalica}} {{hortalica.contagem_Hortalica}}</td>
+                                    <td>R$ {{hortalica.valor_Hortalica}}</td>
                                 </tr>   
                             {%endfor%} 
                         </tr>

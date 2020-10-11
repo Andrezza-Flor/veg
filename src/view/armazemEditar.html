@@ -90,7 +90,7 @@
     <div class="main">
         <h1>
             Armazém 
-            <a href="armazemDetalhe.html">
+            <a href="/detalheHortalica">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
@@ -107,11 +107,11 @@
                 </div>
                <div class="write-block">
                     <label for="quantRestante">Quantidade de {{hortalica.nome_Hortalica}} por {{hortalica.contagem_Hortalica}}:</label>
-                    <input type="text" id="quantRestante" name="quantRestante" required>
+                    <input type="text" id="quantRestante" name="quantRestante" value='{{hortalica.quant_Restante_Hortalica}}' required>
                 </div>
                 <div class="write-block">
                     <label for="valorHortalica">Valor por {{hortalica.contagem_Hortalica}}:</label>
-                    <input type="text" id="valorHortalica" name="valorHortalica" required>
+                    <input type="text" id="valorHortalica" name="valorHortalica" value='{{hortalica.valor_Hortalica}}' required>
                 </div>
             </fieldset>
             <fieldset class="dados-Botton">
@@ -128,7 +128,7 @@
                 </div>
             </fieldset>
 
-            <button type="submit" class="button-Salvar">Salvar</button>       
+            <button class="button-Salvar" type="submit" class="button-Salvar">Salvar</button>       
         </form>
 
     </div>

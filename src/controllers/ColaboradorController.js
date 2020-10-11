@@ -47,7 +47,15 @@ module.exports = {
                 })
                   
     
-                return res.render('colaborador.html')
+                const listaColaborador = await knex('Logins')
+                .where({'cod_Plantacao': codPlantacao})
+                .whereNot({'tipo_Usuario': 'Gerente'})
+                .join('Usuarios', 'Usuarios.email_Usuario', '=', 'Logins.email_Usuario')
+                .select('Usuarios.nome_Usuario',
+                        'Usuarios.email_Usuario',
+                        'Usuarios.tipo_Usuario')
+                
+                return  res.render('colaborador.html', {listaColaborador})
     
             } else {
                 const message = "Senha incompativeis"
@@ -59,39 +67,135 @@ module.exports = {
         }        
     },
 
-    // Função de atualizar o Colaborador ** 
-    async update(req, res, next) {
+    // Função para apresentar dados dos Colaboradores
+    async paginaDetalhe(req, res, next) {
         try {
+            const {
+                emailUsuario
+            } = req.body
 
-            const { 
-                nome_Usuario
-             } = req.body
+            local('emailColaborador', emailUsuario)
+            
+            const arrayUsuario = await knex('Usuarios')
+            .where({'Usuarios.email_Usuario': emailUsuario})
+            .join('Logins', 'Logins.email_Usuario', '=', 'Usuarios.email_Usuario')
+            .select('Logins.*', 'Usuarios.*')
 
-             const { email_Usuario } = req.params
+            var dadosUsuario = arrayUsuario[0]
+            var dt = String(dadosUsuario.dt_Admisso_Usuario)
+            var mes = dt.slice(4, 7)
+            var dia = dt.slice(8,10)
+            var ano = dt.slice(11, 15)
 
-            await knex('Usuarios')
-            .update({ 
-                nome_Usuario
-             })
-            .where({ email_Usuario })
+            var data = dia + ' de ' + mes + '. ' + ano
+            dadosUsuario.dt_Admisso_Usuario= data;
 
-            return res.send()
+            dt = String(dadosUsuario.dt_Nasc_Usuario )
+            mes = dt.slice(4, 7)
+            dia = dt.slice(8,10)
+            ano = dt.slice(11, 15)
+
+            data = dia + ' de ' + mes + '. ' + ano
+            dadosUsuario.dt_Nasc_Usuario = data; 
+
+            console.log(dadosUsuario)
+
+            return  res.render('colaboradorDetalhe.html', {dadosUsuario})
 
         } catch (error) {
             next(error)
         }
     },
 
-    //Função de deletar o Colaborador **
-    async disable(req, res, next) {
+    async paginaEditar(req, res, next) {
         try {
-            const { email_Usuario } = req.params
+            const emailUsuario = local('emailColaborador')
+            
+            const arrayUsuario = await knex('Usuarios')
+            .where({'Usuarios.email_Usuario': emailUsuario})
+            .join('Logins', 'Logins.email_Usuario', '=', 'Usuarios.email_Usuario')
+            .select('Logins.*', 'Usuarios.*')
+
+            var dadosUsuario = arrayUsuario[0]
+            var dt = String(dadosUsuario.dt_Admisso_Usuario)
+            var mes = dt.slice(4, 7)
+            var dia = dt.slice(8,10)
+            var ano = dt.slice(11, 15)
+
+            var data = dia + ' de ' + mes + '. ' + ano
+            dadosUsuario.dt_Admisso_Usuario= data;
+
+            dt = String(dadosUsuario.dt_Nasc_Usuario )
+            mes = dt.slice(4, 7)
+            dia = dt.slice(8,10)
+            ano = dt.slice(11, 15)
+
+            data = dia + ' de ' + mes + '. ' + ano
+            dadosUsuario.dt_Nasc_Usuario = data; 
+
+
+            return  res.render('colaboradorEditar.html', {dadosUsuario})
+
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    // Função de atualizar o Colaborador ** 
+    async editar(req, res, next){
+        try {
+            const email = local('emailColaborador')
+            const codPlantacao = local('plantacao')
+
+            const {
+                nomeUsuario,
+                telefoneUsuario
+            } = req.body
+
+            
 
             await knex('Usuarios')
-            .where({ email_Usuario })
+            .where({'Usuarios.email_Usuario': email})
+            .join('Logins', 'Logins.email_Usuario', '=', 'Usuarios.email_Usuario')
+            .update({ 
+                'nome_Usuario': nomeUsuario,
+                'telefone_Usuario': telefoneUsuario
+             })
+
+            const listaColaborador = await knex('Logins')
+            .where({'cod_Plantacao': codPlantacao})
+            .whereNot({'tipo_Usuario': 'Gerente'})
+            .join('Usuarios', 'Usuarios.email_Usuario', '=', 'Logins.email_Usuario')
+            .select('Usuarios.nome_Usuario',
+                    'Usuarios.email_Usuario',
+                    'Usuarios.tipo_Usuario')
+            
+            return  res.render('colaborador.html', {listaColaborador})
+        } catch (error) {
+            next(error)
+        }
+    },
+
+
+    //Função de deletar o Colaborador **
+    async inabilitar(req, res, next) {
+        try {
+            const email = local('emailColaborador')
+            const codPlantacao = local('plantacao')
+
+            await knex('Logins')
+            .where({'email_Usuario': email })
             .del()
 
-            return res.send()
+            const listaColaborador = await knex('Logins')
+            .where({'cod_Plantacao': codPlantacao})
+            .whereNot({'tipo_Usuario': 'Gerente'})
+            .join('Usuarios', 'Usuarios.email_Usuario', '=', 'Logins.email_Usuario')
+            .select('Usuarios.nome_Usuario',
+                    'Usuarios.email_Usuario',
+                    'Usuarios.tipo_Usuario')
+            
+            return  res.render('colaborador.html', {listaColaborador})
 
         } catch (error) {
             next(error)

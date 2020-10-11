@@ -112,7 +112,7 @@
                 </div>
                 <div class="read-block">
                     <label for="dataCompra">Data da Compra:</label>
-                    <p class="input">{{dadoCompra.dt_Pedido_Compra}}</p>
+                    <p class="input">{{data}}</p>
                 </div>
             </fieldset>
 
@@ -155,11 +155,11 @@
                         <th>Valor</th>
                     </tr>
                     
-                    {%for item in dadoItem%}
+                    {%for item in arrayItensCompra%}
                         <tr>
                             <td>{{item.nome_Insumo}}</td>
                             <td>{{item.quant_Total_Insumo}} {{item.contagem_Insumo}}</td>
-                            <td>R$ {{item.valor_Item}}</td>
+                            <td>R$ {{item.valor_Insumo}}</td>
                          </tr>   
                     {%endfor%}  
                     
@@ -167,9 +167,9 @@
                         
                     </tr>
                 </table>
-                <div class="read-block">
+                <div class="read-block-botton">
                     <label for="totalCompra">Total da Compra: </label>
-                    <p class="input">R$ {{dadoCompra.total_Compra}}</p>
+                    <p class="button-input"> <strong>R$ {{total}}</strong> </p>
                 </div>
             </fieldset>
             
@@ -179,7 +179,7 @@
                 </button>  
 
                 <button type="submit" class="button-Salvar">
-                    <a href="/compra">Salvar</a>
+                    <a href="/salvarCompra">Salvar</a>
                 </button>  
             </div>
 

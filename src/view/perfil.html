@@ -128,12 +128,22 @@
                     <label for="funcaoUsuario">Função:</label>
                     <p class="input">{{ usuario.tipo_Usuario }}</p>
                 </div>
+                <div class="read-block">
+                    <label for="dtAdmissao">Data da Admissão:</label>
+                    <p class="input">{{ usuario.dt_Admisso_Usuario }}</p>
+                </div>
             </fieldset>
-            
+            <div class="botton-foot">
+                <button type="submit" class="button-Cancelar">
+                    <a href="/inabilitarPerfil">Inabilitar</a>
+                </button>  
+    
+                <button type="submit" class="button-Salvar">
+                    <a href="/editarPerfil">Editar</a>
+                </button>  
+            </div>
         </form>        
-        <div class="botton-foot">
-            <a class="button-Editar-Colaborador" href="perfilEditar.html">Editar Cadastro</a>
-        </div>
+
     </div>
 </body>
 </html>

@@ -100,6 +100,12 @@
 
         <form action="/escolherInsumo" method="POST">
             <fieldset class="dados-Top">
+                <div class="read-block">
+                    <label for="nomeFornecedor">Fornecedor da Compra:</label>
+                    <p class="input">{{fornecedor}}</p>
+                </div>
+            </fieldset>
+            <fieldset class="dados-Top">
                 <div class="title">
                     <legend>Busca de Insumo</legend>
                 </div>
@@ -117,17 +123,17 @@
                         <img src="/imagem/procurar.png" alt="Adicionar">
                     </button>
                 </div>
-                <div class="foot-dados-Botton">
-                    <div class="aviso-foot">
-                        <img src="/imagem/aviso.png" alt="Aviso">
-                         <p>Caso não tenha achado o insumo é possivel adiciona-lo para esse fornecedor.</p>
-                    </div>
-                    <a href="/adicionarInsumo">
-                        <img src="/imagem/insumo.png" alt="Insumo">
-                        <p>Adicionar Insumo</p>
-                    </a>
-                </div>
             </fieldset>
+            <div class="foot-dados-Botton">
+                <div class="aviso-foot">
+                    <img src="/imagem/aviso.png" alt="Aviso">
+                     <p>Caso não tenha achado o insumo é possivel adiciona-lo para esse fornecedor.</p>
+                </div>
+                <a href="/adicionarInsumo">
+                    <img src="/imagem/insumo.png" alt="Insumo">
+                    <p>Adicionar Insumo</p>
+                </a>
+            </div>
         </form>
 
         <form action="/adicionarItem" method="POST">
@@ -147,28 +153,30 @@
                     <label for="valorInsumo">Valor do Insumo em <strong>1 {{contagemInsumo}}</strong>:</label>
                     <input type="number" id="valorInsumo" name="valorInsumo" required>
                 </div>
-                <button type="submit"> Adicionar na lista </button>
+                <button type="submit" class="button-adicionar"> <img src="/imagem/mais.png" alt="Adicionar">  <p>Adicionar na Lista</p>  </button> 
             </fieldset>
+        </form>
+        
+        <form>
             <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Lista da Compra</legend>
+                </div>
                 <table class="table-Detalhe">
-                    <tr>
-                        <th colspan="4">Lista de itens da compra</th>
-                    </tr>
                     <tr class="head">
                         <th>Nome</th>
                         <th>Quantidade</th>
                         <th>Valor</th>
                     </tr>
-                    {%for Item in Itens%}
+                    {%for Item in arrayItensCompra%}
                         <tr>
                             <td>{{Item.nome_Insumo}}</td>
                             <td>{{Item.quant_Total_Insumo}} {{Item.contagem_Insumo}}</td>
-                            <td>R$ {{Item.valor_Item}}</td>
+                            <td>R$ {{Item.valor_Insumo}}</td>
                         </tr>
                     {%endfor%}
                 </table>
             </fieldset>
-            
         </form>
         <button type="submit" class="button-Finalizar">
             <a href="/finalizaCompra">Finalizar Compra</a>

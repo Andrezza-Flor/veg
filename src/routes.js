@@ -41,19 +41,21 @@ routes
     .get('/entrarCeleiro', CompraController.entrarCeleiro)
 
     //Comprar
-    .get('/realizarCompra', CompraController.realizarCompra)
-    .post('/buscarFornecedor', CompraController.buscarFornecedor)
+    .get('/realizarCompra', CompraController.comprar)
+    .post('/buscarFornecedor', CompraController.escolherFornecedor)
     .get('/comprarInsumo', CompraController.comprarInsumo)
     .post('/escolherInsumo', CompraController.escolherInsumo)
     .post('/adicionarItem', CompraController.adicionarItem)
     .get('/finalizaCompra', CompraController.finalizaCompra)
+    .get('/salvarCompra', CompraController.salvarCompra)
 
     //Fornecedor
     .get('/criarFornecedor', CompraController.apresentarCriarFornecedor)
     .post('/criarFornecedor', CompraController.criarFornecedor)
+    .get('/adicionarInsumo', CompraController.adicionarInsumoII)
     .post('/buscaInsumo', CompraController.buscaInsumo)
     .post('/adicionarInsumo', CompraController.adicionarInsumo)
-    .get('/adicionarInsumo', CompraController.adicionarInsumoII)
+    
 
     //Insumo
     .get('/criarInsumo', CompraController.insumo)
@@ -72,6 +74,8 @@ routes
     .get('/escolherHortalica', VendaController.buscaHortalica)
     .post('/escolherHortalica', VendaController.escolherHortalica)
     .post('/adicionarHortalica', VendaController.adicioanarItem)
+    .get('/finalizarVenda', VendaController.finalizarVenda)
+    .get('/salvarVenda', VendaController.salvarVenda)
 
     //Cliente
     .get('/adicionarCliente', VendaController.adicionarCliente)
@@ -82,6 +86,11 @@ routes
     .get('/colaborador', MenuController.colaborador)
     .get('/cadastroColaborador', ColaboradorController.index)
     .post('/criarColaborador', ColaboradorController.create)
+    .post('/detalheColaborador', ColaboradorController.paginaDetalhe)
+    .get('/editarColaborador', ColaboradorController.paginaEditar)
+    .get('/inabilitarColaborador', ColaboradorController.inabilitar)
+    .post('/editarColaborador', ColaboradorController.editar)
+    
 
 // Estufa
     .get('/estufa', MenuController.estufa)
@@ -102,5 +111,8 @@ routes
 
 // Perfil
     .get('/perfil', MenuController.perfil)
+    .get('/editarPerfil', GerenteController.paginaEditar)
+    .post('/editarPerfil', GerenteController.editarPerfil)
+    .get('/inabilitarPerfil', GerenteController.inabilitar)
 
 module.exports = routes

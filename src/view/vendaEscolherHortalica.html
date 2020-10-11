@@ -100,7 +100,7 @@
         <form action="/escolherHortalica" method="POST">
             <fieldset class="dados-Top">
                 <div class="read-block">
-                    <label for="docCliente">Cliente da Venda:</label>
+                    <label for="nomeCliente">Cliente da Venda:</label>
                     <p class="input">{{cliente}}</p>
                 </div>
             </fieldset>
@@ -137,13 +137,13 @@
                 </div>
                 <div class="write-block">
                     <label for="quantHortalica">Quantidade em <strong>{{hortalica.contagem_Hortalica}}</strong>:</label>
-                    <input type="number" name="quantHortalica" min='1' max={{hortalica.quant_Restante_Hortalica}} required>
+                    <input type="number" name="quantHortalica" min='1' max={{quantidade_Restante}} required>
                 </div>
                 <div class="read-block">
                     <label for="valoHortalica">Valor da <strong>{{hortalica.contagem_Hortalica}}</strong> de <strong>{{hortalica.nome_Hortalica}}</strong>:</label>
                     <p class="input">R$ {{hortalica.valor_Hortalica}}</p>
                 </div>   
-                <button type="submit"> Adicionar na lista </button>
+                <button type="submit" class="button-adicionar"> <img src="/imagem/mais.png" alt="Adicionar">  <p>Adicionar na Lista</p>  </button>
             </fieldset> 
         </form>
         
@@ -169,13 +169,12 @@
                         </tr>
                     {%endfor%}
                 </table>
-            </fieldset>
-
-            <button type="submit" class="button-Finalizar">
-                <a href="vendaFinalizar.html">Finalizar Venda</a>
-            </button>
-            
+            </fieldset>            
         </form> 
+
+        <button type="submit" class="button-Finalizar">
+            <a href="/finalizarVenda">Finalizar Venda</a>
+        </button>
     </div>
 </body>
 </html>

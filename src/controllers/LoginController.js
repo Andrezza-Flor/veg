@@ -50,8 +50,36 @@ module.exports = {
                 // Salvar o código da Plantação no Local Storage, para atividades dentro do Sistema
                 local ('plantacao', codPlantacao)
 
+                // Preparar o parâmetro numCelerio
+                const arrayCeleiro = await knex('Celeiros')
+                .where({'cod_Plantacao': codPlantacao})
+                .select('cod_posicao_celeiro')
+
+                const numCeleiro = arrayCeleiro.length
+
+                // Preparar o parâmetro num Armazem
+                const arrayArmazem = await knex('Armazens')
+                .where({'cod_Plantacao': codPlantacao})
+                .select('cod_Posicao_Armazem')
+
+                const numArmazem = arrayArmazem.length
+
+                // Preparar o parâmetro numEstura
+                const arrayEstufa = await knex('Plantio')
+                .where({'cod_Plantacao': codPlantacao})
+                .select('cod_Plantacao_Hortalica')
+
+                const numEstufa = arrayEstufa.length
+
+                // Preparar o parâmetro numAtiviadade
+                const arrayAtividade = await knex('Atividades')
+                .where({'ator_Atividade': email})
+                .select('cod_Atividade')
+
+                const numAtividade = arrayAtividade.length
+
                 // Retorno positivo, reinderizando para dentro do sistema 
-                return res.render('home.html')
+                return res.render('home.html', {numCeleiro, numArmazem, numEstufa, numAtividade})
             }
 
         } catch (error) {

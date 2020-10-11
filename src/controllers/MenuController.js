@@ -21,16 +21,21 @@ module.exports = {
     },
     async armazem(req,res, next) {
         try {
-            // Preparar a lista de itens no armazém
-            const codPlantacao = Number(local('plantacao'))
-            const listaHortalica = await knex('Armazens')
-            .where({'cod_Plantacao': codPlantacao})
-            .join('Hortalicas', 'Hortalicas.cod_Hortalica', '=', 'Armazens.cod_Hortalica')
-            .select('Armazens.cod_Posicao_Armazem', 'Hortalicas.nome_Hortalica', 'Armazens.quant_Restante_Hortalica', 'Hortalicas.contagem_Hortalica')
-            
+             // Preparar a lista de itens no armazém
+             const codPlantacao = Number(local('plantacao'))
+             const listaHortalica = await knex('Armazens')
+             .where({'cod_Plantacao': codPlantacao})
+             .whereNot({'Armazens.quant_Restante_Hortalica': 0})
+             .join('Hortalicas', 'Hortalicas.cod_Hortalica', '=', 'Armazens.cod_Hortalica')
+             .select('Armazens.cod_Posicao_Armazem',
+                     'Hortalicas.nome_Hortalica', 
+                     'Armazens.quant_Restante_Hortalica', 
+                     'Hortalicas.contagem_Hortalica', 
+                     'Armazens.valor_Hortalica')
+             
             return  res.render('armazem.html', {listaHortalica})
         } catch (error) {
-            return next(error)
+            next(error)
         }
         
     },
@@ -43,38 +48,66 @@ module.exports = {
             .where({'status_Pedido': 'esperando'})
             .join('Fornecedores', 'Fornecedores.cod_Fornecedor', 'Pedidos_Compra.cod_Fornecedor')
             .select('Pedidos_Compra.cod_Pedido_Compra', 'Pedidos_Compra.dt_Pedido_Compra', 'Fornecedores.nome_Fornecedor')
-            
+        
+            for (let index = 0; index < listaPedido.length; index++) {
+                const dt = String(listaPedido[index].dt_Pedido_Compra)
+                const mes = dt.slice(4, 7)
+                const dia = dt.slice(8,10)
+                const ano = dt.slice(11, 15)
+
+                const data = dia + ' de ' + mes + '. ' + ano
+
+                listaPedido[index].dt_Pedido_Compra = data;                
+            }       
+
             // Reiderizando da página para receber os dados
             return  res.render('compra.html', {listaPedido})
 
         } catch (error) {
-            return next(error)
+            next(error)
         }   
     },
-    async venda(req,res) {
+    async venda(req,res, next) {
         try {
             // Preparar a lista de itens no armazém
             const codPlantacao = Number(local('plantacao'))
             const listaHortalica = await knex('Armazens')
             .where({'cod_Plantacao': codPlantacao})
+            .whereNot({'Armazens.valor_Hortalica': 0})
+            .whereNot({'Armazens.quant_Restante_Hortalica': 0})
             .join('Hortalicas', 'Hortalicas.cod_Hortalica', '=', 'Armazens.cod_Hortalica')
-            .select('Armazens.cod_Posicao_Armazem', 'Hortalicas.nome_Hortalica', 'Armazens.quant_Restante_Hortalica', 'Hortalicas.contagem_Hortalica', 'Armazens.valor_Hortalica')
+            .select('Armazens.cod_Posicao_Armazem', 
+                    'Hortalicas.nome_Hortalica', 
+                    'Armazens.quant_Restante_Hortalica', 
+                    'Hortalicas.contagem_Hortalica', 
+                    'Armazens.valor_Hortalica')
             
             return  res.render('venda.html', {listaHortalica})
         } catch (error) {
-            return next(error)
+            next(error)
         }
         
     },
-    async colaborador(req,res) {
+    async colaborador(req,res, next) {
         try {
-            return  res.render('colaborador.html')
+            // Preparar a lista de itens no armazém
+            const codPlantacao = Number(local('plantacao'))
+
+            const listaColaborador = await knex('Logins')
+            .where({'cod_Plantacao': codPlantacao})
+            .whereNot({'tipo_Usuario': 'Gerente'})
+            .join('Usuarios', 'Usuarios.email_Usuario', '=', 'Logins.email_Usuario')
+            .select('Usuarios.nome_Usuario',
+                    'Usuarios.email_Usuario',
+                    'Usuarios.tipo_Usuario')
+            
+            return  res.render('colaborador.html', {listaColaborador})
         } catch (error) {
             return next(error)
         }
         
     },
-    async estufa(req,res) {
+    async estufa(req,res, next) {
         try {
             // Preparar parâmetro produto
             const codPlantacao = Number(local('plantacao'))
@@ -98,23 +131,23 @@ module.exports = {
 
             return  res.render('estufa.html', {producao})
         } catch (error) {
-            return next(error)
+            next(error)
         }
         
     },
-    async relatorio(req,res) {
+    async relatorio(req,res, next) {
         try {
             return  res.render('relatorio.html')
         } catch (error) {
-            return next(error)
+           next(error)
         }
         
     },
-    async atividade(req,res) {
+    async atividade(req,res, next) {
         try {
             return  res.render('atividades.html')
         } catch (error) {
-            return next(error)
+            next(error)
         }
     },
     async perfil(req, res, next) {
@@ -123,15 +156,35 @@ module.exports = {
             const email = local('email');
             // Buscar 
             const dadosPerfil = await knex.from('Usuarios')
-            .where({email_Usuario: email})
-            .select('Usuarios.*')
+            .where({'Usuarios.email_Usuario': email})
+            .join('Logins', 'Logins.email_Usuario', '=', 'Usuarios.email_Usuario')
+            .select('Usuarios.*', 'Logins.dt_Admisso_Usuario')
 
+            var dt = String(dadosPerfil[0].dt_Admisso_Usuario)
+            var mes = dt.slice(4, 7)
+            var dia = dt.slice(8,10)
+            var ano = dt.slice(11, 15)
+
+            var data = dia + ' de ' + mes + '. ' + ano
+
+            dadosPerfil[0].dt_Admisso_Usuario = data;
+
+
+            var dt = String(dadosPerfil[0].dt_Nasc_Usuario)
+            var mes = dt.slice(4, 7)
+            var dia = dt.slice(8,10)
+            var ano = dt.slice(11, 15)
+
+            var data = dia + ' de ' + mes + '. ' + ano
+
+            dadosPerfil[0].dt_Nasc_Usuario = data;
+            
             const usuario = dadosPerfil[0]
 
             return res.render('perfil.html', { usuario });
 
         } catch (error) {
-            return next(error);
+            next(error);
         }
         
     },

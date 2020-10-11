@@ -13,7 +13,6 @@ body {
     background: var(--color-background-menu);
     width: 35rem;
     height: 66.4rem;
-
 }
 
 .menu h1 {
@@ -41,6 +40,11 @@ body {
 
     border-radius: 0.8rem;
     border: none
+}
+
+.button-menu:hover{
+    transition: background 0.2s;
+    background: var(--color-button-menu-dark);
 }
 
 button a {
@@ -71,6 +75,11 @@ img {
     border: none;
 }
 
+.button-menu-exit:hover{
+    transition: background 0.2s;
+    background: var(--color-button-cancel-dark);
+}
+
 .button-menu-perfil {
     background: var(--color-secondary);
     margin-top: 1rem;
@@ -80,6 +89,11 @@ img {
 
     border-radius: 0.8rem;
     border: none;
+}
+
+.button-menu-perfil:hover{
+    transition: 0.2s;
+    background: var(--color-secondary-dark);
 }
 
 .button-menu-exit a,
@@ -151,6 +165,11 @@ img {
     font-weight: lighter;
     align-items: center;
 
+}
+
+.main h1 a:hover{
+    transition: 0.2s;
+    background: var(--color-button-back-dark);
 }
 
 .main h1 img {

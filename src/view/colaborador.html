@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/style/main.css">
     <link rel="stylesheet" href="/style/mainStyle.css">
     <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
 
@@ -89,36 +90,46 @@
     
     <div class="main">
         <h1>Colaborador</h1>
-        <table>
-            <tr>
-                <th colspan="3">Lista de Colaboradores</th>
-            </tr>
-            <tr class="head">
-                <th>Nome</th>
-                <th>Função</th>
-                <th></th>
-            </tr>
-            <tr>
-                <td>Matheus de Barros Santos</td>
-                <td>Colaborador Financeiro</td>
-                <td><a href="colaboradorDetalhe.html">Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>Luiza Maria da Silva</td>
-                <td>Colaborador Financeiro</td>
-                <td><a href="colaboradorDetalhe.html">Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>Leandro Souza</td>
-                <td>Colaborador de Produção</td>
-                <td><a href="colaboradorDetalhe.html">Ver Detalhe</a></td>
-            </tr>
-            <tr>
-                <td>Katia Pereira</td>
-                <td>Colaborador de Produção</td>
-                <td><a href="colaborador.html">Ver Detalhe</a></td>
-            </tr>
-        </table>
+
+        <form action="/detalheColaborador" method="POST">
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Busca de Colaborador</legend>
+                </div>
+                <div class="select-block">
+                    <div class="select">
+                        <label for="emailUsuario">Colaborador:</label>
+                        <select name="emailUsuario" id="emailUsuario">
+                            <option value="" disable="" hidden="">Selecione uma opção</option> 
+                            {%for usuario in listaColaborador%}
+                                <option value={{usuario.email_Usuario}}>{{usuario.nome_Usuario}}</option>
+                            {%endfor%}  
+                        </select>
+                    </div>
+                    <button type="submit" class="salvar">
+                        <img src="/imagem/procurar.png" alt="Buscar">
+                    </button>
+                </div>
+            </fieldset>
+            <fieldset class="dados-Button">
+                <table  class="table-Detalhe">
+                    <tr>
+                        <th colspan="3">Lista de Colaboradores</th>
+                    </tr>
+                    <tr class="head">
+                        <th>Nome</th>
+                        <th>Função</th>
+                    </tr>
+                    {%for colaborador in listaColaborador%}
+                        <tr>
+                            <td>{{colaborador.nome_Usuario}}</td>
+                            <td>{{colaborador.tipo_Usuario}}</td>
+                        </tr>   
+                    {%endfor%} 
+                </table>
+            </fieldset>
+        </form>
+        
         <div class="button-main">
             <a href="/cadastroColaborador">Adicionar Colaborador</a>
         </div>

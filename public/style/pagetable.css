@@ -6,8 +6,7 @@ td{
 }
 
 table {
-    margin-top: 3rem;
-    margin-left: 4rem;
+    width: 95%;
 }
 
 th {
@@ -79,11 +78,21 @@ a {
     justify-content: center;
     text-align: center;
 
+    width: 75%;
+
     background: var(--color-secondary);
 
-    width: 80%;
-
     border-radius: 0.8rem;
+}
+
+.main .button-main a{
+    display: block;
+}
+
+
+.main .button-main:hover{
+    transition: 0.2s;
+    background: var(--color-secondary-dark);
 }
 
 .main .button-main a {

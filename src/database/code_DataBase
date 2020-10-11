@@ -188,12 +188,14 @@ CREATE TABLE Pedidos_Venda (
 
 CREATE TABLE Itens_Venda (
   cod_Item_Venda INT(4) AUTO_INCREMENT,
+  cod_Pedido_Venda INT(4) not null,
   quant_vendida INT(5) NOT NULL,
   cod_Posicao_Armazem int(4) not null,
   cod_Hortalica INT(4) NOT NULL,
   cod_Plantacao INT(10) NOT NULL,
   PRIMARY KEY (cod_Item_Venda),
-  FOREIGN KEY(cod_Hortalica) REFERENCES Hortalicas(cod_Hortalica),
+  FOREIGN KEY (cod_Pedido_Venda) REFERENCES Pedidos_Venda(cod_Pedido_Venda),
+  FOREIGN KEY (cod_Hortalica) REFERENCES Hortalicas(cod_Hortalica),
   FOREIGN KEY (cod_Posicao_Armazem) REFERENCES Armazens(cod_Posicao_Armazem)
 );
 

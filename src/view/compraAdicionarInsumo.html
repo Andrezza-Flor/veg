@@ -129,10 +129,12 @@
             </div>
             </fieldset>
         </form>
-       
 
         <form action="/adicionarInsumo" method="POST">
-            <fieldset class="foot-dados-Botton">
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados da Insumo</legend>
+                </div>
                 <div class="read-block">
                     <label for="nomeInsumo">Nome do Insumo:</label>
                     <p class="input">{{dadosInsumo.nome_Insumo}}</p>
@@ -144,9 +146,14 @@
                 <div class="write-block">
                     <label for="tempoEntrega">Quantos dias para ser Entregue:</label>
                     <input type="number" id="tempoEntrega" name="tempoEntrega" required>
-                </div>  
-                <button type="submit" class="button-adicionar"> <img src="/imagem/mais.png" alt="Adicionar"> Adicionar Insumo</button>     
-                <table>
+                </div>     
+                <button type="submit" class="button-adicionar"> <img src="/imagem/mais.png" alt="Adicionar">  <p>Adicionar Insumo</p>  </button> 
+            </fieldset> 
+        </form>
+
+        <form>
+            <fieldset class="foot-dados-Botton">
+                <table class="table-Detalhe">
                     <tr>
                         <th colspan="3">Insumos Adicionadados</th>
                     </tr>
@@ -162,14 +169,12 @@
                     {%endfor%}  
                 </table>
             </fieldset>
-            <div>
-                <a href="/comprarInsumo">
-                    <img src="/imagem/aprovar.png" alt="concluir">
+            <div class="button-main">
+                <a href="/realizarCompra">
                     Concluir o Cadastro
                 </a>
-            </div>
-            
-        </form>
+            </div>          
+        </form> 
     </div>
 </body>
 </html>

@@ -118,13 +118,23 @@
                         </select>
                     </div>
                     <button type="submit">
-                        <img src="/imagem/mais.png" alt="Adicionar">
+                        <img src="/imagem/procurar.png" alt="Adicionar">
                     </button>
                 </div>
+                <div class="foot-dados-Botton">
+                    <div class="aviso-foot">
+                         <img src="/imagem/aviso.png" alt="Aviso">
+                         <p>Caso não tenha achado o Fornecedor é possivel cria-lo</p>
+                    </div>
+                    <a href="/criarFornecedor">
+                        <img src="/imagem/fornecedor.png" alt="Fornecedor">
+                        <p>Criar Fornecedor</p>
+                    </a>
+                </div>  
             </fieldset>
         </form>
             
-        <form action="/buscaFornecedor" method="POST">
+        <form>
             
                 <div class="read-block">
                     <label for="nomeFornecedor">Nome do Fornecedor:</label>
@@ -145,18 +155,7 @@
                 <div class="read-block">
                     <label for="emailFornecedor">Email do Fornecedor:</label>
                     <p class="input">{{dadosFornecedor.email_Fornecedor}}</p>
-                </div>
-
-                <div class="foot-dados-Botton">
-                    <div class="aviso-foot">
-                         <img src="/imagem/aviso.png" alt="Aviso">
-                         <p>Caso não tenha achado o Fornecedor é possivel cria-lo</p>
-                    </div>
-                    <a href="/criarFornecedor">
-                        <img src="/imagem/fornecedor.png" alt="Fornecedor">
-                        <p>Criar Fornecedor</p>
-                    </a>
-                </div>               
+                </div>            
             </fieldset>
         </form>
         

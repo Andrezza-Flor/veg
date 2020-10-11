@@ -104,19 +104,19 @@
                 </div>
                 <div class="read-block">
                     <label for="nomeColaborador">Nome:</label>
-                    <input type="text" id="nomeColaborador" name="nomeColaborador" value="Matheus de Barros Santos" readonly>
+                    <p class="input">{{dadosUsuario.nome_Usuario}}</p>
                 </div>
                <div class="read-block">
                     <label for="cpfColaborador">CPF Colaborador:</label>
-                    <input type="text" id="cpfColaborador" name="cpfColaborador" value="440.998.787-23" readonly>
+                    <p class="input">{{dadosUsuario.cpf_Usuario}}</p>
                 </div>
                 <div class="read-block">
                     <label for="telefoneColaborador">Telefone Colaborador:</label>
-                    <input type="text" id="telefoneColaborador" name="telefoneColaborador" value="(11)99898-6544" readonly>
+                    <p class="input">{{dadosUsuario.telefone_Usuario}}</p>
                 </div>
                 <div class="read-block">
-                    <label for="dtNascimentoColaborador">Data de Nascimento:</label>
-                    <input type="date" id="dtNascimentoColaborador" name="dtNascimentoColaborador" value="1980-08-02" readonly>
+                    <label for="dtNasciamntoColaborador">Data de Nascimento:</label>
+                    <p class="input">{{dadosUsuario.dt_Nasc_Usuario}}</p>
                 </div> 
             </fieldset>
 
@@ -126,21 +126,28 @@
                 </div>
                 <div class="read-block">
                     <label for="emailColaborador">Email Colaborador:</label>
-                    <input type="text" id="emailColaborador" name="emailColaborador" value="matheus.santos@gmail.com" readonly>
+                    <p class="input">{{dadosUsuario.email_Usuario}}</p>
                 </div>
                 <div class="read-block">
                     <label for="funcaoColaborador">Função do Colaborador:</label>
-                    <input type="text" id="funcaoColaborador" name="funcaoColaborador" value="Colaborador Financeiro" readonly>
+                    <p class="input">{{dadosUsuario.tipo_Usuario}}</p>
                 </div>
                 <div class="read-block">
                     <label for="dtAdmissao">Data de Admissão:</label>
-                    <input type="date" id="dtAdmissao" name="dtAdmissao" value="2020-02-02" readonly>
+                    <p class="input">{{dadosUsuario.dt_Admisso_Usuario}}</p>
                 </div>
             </fieldset>
 
             <div class="botton-foot">
-                <a class="button-Editar-Colaborador" href="colaboradorEditar.html">Editar Cadastro</a>
+                <button type="submit" class="button-Cancelar">
+                    <a href="/inabilitarColaborador">Inabilitar</a>
+                </button>  
+
+                <button type="submit" class="button-Salvar">
+                    <a href="/editarColaborador">Editar</a>
+                </button>  
             </div>
+
         </form>        
     </div>
 </body>
