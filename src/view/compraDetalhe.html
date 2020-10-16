@@ -154,16 +154,15 @@
                         </tr>
                     {%endfor%}
                 </table>
-                <div class="read-block">
-                    <label for="valorCompra">Valor do Pedido:</label>
-                    <p class="input">{{pedido.total_Compra}}</p>
+                <div class="read-block-botton">
+                    <label for="totalCompra">Total da Compra: </label>
+                    <p class="button-input"> <strong>R$ {{pedido.total_Compra}}</strong> </p>
                 </div>
             </fieldset>
         </form> 
         
         <div class="button-Salvar">
             <a href="/entrarCeleiro">
-                <img src="/imagem/aprovar.png" alt="Entregue">
                 Pedido Entregue
             </a>
         </div>

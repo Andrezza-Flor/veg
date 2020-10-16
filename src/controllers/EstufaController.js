@@ -148,6 +148,15 @@ module.exports = {
             const past = new Date(arrayProduto[0].dt_Plantio); // data do Plantio
             const diff = Math.abs(now.getTime() - past.getTime()); // Subtrai uma data pela outra
             const days = Math.ceil(diff / (1000 * 60 * 60 * 24)); 
+
+            var dt = String(arrayProduto[0].dt_Plantio)
+            var mes = dt.slice(4, 7)
+            var dia = dt.slice(8,10)
+            var ano = dt.slice(11, 15)
+
+            var data = dia + ' de ' + mes + '. ' + ano
+
+            arrayProduto[0].dt_Plantio = data;
             
             return  res.render('estufaDetalhe.html', {produto, days})
         } catch (error) {
