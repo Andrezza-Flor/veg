@@ -30,35 +30,41 @@ module.exports = {
 
             // Inserção de dados no Banco de Dados - Tabela Usuarios
             await knex('Usuarios').insert({
-                email_Usuario: emailUsuario,
-                nome_Usuario: nomeUsuario,
-                telefone_Usuario: telefoneUsuario,
-                cpf_Usuario: cpfUsuario,
-                dt_Nasc_Usuario: dtNascimento,
-                tipo_Usuario: 'Gerente'
+                email_usuario: emailUsuario,
+                nome_usuario: nomeUsuario,
+                telefone_usuario: telefoneUsuario,
+                cpf_usuario: cpfUsuario,
+                dt_nasc_usuario: dtNascimento,
+                tipo_usuario: 'Gerente'
             })
             
             // Inserção de dados no Banco de Dado - Tabela Platacoes
             await knex('Plantacoes').insert({
-                cod_Plantacao: null,
-                email_Gerente: emailUsuario
+                cod_plantacao: null,
+                email_gerente: emailUsuario
             })
 
             // Captura do codigo da plantação
             const cod = await knex('Plantacoes')
             .where({email_Gerente: emailUsuario})
-            .select('cod_Plantacao')
+            .select('cod_plantacao')
             
-            // Para cresgatar o inteiro do dado [object Object]
-            var data = cod;
-            var s = data[0].cod_Plantacao + "";
-            var d = parseInt(s)
-
             // Inserção de dados no Banco de Dados - Tabela Logins
             await knex('Logins').insert({
-                email_Usuario: emailUsuario,
-                senha_Usuario: senhaUsuario1,
-                cod_Plantacao: d
+                email_usuario: emailUsuario,
+                senha_usuario: senhaUsuario1,
+                cod_plantacao: parseInt(cod[0].cod_plantacao)
+            })
+
+            var dataAtual = new Date();
+            const  mesReferencia = dataAtual.getMonth() + '-' + dataAtual.getFullYear();
+
+            await knex('FluxoCaixa').insert({
+                'mes_referencia': mesReferencia,
+                'cod_plantacao': parseInt(cod[0].cod_plantacao),
+                'capital_inicial': 0,
+                'saldo_operacional': 0,
+                'saldo_transportar': 0,
             })
             
             // Reiderizando a página

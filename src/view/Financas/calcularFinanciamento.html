@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/mainStyle.css">
+    <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">
+        <h1>Escolha uma opção</h1>
+        <div class="botoes">        
+            <a href="/home" class="button-menu">
+                <img src="/imagem/menu/home.png" alt="Página Pricipal">
+                <p>Página Principal</p>
+            </a>
+        
+            <a href="/celeiro" class="button-menu">
+                <img src="/imagem/menu/celeiro.png" alt="Celeiro">
+                <p>Celeiro</p>
+            </a>
+       
+            <a href="/estufa" class="button-menu">
+                <img src="/imagem/menu/plantacao.png" alt="Plantacao">
+                <p>Plantação</p>
+            </a>
+        
+            <a href="/armazem" class="button-menu">
+                <img src="/imagem/menu/armazem.png" alt="Armazem">
+                <p>Armazém</p>
+            </a>
+            
+            <a href="/financas" class="button-menu">
+                <img src="/imagem/menu/financas.png" alt="Finanças">
+                <p>Finanças</p>
+             </a>
+           
+            <a href="/venda" class="button-menu">
+                <img src="/imagem/menu/fornecedor.png" alt="Fornecedor">
+                <p>Fornecedor</p>
+            </a>
+    
+            <a href="/colaborador" class="button-menu">
+                <img src="/imagem/menu/cliente.png" alt="Cliente">
+                <p>Cliente</p>
+            </a>
+            
+            <a href="/colaborador" class="button-menu">
+                <img src="/imagem/menu/colaborador.png" alt="Colaborador">
+                <p>Colaborador</p>
+            </a>
+            
+            <a href="/relatorio" class="button-menu">
+                <img src="/imagem/menu/relatorio.png" alt="Relatório">
+                <p>Relatório</p>
+              </a>
+
+            <a href="/atividade" class="button-menu">
+                <img src="/imagem/menu/ajuda.png" alt="Ajuda">
+                <p>Ajuda</p>
+            </a>
+              
+            <a href="/" class="button-menu">
+                <img src="/imagem/menu/sair.png" alt="Sair">
+                <p>Sair</p>              
+             </a>             
+        </div>   
+        
+    </div>
+        
+    <div class="main">
+        <h1>
+            Cadastrar Financiamento
+            <a href="Financas/financas.html">
+                <img src="/imagem/voltar.png" alt="">
+                Voltar
+            </a>
+        </h1>
+        
+        <form name="FormFinanciamento" action="/calcularFinanciamento" method="POST">
+            <fieldset name="dadosFinanciamento" class="dados-Top">
+                <div class="title">
+                    <legend>Dados do Financiamento</legend>
+                </div>
+                <div class="write-block">
+                    <label for="tipoFinanciamento">Tipo de Financiamento:</label>
+                    <select name="tipoFinanciamento" id="tipoFinanciamento" required>
+                        <option value="" disable="" hidden="">Selecione uma opção</option>
+                        <option value="BNDES Finem">BNDES Finem</option> 
+                        <option value="Inovagro">Inovagro</option>
+                        <option value="Moderagro">Moderagro</option>
+                        <option value="Moderinfra">Moderinfra</option>
+                        <option value="PCA">PCA</option>
+                        <option value="Prodecoop">Prodecoop</option>
+                        <option value="Programa ABC Ambiental">Programa ABC Ambiental</option>
+                        <option value="Pronaf">Pronaf</option>
+                        <option value="Pronamp">Pronamp</option>   
+                        <option value="Financiamento Próprio">Financiamento Próprio</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="write-block">
+                    <label for="valorFinanciamento">Valor do Financiamento:</label>
+                    <input type="number" id="valorFinanciamento" name="valorFinanciamento" min="0" step=".01" placeholder="R$ 000.00" required>
+                </div>
+
+                <div class="mix-write-block">
+                    <label for="numeroParcelas">Forma de pagamento:</label>
+                    <input type="number" id="numeroParcelas" name="numeroParcelas" min="1" required>
+                    <p>Parcela(s)</p> 
+                    <select name="parcela" required>
+                        <option value="" disable="" hidden="">Selecione uma opção</option>
+                        <option value="MÊS">Mensal</option> 
+                        <option value="BIMESTRE">Bimestral</option>
+                        <option value="TRIMESTRE">Trimestral</option>
+                        <option value="SEMESTRE">Semestral</option>
+                        <option value="ANO">Anual</option>
+                    </select>
+                </div>
+                
+
+                <div class="write-block">
+                    <label for="taxaAnual">Taxa a.a. (%):</label>
+                    <input type="number" id="taxaAnual" name="taxaAnual" min="1" step=".01" placeholder="0.0 %" required>
+                </div>
+            
+                <div class="radio-block">
+                    <label for="carencia">Carência:</label>
+                    <p>
+                        <label onclick="semCarencia()">
+                            <input type="radio" id="semCarencia" name="carencia" value="0"> Sem CARÊNCIA
+                        </label>
+                    </p>
+                    <p>
+                        <label onclick="comCarencia()">
+                            <input type="radio" id="semJuros" name="carencia" value="1"> Com CARÊNCIA | Sem JUROS 
+                        </label>
+                    </p>
+                    <p>
+                        <label onclick="comCarencia()">
+                            <input type="radio" id="comJuros" name="carencia" value="2" checked> Com CARÊNCIA | Com JUROS 
+                        </label>
+                    </p>
+                </div>
+                <div id="valor-carencia" class="mix-write-block">
+                    <label for="tempoCarencia">Tempo de carência:</label>
+                    <input type="number" id="tempoCarencia" name="tempoCarencia" min="1" value="1">
+                    <p>Parcela(s)</p> 
+                    <select name="typeCarencia" id="typeCarencia" >
+                        <option value="" disable="" hidden="">Selecione uma opção</option>
+                        <option value="MÊS">Mensal</option> 
+                        <option value="BIMESTRE">Bimestral</option>
+                        <option value="TRIMESTRE">Trimestral</option>
+                        <option value="SEMESTRE">Semestral</option>
+                        <option value="ANO">Anual</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn_calcular" name="btn_calcular">Salvar</button>
+            </fieldset>                
+        </form>        
+    </div>
+
+    
+</body>
+<script language="JavaScript">
+    
+    function semCarencia() {
+        document.getElementById('valor-carencia').style.visibility = 'hidden';
+    }
+
+    function comCarencia() {
+        document.getElementById('valor-carencia').style.visibility = 'visible';
+    }
+</script>
+</html>

@@ -6,6 +6,7 @@ td{
 }
 
 table {
+    position: relative;
     width: 95%;
 }
 
@@ -61,11 +62,77 @@ a {
 } 
 
 .table-Detalhe td {
-    
     font-size: 1.5rem;
     font-family: Poppins;
     text-align: center;
     color: var(--color-text);
+}
+
+#tabela-financiamento {
+    margin: 0;
+    padding: 0;
+}
+
+#tabela-financiamento td{
+    border-width: thin;
+    font-size: 150%;
+    margin: 0;
+    padding: 0 0.5rem;
+}
+
+#tabela-financiamento .titulo {
+    
+    font-weight: bolder;
+}
+
+#tabela-financiamento .carencia {
+    background-color: #FFF976 ;
+}
+
+#tabela-financiamento .parcela {
+    background-color: #AEFF47;
+}
+
+#tabela-financiamento #tempo{
+    padding: 0 1rem;
+}
+
+.legenda{
+    position: relative;
+    float: right;
+
+    border-style: solid;
+    border-width: thin;
+    border-radius: 0.8rem;
+
+    width: 30%;
+    padding: 0.5rem;
+    margin-right: 4rem;
+    margin-top: 2rem;
+}
+
+
+
+.legenda p{
+    position: relative;
+    display: block;
+    text-align: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-family: Poppins;
+}
+
+.legenda .legCarencia,
+.legenda .legParcela {
+    height: 2rem;
+}
+
+.legenda .legCarencia{
+    background-color: #FFF976;
+}
+
+.legenda .legParcela{
+    background-color: #AEFF47;
 }
 
 .main .button-main  {

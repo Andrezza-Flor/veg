@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/mainStyle.css">
+    <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">
+        <h1>Escolha uma opção</h1>
+        <div class="botoes">        
+            <a href="/home" class="button-menu">
+                <img src="/imagem/menu/home.png" alt="Página Pricipal">
+                <p>Página Principal</p>
+            </a>
+       
+            <a href="/balanco" class="button-menu">
+                <img src="/imagem/menu/balanco.png" alt="Balanco">
+                <p>Balanço</p>
+             </a>
+             <a href="/fluxoCaixa" class="button-menu">
+                <img src="/imagem/menu/caixa.png" alt="Caixa">
+                <p>Fluxo de Caixa</p>
+             </a>
+             <a href="/financas" class="button-menu">
+                <img src="/imagem/menu/financas.png" alt="Finanças">
+                <p>Financiamento</p>
+             </a>
+              
+            <a href="/" class="button-menu">
+                <img src="/imagem/menu/sair.png" alt="Sair">
+                <p>Sair</p>              
+             </a>             
+        </div>   
+        
+    </div>
+    
+    
+    <div class="main">
+        <h1>
+            Cadastrar Financiamento
+            
+        </h1>
+    
+        <form name="FormFinanciamento" action="/criarConta" method="POST">
+            <fieldset  id="dados-Parcelas" class="dados-Botton">
+                <div class="title">
+                    <legend>{{titulo}}</legend>
+                </div>
+
+                <table id="tabela-financiamento">
+                    <tr>
+                        <td id="tempo" class="titulo">Tempo</td>
+                        <td class="titulo">Valor Principal</td>
+                        <td class="titulo">Juros</td>
+                        <td class="titulo">Valor da Parcela</td>
+                        <td class="titulo">Saldo Devedor</td>
+                        <td class="titulo">Data do Pagamento</td>
+                    </tr>
+                    {%for registro in resultadoFinal%}
+                        <tr>
+                            <td class="{{registro.parcela}}">{{registro.tempo}}</td>
+                            <td class="{{registro.parcela}}">R${{registro.parcelasPrincipais}}</td>
+                            <td class="{{registro.parcela}}">R${{registro.juros}}</td>
+                            <td class="{{registro.parcela}}">R${{registro.parcelaTotal}}</td>
+                            <td class="{{registro.parcela}}">R${{registro.saldoDevedor}}</td>
+                            <td class="{{registro.parcela}}">{{registro.mesPagamento}}. {{registro.anoPagamento}}</td>
+                        </tr>
+                    {%endfor%}
+                </table>  
+                
+                <div class="legenda">
+                    <div class="legCarencia"><p>Período de Carências</p></div>
+                
+                    <div class="legParcela"><p>Período de Quitação</p></div>
+                </div>            
+            </fieldset>
+
+            <fieldset id="dados-Contas" class="dados-Botton">
+                <div class="title">
+                    <legend>Dados do Pagamento</legend>
+                </div>
+
+                <div class="write-block">
+                    <label for="diaPagamento">Dia de Pagamento:</label>
+                    <input type="number" id="diaPagamento" name="diaPagamento" min="1" max="31" required>
+                </div>
+
+                <div class="radio-block">
+                    <label for="regraPagamento">Regra de Pagamento:</label>
+                    <p style="color: red;">**Caso o dia de pagamento caia no final de semana</p>
+                    <p>
+                        <label>
+                            <input type="radio" id="proximo" name="regraPagamento" value="proximo"checked> Primeiro dia após o vencimento
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input type="radio" id="antes" name="regraPagamento" value="antes"> Último dia antes do vencimento
+                        </label>
+                    </p>
+                </div>
+
+            </fieldset>
+            <button type="submit" class="btn_calcular" name="btn_calcular">Salvar</button>
+        </form>  
+    </div>
+
+    
+</body>
+<script language="JavaScript">
+    
+    function semCarencia() {
+        document.getElementById('valor-carencia').style.visibility = 'hidden';
+    }
+
+    function comCarencia() {
+        document.getElementById('valor-carencia').style.visibility = 'visible';
+    }
+</script>
+</html>

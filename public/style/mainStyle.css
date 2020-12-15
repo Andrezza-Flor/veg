@@ -2,6 +2,7 @@
     margin: 0px;
     padding: 0px;
 }
+
 body {
     background: var(--color-background);
 }
@@ -9,15 +10,15 @@ body {
 
 .menu {
     position: fixed;
+    float: left;
 
     background: var(--color-background-menu);
-    width: 35rem;
+    width: 30%;
     height: 100%;
 }
 
 .menu h1 {
 
-    margin-top: 1rem;
     margin-left: 2rem;
     margin-right: 2rem;
     margin-bottom: 1rem;
@@ -31,128 +32,63 @@ body {
     text-align: center;    
 }
 
+.botoes{
+    position: relative;
+    border-radius: 0.8rem;
+    
+    color: var(--color-button-menu);
+
+}
+
 .button-menu {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+
     background: var(--color-button-menu);
-    margin-top: 1rem;
-    margin-left: 1.5rem;
-    width: 15rem;
-    height: 13rem;
+    margin-top: 0.5rem;
+    margin-left: 2rem;
+    width: 90%;
+    height: 5rem;
 
     border-radius: 0.8rem;
     border: none
 }
-
+ 
 .button-menu:hover{
     transition: background 0.2s;
     background: var(--color-button-menu-dark);
 }
 
-.button-colher {
-    padding-left: 3rem;
-
-    display: flex;
-
-    background: var(--color-secondary);
-    margin-top: 1rem;
-    margin-left: 1.5rem;
-    width: 30rem;
-    height: 12rem;
-
-    
-
-    border-radius: 0.8rem;
-    border: none
-}
-
-.button-colher p{
-    padding-top: 1.4rem;
-
-    font-size: 3rem;
-    font-family: Poppins;
-}
-
-.button-colher:hover{
-    transition: background 0.2s;
-    background: var(--color-secondary-dark);
-}
-
-button a {
-    text-decoration: none;
-    font-size: 2rem;
-    font-family: Poppins;
-    color: #000000;
-    font-weight: bold;
-}
-
-
 img {
     padding-top: 0.5rem;
     padding-bottom: 0.8rem;
-    width: 8rem;
+    width: 4rem;
     display: block;
     margin: auto;
 }
 
-.button-menu-exit {
-    background: var(--color-button-cancel);
-    margin-top: 1rem;
-    margin-left: 1.5rem;
-    width: 15rem;
-    height: 5rem;
-
-    border-radius: 0.8rem;
-    border: none;
+a {
+    text-decoration: none;
 }
 
-.button-menu-exit:hover{
-    transition: background 0.2s;
-    background: var(--color-button-cancel-dark);
-}
+a p{
+    position: relative;
+    text-align: center;
+    margin: auto 0;
 
-.button-menu-perfil {
-    background: var(--color-secondary);
-    margin-top: 1rem;
-    margin-left: 1.5rem;
-    width: 15rem;
-    height: 5rem;
-
-    border-radius: 0.8rem;
-    border: none;
-}
-
-.button-menu-perfil:hover{
-    transition: 0.2s;
-    background: var(--color-secondary-dark);
-}
-
-.button-menu-exit a,
-.button-menu-perfil a {
-    display: flex;
-    color: #000000;
-
-}
-
-.footer {
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
-    width: 3rem;
-    margin-left: 2rem;
-    margin-right: 2rem;
-}
-
-.button-menu-exit p,
-.button-menu-perfil p {
-    padding-top: 0.8rem;
-    height: 100%;
+    color: var(--color-text);
+    font-size: 2.5rem;
+    font-family: Poppins;
+    font-weight: normal;
 }
 
 .main {
-    position: absolute;
-    margin-left: 35rem;
+    position: relative;
+    float: right;
+    /* margin-left: 5rem; */
     
-    width: 75%;
-    height: 80rem;
-
+    width: 65%;
 }
 
 .main h1 {
@@ -178,7 +114,7 @@ img {
 
 .main h1 a {
     background: var(--color-button-back);
-    /* margin-bottom: 2rem; */
+    margin-bottom: 2rem;
     padding-right: 2rem;
     border-radius: 0.8rem;
 
@@ -215,4 +151,222 @@ img {
     font-family: Poppins;
     text-align: center;
 
+}
+
+.search-block {
+    position: relative;
+    display: flex;
+    width: 100%;
+
+}
+
+.search-block button{
+    margin-left: 2rem;
+
+    border: none;
+    background: none;
+}
+
+.search-block button img {
+    width: 5rem;
+    padding-bottom: 0;
+}
+
+.search-block .select{
+    position: relative;
+    width: 60rem;
+    
+}
+
+.search-block .select label{
+    position: relative;
+    display: block;
+
+    margin-left: 0.8rem;
+
+    font-size: 2rem;
+    font-family: Poppins;
+    color: var(--color-text);
+    
+}
+
+.search-block .select select {
+    position: relative;
+    padding-left: 0.8rem;
+
+    font-size: 1.8rem;
+    font-family: Poppins;
+    color: var(--color-text);
+
+    width: 100%;
+    height: 3.5rem;
+    border: none;
+    border-radius: 0.8rem;
+}
+
+/* Configuração da página de Financiamento */
+
+.main #tabela-conta {
+    margin-top: 3rem;
+}
+
+.main #tabela-conta tr.title td.title-col{
+    font-size: 30px;
+}
+
+.main #tabela-conta td.indent{
+    font-weight: bolder;
+}
+
+.main #tabela-conta td.valor{
+    font-size: 15px;
+    padding: 1rem;
+}
+
+.main #tabela-conta td.button{
+    font-size: 16px;
+    font-weight: bolder;
+    padding: 1rem;
+}
+
+.main #tabela-capital{
+    position: relative;
+    margin-top: 2rem;
+    width: 46%;
+}
+
+.main #tabela-fluxocaixa{
+    display: flex;
+}
+
+.main #tabela-capital td,
+#tabela-ativo td,
+#tabela-passivo td,
+#tabela-patrimonio td{
+    border-width: thin;
+}
+.main #tabela-capital .title-col{
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+#tabela-capital .indent,
+#tabela-ativo .indent,
+#tabela-passivo .indent,
+#tabela-patrimonio .indent,
+#tabela-entrada .indent{
+    position: relative;
+    font-size: 1.5rem;
+}
+#tabela-capital .valor,
+#tabela-ativo .valor,
+#tabela-passivo .valor,
+#tabela-patrimonio .valor,
+#tabela-entrada .valor{
+    position: relative;
+    font-size: 1.5rem;
+    text-align: left;
+}
+
+.main #tabela-capital a{
+    font-style: none;
+    color: var(--color-secondary);
+    font-size: 3rem;
+
+    position: relative;
+    margin-left: 10rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
+
+    border-style: solid;
+    border-radius: 100%;
+}
+
+.main #tabela-capital a:hover{
+    transition: 0.2s;
+    color: var(--color-secondary-dark);
+}
+
+#tabela-ativo,
+#tabela-passivo {
+   display: inline;
+}
+
+#tabela-ativo td,
+#tabela-passivo td{
+   width: 18rem;
+   padding: 1rem;
+}
+
+#tabela-patrimonio td{
+   padding: 1rem;
+}
+
+#tabela-patrimonio .indent {
+    width: 50%;
+}
+
+.main a.button-top {
+    background-color: var(--color-secondary);
+}
+.main a.button-top:hover {
+    transition: 0.2s;
+    background-color: var(--color-secondary-dark);
+}
+
+.main a.button-footer:hover{
+    transition: 0.2s;
+    background-color: var(--color-third-dark);
+}
+
+.main a.button-footer {
+    background-color: var(--color-third);
+}
+
+.main a.button-footer,
+.main a.button-top{
+    position: relative;
+    margin-top: 4rem;
+    margin-bottom: 3rem;
+    border-radius: 0.8rem;
+
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    width: 30%;
+    height: 7rem;
+}
+
+.main a.button-footer p,
+.main a.button-top p{
+    color: #000;
+}
+
+.main a.button-footer img ,
+.main a.button-top img {
+    width: 6rem;
+}
+
+.main a#button-compra,
+.main a#novo-financiamento {
+    float: left;
+    margin-left: 10rem;
+}
+
+.main a#button-venda,
+.main a#nova-conta {
+    float: right;
+    margin-right: 10rem;
+}
+
+.main a#criarAporte{
+    font-size: 3.5rem;
+    color: #000;
+    font-family: Poppins;
+
+    background-color: var(--color-secondary);
+
+    border-radius: 0.8rem;
+    padding: 1.5rem;
+    margin-right: 10%;
+    float: right;
 }

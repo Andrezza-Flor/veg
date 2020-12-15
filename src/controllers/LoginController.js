@@ -26,8 +26,8 @@ module.exports = {
             // Busca dos email e senha iguais no banco de dados.
             const dadoAcesso = await knex('Logins')
                 .where({
-                    email_Usuario: email,
-                    senha_Usuario: senha
+                    email_usuario: email,
+                    senha_usuario: senha
                 })
                 .select('email_Usuario')
             
@@ -43,88 +43,48 @@ module.exports = {
 
                 //Busca do código da Plantação
                 const cod = await knex.from('Logins')
-                .where({email_Usuario: email})
-                .select('Logins.cod_Plantacao')
+                .where({email_usuario: email})
+                .select('Logins.cod_plantacao')
 
-                const codPlantacao = String(cod[0].cod_Plantacao);
+                const codPlantacao = String(cod[0].cod_plantacao);
                 // Salvar o código da Plantação no Local Storage, para atividades dentro do Sistema
                 local ('plantacao', codPlantacao)
 
-                // Preparar o parâmetro numCelerio
-                const arrayCeleiro = await knex('Celeiros')
-                .where({'cod_Plantacao': codPlantacao})
-                .select('cod_posicao_celeiro')
+                // // Preparar o parâmetro numCelerio
+                // const arrayCeleiro = await knex('Celeiros')
+                // .where({'cod_plantacao': codPlantacao})
+                // .select('cod_posicao_celeiro')
 
-                const numCeleiro = arrayCeleiro.length
+                // const numCeleiro = arrayCeleiro.length
 
-                // Preparar o parâmetro num Armazem
-                const arrayArmazem = await knex('Armazens')
-                .where({'cod_Plantacao': codPlantacao})
-                .select('cod_Posicao_Armazem')
+                // // Preparar o parâmetro num Armazem
+                // const arrayArmazem = await knex('Armazens')
+                // .where({'cod_plantacao': codPlantacao})
+                // .select('cod_posicao_Armazem')
 
-                const numArmazem = arrayArmazem.length
+                // const numArmazem = arrayArmazem.length
 
-                // Preparar o parâmetro numEstura
-                const arrayEstufa = await knex('Plantio')
-                .where({'cod_Plantacao': codPlantacao})
-                .select('cod_Plantacao_Hortalica')
+                // // Preparar o parâmetro numEstura
+                // const arrayEstufa = await knex('Plantio')
+                // .where({'cod_Plantacao': codPlantacao})
+                // .select('cod_Plantacao_Hortalica')
 
-                const numEstufa = arrayEstufa.length
+                // const numEstufa = arrayEstufa.length
 
-                // Preparar o parâmetro numAtiviadade
-                const arrayAtividade = await knex('Atividades')
-                .where({'ator_Atividade': email})
-                .select('cod_Atividade')
+                // // Preparar o parâmetro numAtiviadade
+                // const arrayAtividade = await knex('Atividades')
+                // .where({'ator_Atividade': email})
+                // .select('cod_Atividade')
 
-                const numAtividade = arrayAtividade.length
+                // const numAtividade = arrayAtividade.length
 
                 // Retorno positivo, reinderizando para dentro do sistema 
-                return res.render('home.html', {numCeleiro, numArmazem, numEstufa, numAtividade})
+                return res.render('home.html')
             }
 
         } catch (error) {
             // Captura de erro
             next(error)
         }             
-    },
-
-    // // Função de atualizar o Login **
-    // async update(req, res, next) {
-    //     try {
-
-    //         const { 
-    //             nome_Usuario
-    //          } = req.body
-
-    //          const { email_Usuario } = req.params
-
-    //         await knex('Usuarios')
-    //         .update({ 
-    //             nome_Usuario
-    //          })
-    //         .where({ email_Usuario })
-
-    //         return res.send()
-
-    //     } catch (error) {
-    //         next(error)
-    //     }
-    // },
-
-    //Função de deletar o Login **
-    // async delete(req, res, next) {
-    //     try {
-    //         const { email_Usuario } = req.params
-
-    //         await knex('Usuarios')
-    //         .where({ email_Usuario })
-    //         .del()
-
-    //         return res.send()
-
-    //     } catch (error) {
-    //         next(error)
-            
-    //     }
-    // }
+    }
 }

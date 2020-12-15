@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/mainStyle.css">
+    <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">
+        <h1>Escolha uma opção</h1>
+        <div class="botoes">        
+            <a href="/home" class="button-menu">
+                <img src="/imagem/menu/home.png" alt="Página Pricipal">
+                <p>Página Principal</p>
+            </a>
+       
+            <a href="/balanco" class="button-menu">
+                <img src="/imagem/menu/balanco.png" alt="Balanco">
+                <p>Balanço</p>
+             </a>
+             <a href="/fluxoCaixa" class="button-menu">
+                <img src="/imagem/menu/caixa.png" alt="Caixa">
+                <p>Fluxo de Caixa</p>
+             </a>
+             <a href="/financas" class="button-menu">
+                <img src="/imagem/menu/financas.png" alt="Finanças">
+                <p>Financiamento</p>
+             </a>
+              
+            <a href="/" class="button-menu">
+                <img src="/imagem/menu/sair.png" alt="Sair">
+                <p>Sair</p>              
+             </a>             
+        </div>   
+        
+    </div>
+
+    <div class="main">
+        <h1>
+            Editar Entrada
+            <a href="/entrada">
+                <img src="/imagem/voltar.png" alt="">
+                Voltar
+            </a>
+        </h1>
+
+        <form action="/editarEntrada" method="POST">
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Dados Entrada</legend>
+                </div>
+                <div class="write-block">
+                    <label for="nomeEntrada">Noma da Entrada:</label>
+                    <input type="text" id="nomeEntrada" name="nomeEntrada" value="{{entrada.nome_entrada}}" required>
+                </div>
+                <div class="write-block">
+                    <label for="valorEntrada">Valor Fixo da Entrada:</label>
+                    <input type="number" id="valorEntrada" name="valorEntrada"  step=".01" placeholder="R$ 0000.00"  value="{{entrada.valor_entrada}}" required>
+                </div>
+                <div class="write-block">
+                    <label for="dtInicio">Data da Entrada:</label>
+                    <input type="date" id="dtInicio" name="dtInicio" min="" value="{{entrada.validade_entrada}}" required>
+                </div> 
+            </fieldset>
+            
+            <div class="botton-foot">
+                <button type="submit" class="">
+                    Salvar Alterações
+                </button>  
+            </div>
+        </form>        
+    </div>
+</body>
+</html>

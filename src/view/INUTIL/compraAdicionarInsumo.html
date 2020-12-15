@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/mainStyle.css">
+    <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">      
+        <h1>Escolha uma opção</h1>
+        <div class="botoes">
+            <button id="celeiro" class="button-menu">
+                <a href="/celeiro">
+                    <img src="/imagem/menu/celeiro.png" alt="Celeiro">
+                    Celeiro
+                </a>
+            </button>
+
+            <button id="estufa" class="button-menu">
+                <a href="/estufa">
+                    <img src="/imagem/menu/estufa.png" alt="Estufa">
+                    Estufa
+                </a>
+            </button>
+
+            <button id="armazem" class="button-menu">
+                <a href="/armazem">
+                    <img src="/imagem/menu/armazem.png" alt="Armazem">
+                    Armazém
+                </a>
+            </button>
+
+            <button id="compra" class="button-menu">
+                <a href="/compra">
+                    <img src="/imagem/menu/compra.png" alt="Compra">
+                    Compra
+                </a>
+            </button> 
+
+            <button id="venda" class="button-menu">
+                <a href="/venda">
+                    <img src="/imagem/menu/vender.png" alt="Venda">
+                    Venda
+                </a>
+            </button>
+            
+            <button id="colaborador" class="button-menu">
+                <a href="/colaborador">
+                    <img src="/imagem/menu/colaborador.png" alt="Colaborador">
+                    Colaborador
+                </a>
+            </button>
+                        
+            <button id="relatorio" class="button-menu">
+                <a href="/relatorio">
+                    <img src="/imagem/menu/relatorio-seo.png" alt="Relatório">
+                    Relatório
+                </a>
+            </button>
+            
+            <button id="atividade" class="button-menu">
+                <a href="/atividade">
+                    <img src="/imagem/menu/atividade.png" alt="Atividade">
+                    Atividade 
+                </a>
+            </button>
+
+            <button id="ajuda" class="button-menu">
+                <a href="/atividade">
+                    <img src="/imagem/menu/ajuda.png" alt="Atividade">
+                    Ajuda 
+                </a>
+            </button>
+            
+        </div>   
+        <div id="footer">
+            <button class="button-menu-exit">
+                <a href="/">
+                    <img class="footer" src="/imagem/menu/sair.png" alt="Sair">
+                    <p>Sair</p>
+                </a> 
+            </button>
+
+            <button class="button-menu-perfil">
+                <a href="/perfil">
+                    <img class="footer" src="/imagem/menu/perfil.png" alt="Perfil">
+                    <p>Perfil</p>
+                </a>
+            </button> 
+        </div>
+    </div>
+    
+    <div class="main">
+        <h1>
+            Compra
+            <a href="/realizarCompra">
+                <img src="/imagem/voltar.png" alt="">
+                Voltar
+            </a>
+        </h1>
+        
+        
+        <form action="/buscaInsumo" method="POST">
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Adicionar Insumo para <strong>{{nomeFornecedor}}</strong></legend>
+                </div>
+
+                <div class="search-block">
+                    <div class="select-block">
+                        <div class="select">
+                            <label for="nomeInsumo">Insumo:</label>
+                            <select name="codInsumo" id="nomeInsumo">
+                                <option value="" disable="" hidden="">Selecione uma opição</option> 
+                                {%for insumo in listaInsumo%}
+                                    <option value={{insumo.cod_Insumo}}>{{ insumo.nome_Insumo }}</option>
+                                {%endfor%}  
+                            </select>
+                        </div>
+                        <button type="submit">
+                            <img src="/imagem/procurar.png" alt="Adicionar">
+                        </button>
+                    </div>
+                </div>
+                
+            <div class="foot-dados-Botton">
+                <div class="aviso-foot">
+                    <img src="/imagem/aviso.png" alt="Aviso">
+                    <p>Caso não tenha achado o insumo é possivel cria-lo</p>
+                </div>
+                <a href="/criarInsumo">
+                    <img src="/imagem/insumo.png" alt="Insumo">
+                    <p>Criar Insumo</p>
+                </a>
+            </div>
+            </fieldset>
+        </form>
+
+        <form action="/adicionarInsumo" method="POST">
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados da Insumo</legend>
+                </div>
+                <div class="read-block">
+                    <label for="nomeInsumo">Nome do Insumo:</label>
+                    <p class="input">{{dadosInsumo.nome_Insumo}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="tipoInsumo">Tipo do Insumo:</label>
+                    <p class="input">{{dadosInsumo.tipo_Insumo}}</p>
+                </div>
+                <div class="write-block">
+                    <label for="tempoEntrega">Quantos dias para ser Entregue:</label>
+                    <input type="number" id="tempoEntrega" name="tempoEntrega" required>
+                </div>     
+                 
+            </fieldset> 
+            <button type="submit" class="button-adicionar"> <img src="/imagem/mais.png" alt="Adicionar">  <p>Adicionar Insumo</p>  </button>
+        </form>
+
+        <form>
+            <fieldset class="foot-dados-Botton">
+                <table class="table-Detalhe">
+                    <tr>
+                        <th colspan="3">Insumos Adicionadados</th>
+                    </tr>
+                    <tr class="head">
+                        <th>Nome do Insumo</th>
+                        <th>Dias de espera</th>
+                    </tr>
+                    {%for Insumo in tabelaInsumos%}
+                        <tr>
+                            <td>{{Insumo.nome_Insumo}}</td>
+                            <td>{{Insumo.tempo_Entrega}}</a></td>
+                        </tr>
+                    {%endfor%}  
+                </table>
+            </fieldset>
+            <div class="button-main">
+                <a href="/realizarCompra">
+                    Concluir o Cadastro
+                </a>
+            </div>          
+        </form> 
+    </div>
+</body>
+</html>

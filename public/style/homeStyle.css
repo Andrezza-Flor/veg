@@ -5,7 +5,7 @@
 
     border-radius: 0.8rem;
     height: 15rem;
-    width: 90rem;
+    width: 90%;
 
     background: var(--color-button-menu);
     display: grid;

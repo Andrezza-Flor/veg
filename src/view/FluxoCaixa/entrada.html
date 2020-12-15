@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/mainStyle.css">
+    <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">
+        <h1>Escolha uma opção</h1>
+        <div class="botoes">        
+            <a href="/home" class="button-menu">
+                <img src="/imagem/menu/home.png" alt="Página Pricipal">
+                <p>Página Principal</p>
+            </a>
+       
+            <a href="/balanco" class="button-menu">
+                <img src="/imagem/menu/balanco.png" alt="Balanco">
+                <p>Balanço</p>
+             </a>
+             <a href="/fluxoCaixa" class="button-menu">
+                <img src="/imagem/menu/caixa.png" alt="Caixa">
+                <p>Fluxo de Caixa</p>
+             </a>
+             <a href="/financas" class="button-menu">
+                <img src="/imagem/menu/financas.png" alt="Finanças">
+                <p>Financiamento</p>
+             </a>
+              
+            <a href="/" class="button-menu">
+                <img src="/imagem/menu/sair.png" alt="Sair">
+                <p>Sair</p>              
+             </a>             
+        </div>   
+        
+    </div>
+        
+    <div class="main">
+        <h1>Entrada de Caixa</h1>
+        <form action="/entrada" method="POST">
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Personalizar Busca</legend>
+                </div>
+                <div class="write-block">
+                    <label for="inicioBusca">Inicio da Busca</label>
+                    <input type="date" id="inicioBusca" name="inicioBusca">
+                </div>
+                <div class="write-block">
+                    <label for="fimBusca">Fim da Busca</label>
+                    <input type="date" id="fimBusca" name="fimBusca">
+                </div>    
+                <button type="submit">
+                   Buscar
+                </button>       
+            </fieldset>
+        </form>
+
+        <form action="/acessarEntrada" method="POST">
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Buscar Entradas</legend>
+                </div>
+                <div class="search-block">
+                    <div class="select">
+                        <label for="codEntrada">Entradas:</label>
+                        <select name="codEntrada" id="codEntrada" required>
+                            <option value="" disable="" hidden="">Selecione uma opção</option> 
+                            {%for entrada in entradas%}
+                                <option value={{entrada.cod_entrada}}>{{entrada.nome_entrada}} - {{entrada.validade_entrada}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                    <button type="submit" class="salvar">
+                        Acessar
+                    </button>
+                </div>
+            </fieldset>
+            <fieldset class="dados-Button">
+                <table id="tabela-entrada">
+                    <tr>
+                        <td class="indent">Nome</td>
+                        <td class="indent">Valor</td>
+                        <td class="indent">Data</td>
+                    </tr>
+                    
+                    {%for entrada in entradas%}
+                        <tr>
+                            <td class="valor">{{entrada.nome_entrada}}</td>
+                            <td class="valor">R$ {{entrada.valor_entrada}}</td>
+                            <td class="valor">{{entrada.validade_entrada}}</td>
+                        </tr>
+                    {%endfor%}
+                    
+        
+                </table>  
+            </fieldset>
+        </form>
+        <a href="/" id="button-compra" class="button-footer">
+            <img src="/imagem/fornecedor.png" alt="Comprar">
+            <p>Cadastrar Venda</p>
+        </a>
+
+        <a href="/cadastrarEntrada" id="button-compra" class="button-footer">
+            <img src="/imagem/fornecedor.png" alt="Comprar">
+            <p>Cadastrar Entradas</p>
+        </a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/mainStyle.css">
+    <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">      
+        <h1>Escolha uma opção</h1>
+        <div class="botoes">
+            <button id="celeiro" class="button-menu">
+                <a href="/celeiro">
+                    <img src="/imagem/menu/celeiro.png" alt="Celeiro">
+                    Celeiro
+                </a>
+            </button>
+
+            <button id="estufa" class="button-menu">
+                <a href="/estufa">
+                    <img src="/imagem/menu/estufa.png" alt="Estufa">
+                    Estufa
+                </a>
+            </button>
+
+            <button id="armazem" class="button-menu">
+                <a href="/armazem">
+                    <img src="/imagem/menu/armazem.png" alt="Armazem">
+                    Armazém
+                </a>
+            </button>
+
+            <button id="compra" class="button-menu">
+                <a href="/compra">
+                    <img src="/imagem/menu/compra.png" alt="Compra">
+                    Compra
+                </a>
+            </button> 
+
+            <button id="venda" class="button-menu">
+                <a href="/venda">
+                    <img src="/imagem/menu/vender.png" alt="Venda">
+                    Venda
+                </a>
+            </button>
+            
+            <button id="colaborador" class="button-menu">
+                <a href="/colaborador">
+                    <img src="/imagem/menu/colaborador.png" alt="Colaborador">
+                    Colaborador
+                </a>
+            </button>
+                        
+            <button id="relatorio" class="button-menu">
+                <a href="/relatorio">
+                    <img src="/imagem/menu/relatorio-seo.png" alt="Relatório">
+                    Relatório
+                </a>
+            </button>
+            
+            <button id="atividade" class="button-menu">
+                <a href="/atividade">
+                    <img src="/imagem/menu/atividade.png" alt="Atividade">
+                    Atividade 
+                </a>
+            </button>
+
+            <button id="ajuda" class="button-menu">
+                <a href="/atividade">
+                    <img src="/imagem/menu/ajuda.png" alt="Atividade">
+                    Ajuda 
+                </a>
+            </button>
+            
+        </div>   
+        <div id="footer">
+            <button class="button-menu-exit">
+                <a href="/">
+                    <img class="footer" src="/imagem/menu/sair.png" alt="Sair">
+                    <p>Sair</p>
+                </a> 
+            </button>
+
+            <button class="button-menu-perfil">
+                <a href="/perfil">
+                    <img class="footer" src="/imagem/menu/perfil.png" alt="Perfil">
+                    <p>Perfil</p>
+                </a>
+            </button> 
+        </div>
+    </div>
+
+    <div class="main">
+        <h1>
+            Colaborador
+            <a href="colaborador.html">
+                <img src="/imagem/voltar.png" alt="">
+                Voltar
+            </a>
+        </h1>
+
+        <form action="/criarColaborador" method="POST">
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Dados do Colaborador</legend>
+                </div>
+                <div class="write-block">
+                    <label for="nomeColaborador">Nome:</label>
+                    <input type="text" id="nomeColaborador" name="nomeColaborador" required>
+                </div>
+               <div class="write-block">
+                    <label for="cpfColaborador">CPF Colaborador:</label>
+                    <input type="text" id="cpfColaborador" name="cpfColaborador" required>
+                </div>
+                <div class="write-block">
+                    <label for="telefoneColaborador">Telefone Colaborador:</label>
+                    <input type="text" id="telefoneColaborador" name="telefoneColaborador" required>
+                </div>
+                <div class="write-block">
+                    <label for="dtNasciColaborador">Data de Nacimento:</label>
+                    <input type="date" id="dtNasciColaborador" name="dtNasciColaborador" required>
+                </div> 
+            </fieldset>
+
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados da Acesso</legend>
+                </div>
+                <div class="write-block">
+                    <label for="emailColaborador">Email Colaborador:</label>
+                    <input type="text" id="emailColaborador" name="emailColaborador" required>
+                </div>
+                <div class="write-block">
+                    <label for="senhaColaboradorI">Senha:</label>
+                    <input type="password" id="senhaColaboradorI" name="senhaColaboradorI" required>
+                </div>
+                <div class="write-block">
+                    <label for="senhaColaboradorII">Repitir senha:</label>
+                    <input type="password" id="senhaColaboradorII" name="senhaColaboradorII" required>
+                </div>
+                <div class="write-block">
+                    <label for="funcaoColaborador">Função do Colaborador:</label>
+                    <select name="funcaoColaborador" id="funcaoColaborador" required>
+                        <option selected disabled>Selecione uma opção</option>
+                        <option value="Colaborador Financeiro">Colaborador Financeiro</option> 
+                        <option value="Colaborador de Produção">Colaborador de Produção</option>
+                    </select>
+                </div>
+            </fieldset>
+            
+            <div class="botton-foot">
+
+                <button type="submit" class="button-Salvar">
+                    Salvar Cadastro
+                </button>  
+            </div>
+        </form>        
+    </div>
+</body>
+</html>

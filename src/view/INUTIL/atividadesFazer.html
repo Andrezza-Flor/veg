@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/mainStyle.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">      
+        <h1>Escolha uma opção</h1>
+        <div class="botoes">
+            <button id="celeiro" class="button-menu">
+                <a href="/celeiro">
+                    <img src="/imagem/menu/celeiro.png" alt="Celeiro">
+                    Celeiro
+                </a>
+            </button>
+
+            <button id="estufa" class="button-menu">
+                <a href="/estufa">
+                    <img src="/imagem/menu/estufa.png" alt="Estufa">
+                    Estufa
+                </a>
+            </button>
+
+            <button id="armazem" class="button-menu">
+                <a href="/armazem">
+                    <img src="/imagem/menu/armazem.png" alt="Armazem">
+                    Armazém
+                </a>
+            </button>
+
+            <button id="compra" class="button-menu">
+                <a href="/compra">
+                    <img src="/imagem/menu/compra.png" alt="Compra">
+                    Compra
+                </a>
+            </button> 
+
+            <button id="venda" class="button-menu">
+                <a href="/venda">
+                    <img src="/imagem/menu/vender.png" alt="Venda">
+                    Venda
+                </a>
+            </button>
+            
+            <button id="colaborador" class="button-menu">
+                <a href="/colaborador">
+                    <img src="/imagem/menu/colaborador.png" alt="Colaborador">
+                    Colaborador
+                </a>
+            </button>
+                        
+            <button id="relatorio" class="button-menu">
+                <a href="/relatorio">
+                    <img src="/imagem/menu/relatorio-seo.png" alt="Relatório">
+                    Relatório
+                </a>
+            </button>
+            
+            <button id="atividade" class="button-menu">
+                <a href="/atividade">
+                    <img src="/imagem/menu/atividade.png" alt="Atividade">
+                    Atividade 
+                </a>
+            </button>
+
+            <button id="ajuda" class="button-menu">
+                <a href="/atividade">
+                    <img src="/imagem/menu/ajuda.png" alt="Atividade">
+                    Ajuda 
+                </a>
+            </button>
+            
+        </div>   
+        <div id="footer">
+            <button class="button-menu-exit">
+                <a href="/">
+                    <img class="footer" src="/imagem/menu/sair.png" alt="Sair">
+                    <p>Sair</p>
+                </a> 
+            </button>
+
+            <button class="button-menu-perfil">
+                <a href="/perfil">
+                    <img class="footer" src="/imagem/menu/perfil.png" alt="Perfil">
+                    <p>Perfil</p>
+                </a>
+            </button> 
+        </div>
+    </div>
+    
+    <div class="main">
+
+        <h1>Atividade
+            <a href="atividades.html">
+                <img src="../../public/imagem/voltar.png" alt="Voltar">
+                Voltar
+            </a>
+        </h1>
+
+        <form>
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Dados da Hortaliça</legend>
+                </div>
+                <div class="read-block">
+                    <label for="nomeAtividade">Nome da Atividade:</label>
+                    <input type="text" id="nomeAtividade" name="nomeAtividade" value="Comprar adubo nitrogênado " readonly>
+                </div>
+                <div class="read-block">
+                    <label for="dtAtividade">Data da Atividade:</label>
+                    <input type="date" id="dtPlantio" name="dtPlantio" value="2020-02-02" readonly>
+                </div> 
+                <div class="read-block">
+                    <label for="descAtividade">Descrição da Atividade</label>
+                    <textarea name="descAtividade" id="descAtividade" values="Comprar 20 Kg de adubo nitrogênado; Adubos Fertipol Indústria e Comércio."readonly>
+                    </textarea>
+                </div>
+                <div class="read-block">
+                    <label for="autoAtividade">Autor da Atividade:</label>
+                    <input type="text" id="autoAtividade" name="autoAtividade" value="Katia Pereira" readonly>
+                </div>
+
+            </fieldset>
+
+            <div class="botton-foot">
+                <a class="button-Cancelar" href="estufa.html">
+                    <img src="../../public/imagem/fechar.png" alt="Cancelar">
+                    Esperar
+                </a>
+
+                <button type="submit" class="button-Salvar">
+                    <a href="estufa.html">
+                        <img src="../../public/imagem/aprovar.png" alt="Feito">
+                        Feito
+                    </a>
+                </button>  
+            </div>
+
+        </form>
+    </div>
+</body>
+</html>

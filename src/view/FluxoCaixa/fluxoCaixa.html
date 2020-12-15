@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/mainStyle.css">
+    <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">
+        <h1>Escolha uma opção</h1>
+        <div class="botoes">        
+            <a href="/home" class="button-menu">
+                <img src="/imagem/menu/home.png" alt="Página Pricipal">
+                <p>Página Principal</p>
+            </a>
+       
+            <a href="/balanco" class="button-menu">
+                <img src="/imagem/menu/balanco.png" alt="Balanco">
+                <p>Balanço</p>
+             </a>
+             <a href="/fluxoCaixa" class="button-menu">
+                <img src="/imagem/menu/caixa.png" alt="Caixa">
+                <p>Fluxo de Caixa</p>
+             </a>
+             <a href="/financas" class="button-menu">
+                <img src="/imagem/menu/financas.png" alt="Finanças">
+                <p>Financiamento</p>
+             </a>
+              
+            <a href="/" class="button-menu">
+                <img src="/imagem/menu/sair.png" alt="Sair">
+                <p>Sair</p>              
+             </a>             
+        </div>   
+        
+    </div>
+        
+    <div class="main">
+        <h1>Fluxo de Caixa</h1>
+
+        <div id="tabela-fluxocaixa">
+            <table id="tabela-capital">
+                <tr class="title">
+                    <td class="title-col" colspan="3">Entrada <a href="/entrada">+</a></th>
+                </tr>
+                <tr>
+                    <td class="indent">Nome</td>
+                    <td class="indent">Valor</td>
+                    <td class="indent">Data</td>
+                </tr>
+                {%for entrada in entradas%}
+                    <tr>
+                        <td class="valor">{{entrada.nome_entrada}}</td>
+                        <td class="valor">R${{entrada.valor_entrada}}</td>
+                        <td class="valor">{{entrada.validade_entrada}}</td>
+                    </tr>
+                {%endfor%}
+                <tr>
+                    <td class="valor" colspan="3">Total: R$ {{totalEntrada}}</td>
+                </tr>
+            </table> 
+    
+            <table id="tabela-capital">
+                <tr class="title">
+                    <td class="title-col" colspan="3">Saída <a href="/saida">+</a></th>
+                </tr>
+                <tr>
+                    <td class="indent">Nome</td>
+                    <td class="indent">Valor</td>
+                    <td class="indent">Data</td>
+                </tr>
+                {%for saida in saidas%}
+                    <tr>
+                        <td class="valor">{{saida.nome_saida}}</td>
+                        <td class="valor">R${{saida.valor_saida}}</td>
+                        <td class="valor">{{saida.validade_saida}}</td>
+                    </tr>
+                {%endfor%}
+                <tr>
+                    <td class="valor" colspan="3">Total: R$ {{totalSaida}}</td>
+                </tr>
+            </table>  
+        </div>
+        
+
+        <form>
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados Gererais - {{mesAtual}}</legend>
+                </div>
+                <div class="read-block">
+                    <label for="capitalInicial">Capital Inicial:</label>
+                    <p class="input">R$ {{capitalInicial}}</p>
+                </div> 
+                <div class="read-block">
+                    <label for="saldoOperacional">Saldo Operacional:</label>
+                    <p class="input">R$ {{saldoOperacional}}</p>
+                </div> 
+                <div class="read-block">
+                    <label for="saldoTransportado">Saldo a Trasportar:</label>
+                    <p class="input">R$ {{saldoTrasportar}}</p>
+                </div> 
+            </fieldset>
+        </form>  
+    </div>
+</body>
+</html>

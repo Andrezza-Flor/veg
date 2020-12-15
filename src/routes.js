@@ -12,11 +12,15 @@ const EstufaController = require('./controllers/EstufaController')
 const CeleiroController = require('./controllers/CeleiroController')
 const ArmazemController = require('./controllers/ArmazemController')
 const VendaController = require('./controllers/VendaController')
+const FinancaController = require('./controllers/FinancasController')
+const FluxoCaixa = require('./controllers/FluxoCaixaController')
+const Balanco = require('./controllers/BalancoController')
 
 routes
 //Login
     .get('/', LoginController.index)
     .post('/access', LoginController.access)
+    .get('/home', MenuController.home)
     
 // Gerente
     .get('/cadastro', GerenteController.index)
@@ -32,6 +36,43 @@ routes
     .post('/detalheHortalica', ArmazemController.detalheHortalica)
     .get('/editarHortalica', ArmazemController.paginaEdicao)
     .post('/editarHortalica', ArmazemController.editarHortalica)
+
+// Balanço
+    .get('/balanco', MenuController.balanco)
+    .get('/ativoCirculante', Balanco.ativoCirculante)
+    .get('/ativoPermanente', Balanco.ativoPermanente)
+    .get('/passivoCirculante', Balanco.passivoCirculante)
+    .get('/passivoPermanente', Balanco.passivoPermanente)
+    
+
+
+// Fluxo de Caixa
+    .get('/fluxoCaixa', MenuController.fluxoCaixa)
+    // Entradas
+    .get('/entrada', FluxoCaixa.entrada)
+    .post('/entrada', FluxoCaixa.buscaEntrada)
+    .get('/cadastrarEntrada', FluxoCaixa.criarEntrada)
+    .post('/cadastrarEntrada', FluxoCaixa.salvarEntrada)
+    .post('/acessarEntrada', FluxoCaixa.acessarEntrada)
+    .get('/editarEntrada', FluxoCaixa.paginaEditarEntrada)
+    .post('/editarEntrada', FluxoCaixa.editarEntrada)
+    .get('/excluirEntrada', FluxoCaixa.excluirEntrada)
+    // Saidas
+    .get('/saida', FluxoCaixa.saida)
+    .post('/saida', FluxoCaixa.buscarSaida)
+    .get('/cadastrarSaida', FluxoCaixa.criarSaida)
+    .post('/cadastrarSaida', FluxoCaixa.salvarSaida)
+    .post('/acessarSaida', FluxoCaixa.acessarSaida)
+    .get('/editarSaida', FluxoCaixa.paginaEditarSaida)
+    .post('/editarSaida', FluxoCaixa.editarSaida)
+    .get('/excluirSaida', FluxoCaixa.excluirSaida)
+    
+
+// Finanças
+    .get('/financas', MenuController.financas)
+    .get('/criarFinanciamento', FinancaController.paginaCriar)
+    .post('/calcularFinanciamento', FinancaController.calcularFinancimento)
+    .post('/criarConta', FinancaController.cadastrarConta)
     
 // Compra
     .get('/compra', MenuController.compra)

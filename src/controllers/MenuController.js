@@ -2,7 +2,188 @@ const knex = require('../database');
 const e = require('express');
 const local = require('local-storage');
 
+async function varreduraFluxoCaixa(codPlantacao) {
+    const fluxosCaixa = await knex('FluxoCaixa')
+    .where('cod_plantacao', codPlantacao)
+    .select()
+
+    // varredura dos dados dos fluxos de caixa e correção dos mesmos.
+    for (let index = 0; index < fluxosCaixa.length; index++) {
+        if(fluxosCaixa[index].capital_inicial != (fluxosCaixa[index].saldo_transportar - fluxosCaixa[index].saldo_operacional)){
+            fluxosCaixa[index].saldo_transportar = fluxosCaixa[index].capital_inicial + fluxosCaixa[index].saldo_operacional;
+        }
+
+        if(index < fluxosCaixa.length -1){
+            fluxosCaixa[index + 1].capital_inicial = fluxosCaixa[index].saldo_transportar;
+        }
+
+        
+    }
+
+    // // Inserção das atualizações dos dos valores no fluxo de caixa
+    for (let index = 0; index < fluxosCaixa.length; index++) {
+        await knex('FluxoCaixa')
+        .where('cod_fluxoCaixa', fluxosCaixa[index].cod_fluxoCaixa)
+        .update({
+            capital_inicial: fluxosCaixa[index].capital_inicial,
+            saldo_operacional: fluxosCaixa[index].saldo_operacional,
+            saldo_transportar: fluxosCaixa[index].saldo_transportar,
+        })
+    }
+} 
+async function apresentacaoEntradas() {
+    const codPlantacao = Number(local('plantacao'))
+    const dataAtual = new Date();
+    const mesAnalise = dataAtual.getMonth();
+    const anoAnalise = dataAtual.getFullYear();
+    const dataFim = new Date(anoAnalise, (mesAnalise+1), 28)
+
+    const dataInicio = new Date(anoAnalise, mesAnalise, 1);
+    dataFim.setDate(0)
+
+    const entradas = await knex('Entradas')
+    .where('cod_plantacao', codPlantacao)
+    .where({'status_entrada': 1})
+    .whereBetween('validade_entrada', [dataInicio, dataFim])
+    .select();
+
+    for (let index = 0; index < entradas.length; index++) {
+         
+        const data = new Date(entradas[index].validade_entrada);
+
+        if(data.getMonth() == dataAtual.getMonth() && data.getFullYear() == dataAtual.getFullYear()){
+            entradas[index].validade_entrada = data.getDate() + "/" + (data.getMonth() + 1) + "/" + data.getFullYear();
+        } else {
+            entradas.splice(index);
+        }
+                            
+    }    
+
+    return entradas
+}
+async function apresentacaoSaidas() {
+    const codPlantacao = Number(local('plantacao'))
+    const dataAtual = new Date();
+    const mesAnalise = dataAtual.getMonth();
+    const anoAnalise = dataAtual.getFullYear();
+    const dataFim = new Date(anoAnalise, (mesAnalise+1), 28)
+
+    const dataInicio = new Date(anoAnalise, mesAnalise, 1);
+    dataFim.setDate(0)
+
+    const saidas = await knex('Saidas')
+    .where('cod_plantacao', codPlantacao)
+    .where({'status_saida': 1})
+    .whereBetween('validade_saida', [dataInicio, dataFim])
+    .select();
+
+    for (let index = 0; index < saidas.length; index++) {
+         
+        const data = new Date(saidas[index].validade_saida);
+
+        if(data.getMonth() == dataAtual.getMonth() && data.getFullYear() == dataAtual.getFullYear()){
+            saidas[index].validade_saida = data.getDate() + "/" + (data.getMonth() + 1) + "/" + data.getFullYear();
+        } else {
+            saidas.splice(index);
+        }
+                            
+    }   
+    
+    return saidas
+}
+
+const nomeDosMeses = [
+    'JANEIRO',
+    'FEVEREIRO',
+    'MARÇO',
+    'ABRIL',
+    'MAIO',
+    'JUNHO',
+    'JULHO',
+    'AGOSTO',
+    'SETEMBRO',
+    'OUTUBRO',
+    'NOVEMBRO',
+    'DEZEMBRO'
+]
+
 module.exports = {
+    
+    async home(req, res, next) {
+        try {
+            return res.render('home.html')
+        } catch (error) {
+            next(error)
+        }
+    },
+    // Acessar a Página de Capital
+    async balanco(req, res, next) {
+        try {
+            return res.render('Balanco/balanco.html')
+        } catch(error) {
+            next(error)
+        }
+    },
+    async fluxoCaixa(req,res, next) {
+        try {
+            const entradas = await apresentacaoEntradas();
+            var totalEntrada = 0
+            for (let index = 0; index < entradas.length; index++) {
+                totalEntrada = entradas[index].valor_entrada + totalEntrada;
+            }
+
+            const saidas = await apresentacaoSaidas()
+            var totalSaida = 0
+            for (let index = 0; index < saidas.length; index++) {
+                totalSaida = saidas[index].valor_saida + totalSaida;
+                
+            }
+
+            // Preparando o parâmetro mesAtual
+            var dataAtual = new Date();
+            const mesAtual = nomeDosMeses[dataAtual.getMonth()]
+
+            // Preparando capitalInicial
+            const  mesReferencia = dataAtual.getMonth() + '-' + dataAtual.getFullYear(); 
+            const codPlantacao = Number(local('plantacao'))
+
+            var fluxoCaixa = await knex('FluxoCaixa')
+            .where({'cod_plantacao': codPlantacao})
+            .where({'mes_referencia': mesReferencia})
+            .select()
+
+            if(fluxoCaixa.length == 0){
+
+                const fluxoCaixaAnterior = await knex('FluxoCaixa')
+                .where({'cod_plantacao': codPlantacao})
+                .select()
+
+                await knex('FluxoCaixa').insert({
+                    'mes_referencia': mesReferencia,
+                    'cod_plantacao': codPlantacao,
+                    'capital_inicial': fluxoCaixaAnterior[fluxoCaixaAnterior.length -1].saldo_transportar,
+                    'saldo_operacional': 0,
+                    'saldo_transportar': 0,
+                })
+            
+                fluxoCaixa = await knex('FluxoCaixa')
+                .where({'cod_plantacao': codPlantacao})
+                .where({'mes_referencia': mesReferencia})
+                .select()
+            } 
+
+            await varreduraFluxoCaixa(codPlantacao)
+
+            const capitalInicial = fluxoCaixa[0].capital_inicial;
+            const saldoOperacional = fluxoCaixa[0].saldo_operacional;
+            const saldoTrasportar = fluxoCaixa[0].saldo_transportar;
+                
+            return  res.render('FluxoCaixa/fluxoCaixa.html', {entradas, saidas, totalEntrada, totalSaida, mesAtual, capitalInicial, saldoOperacional, saldoTrasportar})
+        } catch (error) {
+            next(error)
+        }
+        
+    },    
     async celeiro(req,res, next) {
         try {
             const codPlantacao = Number(local('plantacao'))
@@ -39,6 +220,15 @@ module.exports = {
         }
         
     },
+
+    async financas(req, res, next) {
+        try {
+            return res.render('Financas/financas.html')
+        } catch (error) {
+            next(error)
+        }   
+    },
+
     async compra(req,res, next) {
         try {
             // Trazendo dados da tabela
