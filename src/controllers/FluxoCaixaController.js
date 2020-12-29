@@ -3,6 +3,7 @@ const e = require('express');
 const local = require('local-storage');
 const { render } = require('nunjucks');
 const { insert } = require('../database');
+const knexfile = require('../../knexfile');
 
 async function varreduraFluxoCaixa(codPlantacao) {
     
@@ -46,7 +47,6 @@ async function apresentacaoEntradas() {
 
     const entradas = await knex('Entradas')
     .where('cod_plantacao', codPlantacao)
-    .where('status_entrada', 1)
     .whereBetween('validade_entrada', [dataInicio, dataFim])
     .select();
 
@@ -76,7 +76,6 @@ async function apresentacaoSaidas() {
 
     const saidas = await knex('Saidas')
     .where('cod_plantacao', codPlantacao)
-    .where('status_saida', 1)
     .whereBetween('validade_saida', [dataInicio, dataFim])
     .select();
 
@@ -148,87 +147,7 @@ async function buscarSaida(){
 
     return saida
 }
-async function criarBalanco(anoReferencia){
-    const codPlantacao = Number(local('plantacao'))
 
-    await knex('BalancosPatrimoniais')
-    .insert({
-        'cod_plantacao': codPlantacao,
-        'ano_referencia': anoReferencia,
-        'valor_ativo': 0,
-        'valor_passivo': 0,
-        'patrimonio_liquido': 0,
-        'capital_social': 0,
-    })
-
-    const codBalanco = await knex('BalancosPatrimoniais')
-    .where('cod_plantacao', codPlantacao)
-    .where('ano_referencia', anoReferencia)
-    .select('cod_balanco');
-
-    console.log("Balaço adicionado com sucesso", codBalanco[0].cod_balanco);
-
-    return codBalanco;
-}
-async function adicionarAtivo(codEntrada){
-    // Buscando os dados da Entrada
-    const entradas = await knex('Entradas')
-    .where('cod_entrada', codEntrada)
-    .select()
-
-    const dataEntrada = new Date(entradas[0].validade_entrada);
-    
-    // Buscando os cod_balanco
-    var codBalanco = await knex('BalancosPatrimoniais')
-    .where('ano_referencia', dataEntrada.getFullYear())
-    .select('cod_balanco') 
-
-    if ( codBalanco.length == [] ){
-        codBalanco = await criarBalanco(dataEntrada.getFullYear());
-    }
-
-    await knex('Ativos')
-    .insert({
-        'cod_balanco': codBalanco[0].cod_balanco,
-        'tipo_ativo': 'ATIVO CIRCULANTE',
-        'nome_ativo': entradas[0].nome_entrada,
-        'valor_ativo': entradas[0].valor_entrada,
-        'data_ativo': entradas[0].validade_entrada,
-        'status_ativo': 0,
-    })
-
-    console.log('Ativo adicionado com sucesso')
-}
-async function adicionarPassivo(codSaida){
-    // Buscando os dados da Saidas
-    const saidas = await knex('Saidas')
-    .where('cod_saida', codSaida)
-    .select()
-
-
-    const dataSaida = new Date(saidas[0].validade_saida);
-    
-    // Buscando os cod_balanco
-    var codBalanco = await knex('BalancosPatrimoniais')
-    .where('ano_referencia', dataSaida.getFullYear())
-    .select('cod_balanco') 
-
-    if ( codBalanco.length == [] ){
-        codBalanco = await criarBalanco(dataEntrada.getFullYear());
-    }
-
-    await knex('Passivos')
-    .insert({
-        'cod_balanco': codBalanco[0].cod_balanco,
-        'tipo_passivo': 'PASSIVO CIRCULANTE',
-        'nome_passivo': saidas[0].nome_saida,
-        'valor_passivo': saidas[0].valor_saida,
-        'data_passivo': saidas[0].validade_saida,
-        'status_passivo': 0,
-    })
-
-    console.log('Passivo adicionado com sucesso')
-}
 
 module.exports = {
     async entrada(req,res, next) {
@@ -253,7 +172,6 @@ module.exports = {
             
             const entradas = await knex('Entradas')
             .where({'cod_plantacao': codPlantacao})
-            .where({'status_entrada': 1})
             .whereBetween('validade_entrada', [inicioBusca, fimBusca])
             .select();
 
@@ -317,23 +235,14 @@ module.exports = {
                         break;
                 }
             } 
-            
+
             await knex('Entradas').insert({
-               'cod_entrada': null,
-               'cod_plantacao': codPlantacao,
-               'validade_entrada': dtEntrada,
+                'cod_plantacao': codPlantacao,
+                'validade_entrada': dtEntrada,
                 'nome_entrada': nomeEntrada.toUpperCase(),
-               'valor_entrada': parcelaFixa,
-               'status_entrada': 1,
+                'valor_entrada': parcelaFixa,
+                'destino_valor': null
             })
-
-            const codEntradas = await knex('Entradas')
-            .where('cod_plantacao', codPlantacao)
-            .select('cod_entrada')
-
-            const codEntrada = codEntradas[codEntradas.length - 1].cod_entrada
-
-            await adicionarAtivo(codEntrada)
 
             var mesReferencia = dtEntrada.getMonth() + '-' + dtEntrada.getFullYear();
 
@@ -343,17 +252,7 @@ module.exports = {
             .select('saldo_operacional')
 
 
-            if (fluxoCaixa.length == 0) {
-                await knex('FluxoCaixa')
-                .insert({
-                    mes_referencia: mesReferencia,
-                    cod_plantacao: codPlantacao,
-                    capital_inicial: 0,
-                    saldo_operacional: parcelaFixa,
-                    saldo_transportar: 0
-                })
-
-            } else {
+            if (fluxoCaixa.length != 0) {
                 // Resgatar saldo_operacional
                 var saldoOperacional = Number(fluxoCaixa[0].saldo_operacional)
 
@@ -364,8 +263,7 @@ module.exports = {
                 .update({
                     saldo_operacional: saldoOperacional + parcelaFixa
                 })
-
-            }
+            } 
             
             await varreduraFluxoCaixa(codPlantacao)
 
@@ -393,112 +291,136 @@ module.exports = {
         }
         
     },
-    async paginaEditarEntrada(req,res, next) {
-        try {
-            const entrada = await buscaEntrada();
+    // async paginaEditarEntrada(req,res, next) {
+    //     try {
+    //         const entrada = await buscaEntrada();
             
-            return  res.render('FluxoCaixa/editarEntrada.html', {entrada})
-        } catch (error) {
-            next(error)
-        }
+    //         return  res.render('FluxoCaixa/editarEntrada.html', {entrada})
+    //     } catch (error) {
+    //         next(error)
+    //     }
         
-    },
-    // Função de edicao no banco de dados
-    async editarEntrada(req,res, next) {
-        try {
-            const codEntrada = Number(local('codEntrada'))
-            const codPlantacao = Number(local('plantacao'))
-            const{
-                nomeEntrada,
-                valorEntrada,
-                dtInicio
-            } = req.body;
+    // },
+    // // Função de edicao no banco de dados
+    // async editarEntrada(req,res, next) {
+    //     try {
+    //         const codEntrada = Number(local('codEntrada'))
+    //         const codPlantacao = Number(local('plantacao'))
+    //         const{
+    //             nomeEntrada,
+    //             valorEntrada,
+    //             dtInicio
+    //         } = req.body;
+    //         const dtEntrada = new Date(dtInicio)
+    //         dtEntrada.setDate(dtEntrada.getDate() + 1)
 
-            // Resgatar o valor anterior para atualizar também no FluxoCaixa
-            const valorAntigo = await knex('Entradas')
-            .where({'cod_Entrada': codEntrada})
-            .select('valor_entrada')
+    //         // Resgatar o valor anterior para atualizar também no FluxoCaixa
+    //         const valorAntigo = await knex('Entradas')
+    //         .where({'cod_Entrada': codEntrada})
+    //         .select()
             
-            await knex('Entradas')
-            .where({'cod_Entrada': codEntrada})
-            .update({
-                'nome_entrada': nomeEntrada.toUpperCase(),
-                'valor_entrada': valorEntrada,
-                'validade_entrada': dtInicio,
-            })
+    //         await knex('Entradas')
+    //         .where({'cod_entrada': codEntrada})
+    //         .update({
+    //             'nome_entrada': nomeEntrada.toUpperCase(),
+    //             'valor_entrada': valorEntrada,
+    //             'validade_entrada': dtInicio,
+    //         })
 
-            const dtEntrada = new Date(dtInicio)
-            dtEntrada.setDate(dtEntrada.getDate() + 1)
+    //         var codBalanco = await knex('BalancosPatrimoniais')
+    //         .where('cod_plantacao', codPlantacao)
+    //         .where('ano_referencia', dtEntrada.getFullYear())
+    //         .select()
 
-            var mesReferencia = dtEntrada.getMonth() + '-' + dtEntrada.getFullYear();
+    //         if (codBalanco.length == 0){
+    //             codBalanco = await criarBalanco(dtEntrada.getFullYear())
+    //         }
 
-            var fluxoCaixa = await knex('FluxoCaixa')
-            .where('cod_plantacao', codPlantacao)
-            .where('mes_referencia', mesReferencia)
-            .select('saldo_operacional')
+    //         await knex('Ativos')
+    //         .where('cod_ativo', valorAntigo[0].cod_ativo)
+    //         .update({
+    //             'cod_balanco': codBalanco[0].cod_balanco,
+    //             'nome_ativo': nomeEntrada.toUpperCase(),
+    //             'valor_ativo': valorEntrada,
+    //             'data_ativo': dtInicio,
+    //             'status_ativo': 0,
 
-
-            // Resgatar saldo_operacional
-            var saldoOperacional = fluxoCaixa[0].saldo_operacional + (Number(valorEntrada) - valorAntigo[0].valor_entrada)
+    //         })
             
-            // atualizar saldo_operacional
-            await knex('FluxoCaixa')
-            .where('cod_plantacao', codPlantacao)
-            .where('mes_referencia', mesReferencia)
-            .update({
-                saldo_operacional: saldoOperacional
-            })
+    //         var mesReferencia = dtEntrada.getMonth() + '-' + dtEntrada.getFullYear();
 
-            await varreduraFluxoCaixa(codPlantacao);
+    //         var fluxoCaixa = await knex('FluxoCaixa')
+    //         .where('cod_plantacao', codPlantacao)
+    //         .where('mes_referencia', mesReferencia)
+    //         .select('saldo_operacional')
 
-            const entrada = await buscaEntrada();
+
+    //         // Resgatar saldo_operacional
+    //         var saldoOperacional = fluxoCaixa[0].saldo_operacional + (Number(valorEntrada) - valorAntigo[0].valor_entrada)
             
-            return  res.render('FluxoCaixa/visualizarEntrada.html', {entrada})
-        } catch (error) {
-            next(error)
-        }
+    //         // atualizar saldo_operacional
+    //         await knex('FluxoCaixa')
+    //         .where('cod_plantacao', codPlantacao)
+    //         .where('mes_referencia', mesReferencia)
+    //         .update({
+    //             saldo_operacional: saldoOperacional
+    //         })
+
+    //         await varreduraFluxoCaixa(codPlantacao);
+
+    //         const entrada = await buscaEntrada();
+            
+    //         return  res.render('FluxoCaixa/visualizarEntrada.html', {entrada})
+    //     } catch (error) {
+    //         next(error)
+    //     }
         
-    },
-    // Função de edicao no banco de dados
-    async excluirEntrada(req,res, next){
-        try {
-            const codEntrada = Number(local('codEntrada'))
-            const codPlantacao = Number(local('plantacao'))
+    // },
+    // // Função de edicao no banco de dados
+    // async excluirEntrada(req,res, next){
+    //     try {
+    //         const codEntrada = Number(local('codEntrada'))
+    //         const codPlantacao = Number(local('plantacao'))
 
-            const entrada = await knex('Entradas')
-            .where('cod_entrada', codEntrada)
-            .select('valor_entrada', 'validade_entrada')
+    //         const entrada = await knex('Entradas')
+    //         .where('cod_entrada', codEntrada)
+    //         .select()
 
-            const valorEntrada = Number(entrada[0].valor_entrada);
-            const data = new Date(entrada[0].validade_entrada);
-            data.setDate(data.getDate() + 1)
-            const mesReferencia = data.getMonth()+'-'+data.getFullYear();
+    //         const valorEntrada = Number(entrada[0].valor_entrada);
+    //         const data = new Date(entrada[0].validade_entrada);
+    //         data.setDate(data.getDate() + 1)
+    //         const mesReferencia = data.getMonth()+'-'+data.getFullYear();
 
-            await knex('Entradas')
-            .where({'cod_entrada': codEntrada})
-            .update({'status_entrada': 0})
+    //         await knex('Entradas')
+    //         .where({'cod_entrada': codEntrada})
 
-            const saldoOperacional = await knex('FluxoCaixa')
-            .where('cod_plantacao', codPlantacao)
-            .where('mes_referencia', mesReferencia)
-            .select('saldo_operacional')
+    //         await knex('Ativos')
+    //         .where('cod_ativo', entrada[0].cod_ativo)
+    //         .update({
+    //             'valor_ativo': 0,
+    //         })
 
-            await knex('FluxoCaixa')
-            .where('cod_plantacao', codPlantacao)
-            .where('mes_referencia', mesReferencia)
-            .update({
-                saldo_operacional: saldoOperacional[0].saldo_operacional - valorEntrada
-            })
+    //         const saldoOperacional = await knex('FluxoCaixa')
+    //         .where('cod_plantacao', codPlantacao)
+    //         .where('mes_referencia', mesReferencia)
+    //         .select('saldo_operacional')
 
-            await varreduraFluxoCaixa(codPlantacao);
+    //         await knex('FluxoCaixa')
+    //         .where('cod_plantacao', codPlantacao)
+    //         .where('mes_referencia', mesReferencia)
+    //         .update({
+    //             saldo_operacional: saldoOperacional[0].saldo_operacional - valorEntrada
+    //         })
 
-            const entradas = await apresentacaoEntradas();
+    //         await varreduraFluxoCaixa(codPlantacao);
 
-            return res.render('FluxoCaixa/entrada.html', {entradas})
-        } catch (error) {
-            next(error)
-        }
-    },
+    //         const entradas = await apresentacaoEntradas();
+
+    //         return res.render('FluxoCaixa/entrada.html', {entradas})
+    //     } catch (error) {
+    //         next(error)
+    //     }
+    // },
     async saida(req,res, next) {
         try {
             
@@ -520,7 +442,6 @@ module.exports = {
 
             const saidas = await knex('Saidas')
             .where({'cod_plantacao': codPlantacao})
-            .where({'status_saida': 1})
             .whereBetween('validade_saida', [inicioBusca, fimBusca])
             .select();
 
@@ -550,56 +471,25 @@ module.exports = {
                 nomeSaida,
                 valorSaida,
                 dtPagamento,
-                caracteristicaPagamento,
+                tipoSaida,
             } = req.body
 
             const codPlantacao = Number(local('plantacao'))
             var parcelaFixa = Number(valorSaida)
             var dataPagamento = new Date(dtPagamento);
             dataPagamento.setDate(dataPagamento.getDate() + 1)
-            const dia = dataPagamento.getDate();
-            var mes = dataPagamento.getMonth();
-            var ano = dataPagamento.getFullYear();
-          
-            //Cadastro da Saidas pelos números de parcelas
-            var dtSaida = new Date(ano, mes, dia)
-
-            if (dia != dtSaida.getDate()){
-                dtSaida.setDate(0);
-            }
             
-            if(caracteristicaPagamento == 0){     
-                switch (dtSaida.getDay()) {
-                    case 0:
-                        dtSaida.setDate(dtSaida.getDate() + 1);
-                        break;
-                    case 6:
-                        dtSaida.setDate(dtSaida.getDate() + 2);
-                        break;
-                    default:
-                        break;
-                }            
-            } 
-                
- 
             await knex('Saidas').insert({
                 'cod_saida': null,
                 'cod_plantacao': codPlantacao,
-                'validade_saida': dtSaida,
+                'validade_saida': dataPagamento,
                 'nome_saida': nomeSaida.toUpperCase(),
                 'valor_saida': parcelaFixa,
-                'status_saida': 1,
-            })
+                'destino_saida': tipoSaida,
+                'cobranca_saida': 0,
+            })             
 
-            const codSaidas = await knex('Saidas')
-            .where('cod_plantacao', codPlantacao)
-            .select('cod_saida')
-
-            const codSaida = codSaidas[codSaidas.length - 1].cod_saida
-
-            await adicionarPassivo(codSaida)                
-
-            var mesReferencia = dtSaida.getMonth() + '-' + dtSaida.getFullYear();
+            var mesReferencia = dataPagamento.getMonth() + '-' + dataPagamento.getFullYear();
                 
             var fluxoCaixa = await knex('FluxoCaixa')
             .where('cod_plantacao', codPlantacao)
@@ -607,17 +497,7 @@ module.exports = {
             .select('saldo_operacional')
 
 
-            if (fluxoCaixa.length == 0) {
-                await knex('FluxoCaixa')
-                .insert({
-                    'mes_referencia': mesReferencia,
-                    'cod_plantacao': codPlantacao,
-                    'capital_inicial': 0,
-                    'saldo_operacional': Math.sign(parcelaFixa),
-                    'saldo_transportar': 0
-                })
-
-            } else {
+            if (fluxoCaixa.length != 0) {
                 // Resgatar saldo_operacional
                 var saldoOperacional = fluxoCaixa[0].saldo_operacional
 
@@ -629,7 +509,7 @@ module.exports = {
                     saldo_operacional: saldoOperacional - parcelaFixa
                 })
 
-            }        
+            }      
 
             await varreduraFluxoCaixa(codPlantacao);
                         
@@ -657,115 +537,134 @@ module.exports = {
         }
         
     },
-    async paginaEditarSaida(req,res, next) {
-        try {
-            const saida = await buscarSaida();
+    // async paginaEditarSaida(req,res, next) {
+    //     try {
+    //         const saida = await buscarSaida();
             
-            return  res.render('FluxoCaixa/editarSaida.html', {saida})
-        } catch (error) {
-            next(error)
-        }
+    //         return  res.render('FluxoCaixa/editarSaida.html', {saida})
+    //     } catch (error) {
+    //         next(error)
+    //     }
         
-    },
+    // },
     // Função de edicao no banco de dados
-    async editarSaida(req,res, next) {
-        try {
-            const codSaida = Number(local('codSaida'))
-            const codPlantacao = Number(local('plantacao'))
-           
-            const{
-                nomeSaida,
-                valorSaida,
-                dtSaida
-            } = req.body;
+    // async editarSaida(req,res, next) {
+    //     try {
+    //         const codSaida = Number(local('codSaida'))
+    //         const codPlantacao = Number(local('plantacao'))
+    //         const{
+    //             nomeSaida,
+    //             valorSaida,
+    //             dtSaida
+    //         } = req.body;
+    //         const dataSaida = new Date(dtSaida);
+    //         dataSaida.setDate(dataSaida.getDate() + 1)
 
-            // Resgatando o valor antigo da saída para o FluxoCaixa
-            const valorAntigo = await knex('Saidas')
-            .where('cod_saida', codSaida)
-            .select('valor_saida');
+    //         // Resgatando o valor antigo da saída para o FluxoCaixa
+    //         const valorAntigo = await knex('Saidas')
+    //         .where('cod_saida', codSaida)
+    //         .select();
             
-            await knex('Saidas')
-            .where({'cod_saida': codSaida})
-            .update({
-                'nome_saida': nomeSaida.toUpperCase(),
-                'valor_saida': valorSaida,
-                'validade_saida': dtSaida,
-            })
+    //         await knex('Saidas')
+    //         .where({'cod_saida': codSaida})
+    //         .update({
+    //             'nome_saida': nomeSaida.toUpperCase(),
+    //             'valor_saida': valorSaida,
+    //             'validade_saida': dtSaida,
+    //         })
 
-            // Atualizar o saldo operacional do mes correspondente
-            const dataSaida = new Date(dtSaida);
-            dataSaida.setDate(dataSaida.getDate() + 1)
-            var mes_referencia = dataSaida.getMonth() + '-' + dataSaida.getFullYear();
+    //         var codBalanco = await knex('BalancosPatrimoniais')
+    //         .where('cod_plantacao', codPlantacao)
+    //         .where('ano_referencia', dataSaida.getFullYear())
+    //         .select('cod_balanco')
 
-            var fluxoCaixa = await knex('FluxoCaixa')
-            .where('cod_plantacao', codPlantacao)
-            .where('mes_referencia', mes_referencia)
-            .select('saldo_operacional', 'cod_fluxoCaixa')
+    //         console.log(valorAntigo);
 
-            var saldoOperacional = fluxoCaixa[0].saldo_operacional - (Number(valorSaida) - valorAntigo[0].valor_saida)
+    //         if (codBalanco.length == 0){
+    //             codBalanco = await criarBalanco(dataSaida.getFullYear())
+    //         }
 
-            await knex('FluxoCaixa')
-            .where('cod_fluxoCaixa', Number(fluxoCaixa[0].cod_fluxoCaixa))
-            .update({
-                'saldo_operacional': saldoOperacional,
-            })
+    //         await knex('Passivos')
+    //         .where('cod_passivo', valorAntigo[0].cod_passivo)
+    //         .update({
+    //             'cod_balanco': codBalanco[0].cod_balanco,
+    //             'nome_passivo': nomeSaida.toUpperCase(),
+    //             'valor_passivo': valorSaida,
+    //             'data_passivo': dtSaida,
+    //             'status_passivo': 0,
+    //         })
 
-            await varreduraFluxoCaixa(codPlantacao);
-            const saida = await buscarSaida();
+    //         // Atualizar o saldo operacional do mes correspondente
             
-            return  res.render('FluxoCaixa/visualizarSaida.html', {saida})
-        } catch (error) {
-            next(error)
-        }
+    //         var mes_referencia = dataSaida.getMonth() + '-' + dataSaida.getFullYear();
+
+    //         var fluxoCaixa = await knex('FluxoCaixa')
+    //         .where('cod_plantacao', codPlantacao)
+    //         .where('mes_referencia', mes_referencia)
+    //         .select('saldo_operacional', 'cod_fluxoCaixa')
+
+    //         var saldoOperacional = fluxoCaixa[0].saldo_operacional - (Number(valorSaida) - valorAntigo[0].valor_saida)
+
+    //         await knex('FluxoCaixa')
+    //         .where('cod_fluxoCaixa', Number(fluxoCaixa[0].cod_fluxoCaixa))
+    //         .update({
+    //             'saldo_operacional': saldoOperacional,
+    //         })
+
+    //         await varreduraFluxoCaixa(codPlantacao);
+    //         const saida = await buscarSaida();
+            
+    //         return  res.render('FluxoCaixa/visualizarSaida.html', {saida})
+    //     } catch (error) {
+    //         next(error)
+    //     }
         
-    },
+    // },
+    // async excluirSaida(req,res, next){
+    //     try {
+    //         const codSaida = Number(local('codSaida'))
+    //         const codPlantacao = Number(local('plantacao'))
 
-    async excluirSaida(req,res, next){
-        try {
-            const codSaida = Number(local('codSaida'))
-            const codPlantacao = Number(local('plantacao'))
+    //         const saida = await knex('Saidas')
+    //         .where('cod_saida', codSaida)
+    //         .select()
 
-            const saida = await knex('Saidas')
-            .where('cod_saida', codSaida)
-            .select('valor_saida', 'validade_saida')
+    //         const valorSaida = Number(saida[0].valor_saida);
+    //         const data = new Date(saida[0].validade_saida);
+    //         data.setDate(data.getDate() + 1);
+    //         const  mesReferencia = data.getMonth() + '-' + data.getFullYear();
 
-            const valorSaida = Number(saida[0].valor_saida);
-            const data = new Date(saida[0].validade_saida);
-            data.setDate(data.getDate() + 1);
-            const  mesReferencia = data.getMonth() + '-' + data.getFullYear();
+    //         await knex('Saidas')
+    //         .where({'cod_saida': codSaida})
+    //         .update({'status_saida': 0})
 
-            await knex('Saidas')
-            .where({'cod_saida': codSaida})
-            .update({'status_saida': 0})
+    //         await knex('Passivos')
+    //         .where('cod_passivo', saida[0].cod_passivo)
+    //         .update({
+    //             'valor_passivo': 0,
+    //         });
 
-            const saldoOperacional = await knex('FluxoCaixa')
-            .where('cod_plantacao', codPlantacao)
-            .where('mes_referencia', mesReferencia)
-            .select('saldo_operacional', 'cod_fluxoCaixa')
+    //         const saldoOperacional = await knex('FluxoCaixa')
+    //         .where('cod_plantacao', codPlantacao)
+    //         .where('mes_referencia', mesReferencia)
+    //         .select('saldo_operacional', 'cod_fluxoCaixa')
 
-            const saldoTotal = Number(saldoOperacional[0].saldo_operacional) + Number(valorSaida);
+    //         const saldoTotal = Number(saldoOperacional[0].saldo_operacional) + Number(valorSaida);
 
-            console.log(saldoTotal)
-            console.log(saldoOperacional[0].saldo_operacional)
-            console.log(valorSaida)
+    //         await knex('FluxoCaixa')
+    //         .where('cod_fluxocaixa', Number(saldoOperacional[0].cod_fluxoCaixa))
+    //         .update({
+    //             'saldo_operacional': saldoTotal
+    //         })
 
+    //         await varreduraFluxoCaixa(codPlantacao);
 
-            await knex('FluxoCaixa')
-            .where('cod_fluxocaixa', Number(saldoOperacional[0].cod_fluxoCaixa))
-            .update({
-                'saldo_operacional': saldoTotal
-            })
+    //         const saidas = await apresentacaoSaidas();
 
-            
-
-            await varreduraFluxoCaixa(codPlantacao);
-
-            const saidas = await apresentacaoSaidas();
-
-            return res.render('FluxoCaixa/saida.html', {saidas})
-        } catch (error) {
-            next(error)
-        }
-    },
+    //         return res.render('FluxoCaixa/saida.html', {saidas})
+    //     } catch (error) {
+    //         next(error)
+    //     }
+    // },
     
 }

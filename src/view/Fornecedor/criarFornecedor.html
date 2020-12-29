@@ -34,6 +34,14 @@
                 <img src="/imagem/menu/financas.png" alt="Finanças">
                 <p>Financiamento</p>
              </a>
+             <a href="/compra" class="button-menu">
+                <img src="" alt="Compra">
+                <p>Compra</p>
+             </a>
+             <a href="/fornecedor" class="button-menu">
+                <img src="/imagem/menu/fornecedor.png" alt="Fornecedor">
+                <p>Fornecedor</p>
+             </a>
               
             <a href="/" class="button-menu">
                 <img src="/imagem/menu/sair.png" alt="Sair">
@@ -42,66 +50,65 @@
         </div>   
         
     </div>
-
+    
     <div class="main">
         <h1>
-            Cadastrar Saida
-            <a href="/saida">
+            Cadastrar Fornecedor
+            <a href="/fornecedor">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
-
-        <form action="/cadastrarSaida" method="POST">
+        
+        <form action="/criarFornecedor" method="POST">
             <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Dados Saida</legend>
+                    <legend>Dados do Fornecedor</legend>
                 </div>
                 <div class="write-block">
-                    <label for="nomeSaida">Noma da Saida:</label>
-                    <input type="text" id="nomeSaida" name="nomeSaida" required>
+                    <label for="nomeFornecedor">Nome Fornecedor:</label>
+                    <input type="text" id="nomeFornecedor" name="nomeFornecedor" required>
                 </div>
                 <div class="write-block">
-                    <label for="valorSaida">Valor da Saida:</label>
-                    <input type="number" id="valorSaida" name="valorSaida" step=".01" placeholder="R$ 0000.00" required>
+                    <label for="docFornecedor">CNPJ Fornecedor:</label>
+                    <input type="text" id="docFornecedor" name="docFornecedor" required>
                 </div>
-                
                 <div class="write-block">
-                    <label for="dtPagamento">Data da Saida:</label>
-                    <input type="date" id="dtPagamento" name="dtPagamento" required>
-                </div> 
-                <div class="radio-block">
-                    <label for="tipoSaida">Tipo da Saida:</label>
-                    <p>
-                        <label onclick="semCarencia()">
-                            <input type="radio" name="tipoSaida" value="ALUGUEL"> ALUGUEL
-                        </label>
-                    </p>
-                    <p>
-                        <label onclick="comCarencia()">
-                            <input type="radio" name="tipoSaida" value="CONTA"> CONTA
-                        </label>
-                    </p>
-                    <p>
-                        <label onclick="comCarencia()">
-                            <input type="radio" name="tipoSaida" value="IMPOSTO"> IMPOSTO
-                        </label>
-                    </p>
-                    <p>
-                        <label onclick="comCarencia()">
-                            <input type="radio" name="tipoSaida" value="OUTROS DEBITOS" checked> OUTROS DEBITOS
-                        </label>
-                    </p>
+                    <label for="telefoneFornecedor">Telefone Fornecedor:</label>
+                    <input type="text" id="telefoneFornecedor" name="telefoneFornecedor" required>
                 </div>
-            </fieldset>
-            
-            <div class="botton-foot">
+                <div class="write-block">
+                    <label for="cepFornecedor">CEP Fornecedor:</label>
+                    <input type="text" id="cepFornecedor" name="cepFornecedor" required>
+                </div>
+                <div class="write-block">
+                    <label for="emailFornecedor">Email Fornecedor:</label>
+                    <input type="text" id="emailFornecedor" name="emailFornecedor" required>
+                </div>
 
-                <button type="submit" class="button-Salvar">
-                    Salvar Cadastro
-                </button>  
-            </div>
-        </form>        
+                <div class="radio-block">
+                    <label for="tipoFornecimento">Tipo de Fornecimento:</label>
+                    <p>
+                        <label>
+                            <input type="checkbox" id="insumo" name="insumo" value="INSUMO" checked> Insumos
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input type="checkbox" id="ferramenta" name="ferramenta" value="FERRAMENTA"> Ferramentas
+                        </label>
+                    </p>
+                </div>
+
+                <div class="foot-dados-Botton">
+                    <div class="aviso-foot">
+                        <p style="font-size: 15px; padding-top: 10px; color: red;">{{mensagem}}</p>
+                    </div>
+                </div>            
+ 
+            </fieldset>
+            <button type="submit" class="btn_calcular" name="btn_calcular">Salvar</button>
+        </form> 
     </div>
 </body>
 </html>

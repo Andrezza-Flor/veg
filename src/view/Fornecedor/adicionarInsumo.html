@@ -14,7 +14,7 @@
     <title>Veg</title>
 </head>
 <body>
-    <div class="menu">      
+    <div class="menu">
         <h1>Escolha uma opção</h1>
         <div class="botoes">
             <button id="celeiro" class="button-menu">
@@ -100,18 +100,18 @@
     
     <div class="main">
         <h1>
-            Compra
-            <a href="/realizarCompra">
+            Escolher Insumos
+            <a href="/criarFornecedor">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
         
         
-        <form action="/buscaInsumo" method="POST">
+        <form action="/adicionarInsumo" method="POST">
             <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Adicionar Insumo para <strong>{{nomeFornecedor}}</strong></legend>
+                    <legend>Adicionar Insumo para <strong>{{fornecedor.nomeFornecedor}}</strong></legend>
                 </div>
 
                 <div class="search-block">
@@ -120,76 +120,94 @@
                             <label for="nomeInsumo">Insumo:</label>
                             <select name="codInsumo" id="nomeInsumo">
                                 <option value="" disable="" hidden="">Selecione uma opição</option> 
-                                {%for insumo in listaInsumo%}
-                                    <option value={{insumo.cod_Insumo}}>{{ insumo.nome_Insumo }}</option>
+                                {%for insumo in insumoLista%}
+                                    <option value={{insumo.cod_insumo}}>{{ insumo.nome_insumo }}</option>
                                 {%endfor%}  
                             </select>
                         </div>
-                        <button type="submit">
-                            <img src="/imagem/procurar.png" alt="Adicionar">
-                        </button>
                     </div>
                 </div>
-                
+                <div class="write-block">
+                    <label for="diaEntrega">Dias de entrega:</label>
+                    <input type="number" id="diaEntrega" name="diaEntrega" min="1" required>
+                </div>
+                <div class="search-block">
+                    <div class="select-block">
+                        <div class="select">
+                            <label for="qualidadeProduto">Qualidade do produto:</label>
+                            <select name="qualidadeProduto" id="qualidadeProduto">
+                                <option value="" disable="" hidden="">Selecione uma opição</option> 
+                                <option value="OTIMA">Ótima</option>
+                                <option value="BOA">Boa</option>
+                                <option value="RUIM">Ruim</option>
+                                <option value="NS">Não sei</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="search-block">
+                    <div class="select-block">
+                        <div class="select">
+                            <label for="contagemProduto">Contagem do produto:</label>
+                            <select name="contagemProduto" id="contagemProduto">
+                                <option value="" disable="" hidden="">Selecione uma opição</option> 
+                                <option value="KG">Kg</option>
+                                <option value="U">Unidade</option>
+                                <option value="L">Litro</option>
+                                <option value="SACA">Saca</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn_calcular" name="btn_calcular">Selecionar</button>
+            </fieldset>
+
             <div class="foot-dados-Botton">
                 <div class="aviso-foot">
-                    <img src="/imagem/aviso.png" alt="Aviso">
                     <p>Caso não tenha achado o insumo é possivel cria-lo</p>
                 </div>
-                <a href="/criarInsumo">
-                    <img src="/imagem/insumo.png" alt="Insumo">
-                    <p>Criar Insumo</p>
-                </a>
+                <div class="acoes-n-banco">
+                    <a href="/criarInsumo" id="cadastrar-banco"> <p>Criar Insumo</p> </a>
+                </div>
             </div>
-            </fieldset>
+
         </form>
 
-        <form action="/adicionarInsumo" method="POST">
-            <fieldset class="dados-Botton">
-                <div class="title">
-                    <legend>Dados da Insumo</legend>
-                </div>
-                <div class="read-block">
-                    <label for="nomeInsumo">Nome do Insumo:</label>
-                    <p class="input">{{dadosInsumo.nome_Insumo}}</p>
-                </div>
-                <div class="read-block">
-                    <label for="tipoInsumo">Tipo do Insumo:</label>
-                    <p class="input">{{dadosInsumo.tipo_Insumo}}</p>
-                </div>
-                <div class="write-block">
-                    <label for="tempoEntrega">Quantos dias para ser Entregue:</label>
-                    <input type="number" id="tempoEntrega" name="tempoEntrega" required>
-                </div>     
-                 
-            </fieldset> 
-            <button type="submit" class="button-adicionar"> <img src="/imagem/mais.png" alt="Adicionar">  <p>Adicionar Insumo</p>  </button>
-        </form>
+        {%if tamanhoLista==0 %}
 
-        <form>
-            <fieldset class="foot-dados-Botton">
-                <table class="table-Detalhe">
-                    <tr>
-                        <th colspan="3">Insumos Adicionadados</th>
-                    </tr>
-                    <tr class="head">
-                        <th>Nome do Insumo</th>
-                        <th>Dias de espera</th>
-                    </tr>
-                    {%for Insumo in tabelaInsumos%}
+        {%else%}
+            <form>
+                <fieldset class="foot-dados-Botton">
+                    <table class="table-Detalhe">
                         <tr>
-                            <td>{{Insumo.nome_Insumo}}</td>
-                            <td>{{Insumo.tempo_Entrega}}</a></td>
+                            <th colspan="3">Insumos Adicionadados</th>
                         </tr>
-                    {%endfor%}  
-                </table>
-            </fieldset>
-            <div class="button-main">
-                <a href="/realizarCompra">
-                    Concluir o Cadastro
-                </a>
-            </div>          
-        </form> 
+                        <tr class="head">
+                            <th>Nome do Insumo</th>
+                            <th>Dias de espera</th>
+                        </tr>
+                        {%for insumo in insumosFornecedor%}
+                            <tr>
+                                <td>{{insumo.nomeInsumo}}</td>
+                                <td>{{insumo.diaEntrega}} dias</a></td>
+                            </tr>
+                        {%endfor%}  
+                    </table>
+                </fieldset>
+
+
+                {%if ferramentaPossui %}
+                    <div class="acoes-n-banco">
+                        <a href="/adicionarFerramenta" id="cadastrar-banco"> <p>Próximo</p> </a>
+                    </div>        
+                {%else%}
+                    <div class="acoes-n-banco">
+                        <a href="/salvarDados" id="cadastrar-banco"> <p>Próximo</p> </a>
+                    </div>        
+                {%endif%}
+
+            </form> 
+        {%endif%}
     </div>
 </body>
 </html>

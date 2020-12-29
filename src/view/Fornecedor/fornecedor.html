@@ -34,6 +34,14 @@
                 <img src="/imagem/menu/financas.png" alt="Finanças">
                 <p>Financiamento</p>
              </a>
+             <a href="/compra" class="button-menu">
+                <img src="" alt="Compra">
+                <p>Compra</p>
+             </a>
+             <a href="/fornecedor" class="button-menu">
+                <img src="/imagem/menu/fornecedor.png" alt="Fornecedor">
+                <p>Fornecedor</p>
+             </a>
               
             <a href="/" class="button-menu">
                 <img src="/imagem/menu/sair.png" alt="Sair">
@@ -42,37 +50,32 @@
         </div>   
         
     </div>
-
+    
     <div class="main">
-        <h1>
-            Editar Entrada
-            <a href="/entrada">
-                <img src="/imagem/voltar.png" alt="">
-                Voltar
-            </a>
-        </h1>
+        <h1>Fornecedor</h1>
 
-        <form>
-            <fieldset class="dados-Top">
+        <form name="FormFornecedor" action="/fornecedor" method="POST">
+
+            <fieldset name="listaFornecedor" class="dados-Top">
                 <div class="title">
-                    <legend>Dados Entrada</legend>
+                    <legend>Escolha uma fornecedor</legend>
                 </div>
-                <div class="read-block">
-                    <label for="nomeEntrada">Noma da Entrada:</label>
-                    <p class="input">{{entrada.nome_entrada}}</p>
+                <div class="write-block">
+                    <label for="codFornecedor">Fornecedor:</label>
+                    <select name="codFornecedor" id="codFornecedor" required>
+                        <option value="" disable="" hidden="">Selecione uma opção</option>
+                        {%for fornecedor in fornecedores%}
+                            <option value={{fornecedor.cod_fornecedor}}>{{fornecedor.nome_fornecedor}}</option> 
+                        {%endfor%}
+                    </select>
                 </div>
-                <div class="read-block">
-                    <label for="valorEntrada">Valor Fixo da Entrada:</label>
-                    <p class="input">R$ {{entrada.valor_entrada}}</p>
-                </div>
-                <div class="read-block">
-                    <label for="nomeEntrada">Data da Entrada:</label>
-                    <p class="input">{{entrada.validade_entrada}}</p>
-                </div>
-            </fieldset>
-        </form>   
-       
-
+                <button type="submit" class="btn_calcular" name="btn_calcular">Selecionar</button>
+            </fieldset>         
+        </form>    
+        
+        <div class="acoes-n-banco">
+            <a href="/criarFornecedor" id="cadastrar-banco"> <p>Criar Fornecedor</p> </a>
+        </div>
     </div>
 </body>
 </html>

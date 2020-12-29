@@ -100,43 +100,38 @@
     
     <div class="main">
         <h1>
-            Compra
-            <a href="/realizarCompra">
-                <img src="/imagem/voltar.png" alt="">
-                Voltar
-            </a>
+            Ferramenta
         </h1>
         
-        <form action="/criarFornecedor" method="POST">
+        <form action="/criarFerramenta" method="POST">
             <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Dados do Fornecedor</legend>
+                    <legend>Cadastrar Ferramenta</legend>
                 </div>
                 <div class="write-block">
-                    <label for="nomeFornecedor">Nome Fornecedor:</label>
-                    <input type="text" id="nomeFornecedor" name="nomeFornecedor" required>
+                    <label for="nomeFerramenta">Nome da Ferramenta:</label>
+                    <input type="text" id="nomeFerramenta" name="nomeFerramenta" required>
                 </div>
+
                 <div class="write-block">
-                    <label for="docFornecedor">CNPJ Fornecedor:</label>
-                    <input type="text" id="docFornecedor" name="docFornecedor" required>
+                    <label for="caracteristicaFerramenta">Caracteristica da Ferramenta:</label>
+                    <input type="text" id="caracteristicaFerramenta" name="caracteristicaFerramenta" required>
                 </div>
-                <div class="write-block">
-                    <label for="telefoneFornecedor">Telefone Fornecedor:</label>
-                    <input type="text" id="telefoneFornecedor" name="telefoneFornecedor" required>
-                </div>
-                <div class="write-block">
-                    <label for="cepFornecedor">CEP Fornecedor:</label>
-                    <input type="text" id="cepFornecedor" name="cepFornecedor" required>
-                </div>
-                <div class="write-block">
-                    <label for="emailFornecedor">Email Fornecedor:</label>
-                    <input type="text" id="emailFornecedor" name="emailFornecedor" required>
-                </div>
- 
+                          
             </fieldset>
 
-            <button type="submit" class="button-Salvar">Salvar</button>
+            {% if mensagem != "" %}
+                <div class="foot-dados-Botton">
+                    <div class="aviso-foot">
+                        <p>{{mensagem}}</p>
+                    </div>
+                </div>               
+            {% endif %}
+
+            <button type="submit" class="btn_calcular" name="btn_calcular">Cadastrar</button>
+
         </form> 
+        
     </div>
 </body>
 </html>

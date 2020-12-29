@@ -42,37 +42,56 @@
         </div>   
         
     </div>
-
+    
+    
     <div class="main">
         <h1>
-            Editar Entrada
-            <a href="/entrada">
-                <img src="/imagem/voltar.png" alt="">
-                Voltar
-            </a>
+            Cadastrar Financiamento
+            
         </h1>
-
-        <form>
-            <fieldset class="dados-Top">
+    
+        <form name="FormFinanciamento" action="/criarConta" method="POST">
+            <fieldset  id="dados-Parcelas" class="dados-Botton">
                 <div class="title">
-                    <legend>Dados Entrada</legend>
+                    <legend>{{titulo}}</legend>
                 </div>
-                <div class="read-block">
-                    <label for="nomeEntrada">Noma da Entrada:</label>
-                    <p class="input">{{entrada.nome_entrada}}</p>
-                </div>
-                <div class="read-block">
-                    <label for="valorEntrada">Valor Fixo da Entrada:</label>
-                    <p class="input">R$ {{entrada.valor_entrada}}</p>
-                </div>
-                <div class="read-block">
-                    <label for="nomeEntrada">Data da Entrada:</label>
-                    <p class="input">{{entrada.validade_entrada}}</p>
-                </div>
-            </fieldset>
-        </form>   
-       
 
+                <table id="tabela-financiamento">
+                    <tr>
+                        <td id="tempo" class="titulo">Nome Conta</td>
+                        <td class="titulo">Valor Conta</td>
+                        <td class="titulo">Data Vencimento</td>
+                    </tr>
+                    {%for registro in resultadoConta%}
+                        <tr>
+                            <td class="{{registro.tipoConta}}">{{registro.tempo}} ({{registro.tipoConta}}) </td>
+                            <td class="{{registro.tipoConta}}">R${{registro.valor}}</td>
+                            <td class="{{registro.tipoConta}}">{{registro.diaPagamento}} / {{registro.mesPagamento}} / {{registro.anoPagamento}}</td>
+                        </tr>
+                    {%endfor%}
+                </table>  
+                
+                <div class="legenda">
+                    <div class="legCarencia"><p>Período de Carências</p></div>
+                
+                    <div class="legParcela"><p>Período de Quitação</p></div>
+                </div>            
+            </fieldset>
+
+            <a href="/salvarFinanciamento" class="btn_salvar" name="btn_salvar">Salvar Financiamento</a>
+        </form>  
     </div>
+
+    
 </body>
+<script language="JavaScript">
+    
+    function semCarencia() {
+        document.getElementById('valor-carencia').style.visibility = 'hidden';
+    }
+
+    function comCarencia() {
+        document.getElementById('valor-carencia').style.visibility = 'visible';
+    }
+</script>
 </html>

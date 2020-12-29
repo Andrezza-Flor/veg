@@ -26,8 +26,6 @@ CREATE TABLE Atividades (
     FOREIGN KEY (cod_plantacao) REFERENCES Plantacoes (cod_Plantacao)
 );
 
-
-
 CREATE TABLE Logins (
   email_usuario VARCHAR(500) NOT NULL,
   senha_usuario VARCHAR(500) NOT NULL,
@@ -52,26 +50,39 @@ CREATE TABLE BalancosPatrimoniais (
 
 CREATE TABLE Ativos (
   cod_ativo INT(4) AUTO_INCREMENT,
+  cod_plantacao INT(4) NOT NULL,
   cod_balanco INT(4) NOT NULL,
   tipo_ativo VARCHAR(100) NOT NULL,
   nome_ativo VARCHAR(100) NOT NULL,
   valor_ativo FLOAT(10,2) NOT NULL,
   data_ativo DATE NOT NULL,
-  status_ativo TINYINT(1) NOT NULL,
   PRIMARY KEY (cod_ativo),
-  FOREIGN KEY (cod_balanco) REFERENCES BalancosPatrimoniais(cod_balanco)
+  FOREIGN KEY (cod_plantacao) REFERENCES Plantacoes(cod_plantacao)
+);
+
+CREATE TABLE Contas (
+  cod_conta INT(4) AUTO_INCREMENT,
+  nome_banco VARCHAR(100) NOT NULL,
+  tipo_conta VARCHAR(100) NOT NULL,
+  mensalidade_conta FLOAT(10,2) NOT NULL,
+  dt_atualizacao_conta timestamp NOT NULL DEFAULT current_timestamp(),
+  saldo_conta FLOAT (10,2) NOT NULL,
+  cod_plantacao INT(4) NOT NULL,
+  status_conta TINYINT(1) NOT NULL,
+  PRIMARY KEY (cod_conta),
+  FOREIGN KEY (cod_plantacao) REFERENCES Plantacoes(cod_plantacao)
 );
 
 CREATE TABLE Passivos (
   cod_passivo INT(4) AUTO_INCREMENT,
+  cod_plantacao INT(4) NOT NULL,
   cod_balanco INT(4) NOT NULL,
   tipo_passivo VARCHAR(100) NOT NULL,
   nome_passivo VARCHAR(100) NOT NULL,
   valor_passivo FLOAT(10,2) NOT NULL,
   data_passivo DATE NOT NULL,
-  status_passivo TINYINT(1) NOT NULL,
   PRIMARY KEY (cod_passivo),
-  FOREIGN KEY (cod_balanco) REFERENCES BalancosPatrimoniais(cod_balanco)
+  FOREIGN KEY (cod_plantacao) REFERENCES Plantacoes(cod_plantacao)
 );
 
 CREATE TABLE Saidas (
@@ -80,7 +91,8 @@ CREATE TABLE Saidas (
   validade_saida DATE  NOT NULL,
   nome_saida VARCHAR(200) NOT NULL,
   valor_saida DECIMAL(10,2) NOT NULL,
-  status_saida TINYINT(1) not null,
+  destino_saida VARCHAR(200) NOT NULL,
+  cobranca_saida TINYINT(1) NOT NULL,
   PRIMARY KEY (cod_saida),
   FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao)
 );
@@ -91,7 +103,7 @@ CREATE TABLE Entradas (
   validade_entrada DATE  NOT NULL,
   nome_entrada VARCHAR(200) NOT NULL,
   valor_entrada DECIMAL(10,2) NOT NULL,
-  status_entrada TINYINT(1) not null,
+  destino_valor VARCHAR(200),
   PRIMARY KEY (cod_entrada),
   FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao)
 );
@@ -112,51 +124,62 @@ CREATE TABLE Financiamentos (
   cod_plantacao INT(4) NOT NULL,
   tipo_financiamento VARCHAR(200) NOT NULL,
   valor_financiamento DECIMAL(10,2) NOT NULL,
+  taxa_financiamento VARCHAR(200) NOT NULL,
   dt_financiamento DATE NOT NULL,
+  dt_finalizado DATE NOT NULL,
+  tipo_carencia VARCHAR(100) NOT NULL,
+  tipo_quitacao VARCHAR(100) NOT NULL,
+  tempo_carencia int(100) NOT NULL,
+  tempo_quitacao int(100) NOT NULL,
   email_usuario VARCHAR(500) NOT NULL,
   PRIMARY KEY (cod_financiamento),
   FOREIGN KEY (cod_plantacao)  REFERENCES Plantacoes(cod_plantacao),
   FOREIGN KEY (email_usuario) REFERENCES Usuarios(email_usuario)
 );
 
-------------------------------------------PAREI--------------------------------------------
-
 CREATE TABLE Fornecedores (
-  cod_Fornecedor int(4) NOT NULL AUTO_INCREMENT,
-  doc_Fornecedor varchar(20) NOT NULL,
-  nome_Fornecedor varchar(200) NOT NULL,
-  telefone_Fornecedor varchar(15) NOT NULL,
-  cep_Fornecedor varchar(10) NOT NULL,
-  email_Fornecedor varchar(500) NOT NULL,
-  PRIMARY KEY (cod_Fornecedor)
+  cod_fornecedor int(4) NOT NULL AUTO_INCREMENT,
+  nome_fornecedor varchar(200) NOT NULL,
+  doc_fornecedor varchar(20) NOT NULL,
+  telefone_fornecedor varchar(15) NOT NULL,
+  cep_fornecedor varchar(10) NOT NULL,
+  email_fornecedor varchar(500) NOT NULL,
+  PRIMARY KEY (cod_fornecedor)
 );
 
 CREATE TABLE Insumos (
-  cod_Insumo int(4) NOT NULL AUTO_INCREMENT,
-  nome_Insumo varchar(200) NOT NULL,
-  tipo_Insumo varchar(200) NOT NULL,
-  contagem_Insumo varchar(10) NOT NULL,
-  PRIMARY KEY (cod_Insumo, nome_Insumo)
+  cod_insumo int(4) NOT NULL AUTO_INCREMENT,
+  nome_insumo varchar(200) NOT NULL,
+  tipo_insumo varchar(200) NOT NULL,
+  PRIMARY KEY (cod_insumo)
 );
 
+CREATE TABLE Fornecedores_Produtos (
+  cod_produto int(4) NOT NULL,
+  cod_fornecedor int(4) NOT NULL,
+  cod_plantacao INT(4) NOT NULL,
+  dia_entrega int(4) NOT NULL,
+  qualidade_produto int(4) NOT NULL,
+  contagem_produto int(4) NOT NULL,
+  PRIMARY KEY (cod_fornecedor, cod_produto),
+  FOREIGN KEY (cod_fornecedor) REFERENCES Fornecedores (cod_fornecedor),
+  FOREIGN KEY (cod_plantacao) REFERENCES Plantacoes (cod_plantacao)
+);
+
+-------------------------------
 CREATE TABLE Hortalicas (
-  cod_Hortalica int(4) NOT NULL AUTO_INCREMENT,
-  nome_Hortalica varchar(200) NOT NULL,
-  cod_Insumo int(4) NOT NULL,
-  contagem_Hortalica varchar(10) NOT NULL,
-  PRIMARY KEY (cod_Hortalica, nome_Hortalica),
-  FOREIGN KEY (cod_Insumo) REFERENCES Insumos (cod_Insumo)
+  cod_hortalica int(4) NOT NULL AUTO_INCREMENT,
+  nome_hortalica varchar(200) NOT NULL,
+  cod_insumo int(4) NOT NULL,
+  PRIMARY KEY (cod_hortalica),
+  FOREIGN KEY (cod_insumo) REFERENCES Insumos (cod_insumo)
 );
 
-CREATE TABLE Fornecedores_Insumos (
-  cod_Insumo int(4) NOT NULL,
-  cod_Fornecedor int(4) NOT NULL,
-  cod_Plantacao INT(4) NOT NULL,
-  tempo_Entrega int(4) NOT NULL,
-  PRIMARY KEY (cod_Fornecedor, cod_Insumo, cod_Plantacao),
-  FOREIGN KEY (cod_Insumo) REFERENCES Insumos(cod_Insumo),
-  FOREIGN KEY (cod_Fornecedor) REFERENCES Fornecedores (cod_Fornecedor),
-  FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao)
+CREATE TABLE Ferramentas (
+  cod_ferramenta int(4) NOT NULL AUTO_INCREMENT,
+  nome_ferramenta varchar(200) NOT NULL,
+  caracteristica_ferramenta varchar(200) NOT NULL,
+  PRIMARY KEY (cod_ferramenta)
 );
 
 CREATE TABLE Pedidos_Compra (
@@ -183,6 +206,9 @@ CREATE TABLE Itens_Compra (
   FOREIGN KEY (cod_Pedido_Compra) REFERENCES Pedidos_Compra(cod_Pedido_Compra),
   FOREIGN KEY (cod_Insumo) REFERENCES Fornecedores_Insumos(cod_Insumo)
 );
+
+
+------------------------------------------PAREI--------------------------------------------
 
 CREATE TABLE Celeiros (
   cod_posicao_celeiro int(4) AUTO_INCREMENT,

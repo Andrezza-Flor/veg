@@ -473,11 +473,14 @@ legend {
     width: 30%;
     height: 4rem;
 
+    color: #000000;
+
     font-family: Poppins;
     font-size: 2rem;
 
     margin-left: 60%;
     margin-top: 2rem;
+    padding: 0 2rem;
 }
 
 .btn_calcular:hover,

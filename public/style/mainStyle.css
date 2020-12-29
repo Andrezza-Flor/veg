@@ -205,29 +205,18 @@ a p{
 }
 
 /* Configuração da página de Financiamento */
-
-.main #tabela-conta {
-    margin-top: 3rem;
+#tabela-financiamento .indent,
+#tabela-financiamento .valor {
+    width: 20rem;
+    font-size: 1.8rem;
+    padding: 0rem;
+}
+#tabela-financiamento .indent{
+    width: 20rem;
+    font-size: 1.8rem;
+    padding: 0rem;
 }
 
-.main #tabela-conta tr.title td.title-col{
-    font-size: 30px;
-}
-
-.main #tabela-conta td.indent{
-    font-weight: bolder;
-}
-
-.main #tabela-conta td.valor{
-    font-size: 15px;
-    padding: 1rem;
-}
-
-.main #tabela-conta td.button{
-    font-size: 16px;
-    font-weight: bolder;
-    padding: 1rem;
-}
 
 .main #tabela-capital{
     position: relative;
@@ -306,6 +295,26 @@ a p{
     width: 50%;
 }
 
+#tabela-itens-balanco .indent{
+    font-size: 2rem;
+    padding: 0.5rem;
+    width: 10rem;
+    border-width: thin;
+}
+
+#tabela-itens-balanco .valor,
+#tabela-itens-balanco .total{
+    font-size: 1.7rem;
+    padding: 0.2rem;
+    border-width: thin;
+}
+#tabela-itens-balanco .total{
+    position: relative;
+    padding-left: 4rem;
+    text-align: left;
+    margin-top: 2rem;
+}
+
 .main a.button-top {
     background-color: var(--color-secondary);
 }
@@ -369,4 +378,71 @@ a p{
     padding: 1.5rem;
     margin-right: 10%;
     float: right;
+}
+
+.acoes-banco {
+    position: relative;
+    display: block;
+    width: 30%;
+
+    float: left;
+
+    margin-top: 4rem;
+    margin-left: 3rem;
+}
+
+.acoes-n-banco {
+    position: relative;
+    display: block;
+    width: 30%;
+
+    float: right;
+
+    margin-top: 4rem;
+    margin-right: 15rem; 
+}
+
+a#cadastrar-banco,
+a#deposito,
+a#saque,
+a#fechar-banco {
+    position: relative;
+    display: flex;
+    width: 30rem;
+    height: 5rem;
+    margin: 1rem;
+
+   font-size: 2.5rem;
+   font-family: Poppins;
+   text-align: center;
+
+   border-radius: 0.8rem;
+   background-color: var(--color-secondary);
+}
+
+a#cadastrar-banco:hover,
+a#deposito:hover,
+a#saque:hover{
+    transition: 0.2s;
+    background-color: var(--color-secondary-dark);
+}
+
+a#fechar-banco {
+    background-color: var(--color-button-cancel);
+}
+
+a#fechar-banco:hover{
+    transition: 0.2s;
+    background-color: var(--color-button-cancel-dark);
+}
+
+a#cadastrar-banco p,
+a#deposito p,
+a#saque p,
+a#fechar-banco p{
+    position: relative;
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: #000;
 }

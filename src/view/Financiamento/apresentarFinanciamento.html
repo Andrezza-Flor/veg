@@ -30,7 +30,7 @@
                 <img src="/imagem/menu/caixa.png" alt="Caixa">
                 <p>Fluxo de Caixa</p>
              </a>
-             <a href="/financas" class="button-menu">
+             <a href="/financiamento" class="button-menu">
                 <img src="/imagem/menu/financas.png" alt="Finanças">
                 <p>Financiamento</p>
              </a>
@@ -72,7 +72,7 @@
                             <td class="{{registro.parcela}}">R${{registro.juros}}</td>
                             <td class="{{registro.parcela}}">R${{registro.parcelaTotal}}</td>
                             <td class="{{registro.parcela}}">R${{registro.saldoDevedor}}</td>
-                            <td class="{{registro.parcela}}">{{registro.mesPagamento}}. {{registro.anoPagamento}}</td>
+                            <td class="{{registro.parcela}}">{{registro.mesPagamento}} {{registro.anoPagamento}}</td>
                         </tr>
                     {%endfor%}
                 </table>  

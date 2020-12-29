@@ -42,37 +42,44 @@
         </div>   
         
     </div>
-
+    
     <div class="main">
         <h1>
-            Editar Entrada
-            <a href="/entrada">
+            Cadastrar <br>Conta Bancária
+            <a href="/ativoCirculante">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
-
-        <form>
-            <fieldset class="dados-Top">
+        
+        <form name="FormContaBancaria" action="/salvarConta" method="POST">
+            <fieldset name="dadosConta" class="dados-Top">
                 <div class="title">
-                    <legend>Dados Entrada</legend>
+                    <legend>Dados da Conta</legend>
                 </div>
-                <div class="read-block">
-                    <label for="nomeEntrada">Noma da Entrada:</label>
-                    <p class="input">{{entrada.nome_entrada}}</p>
+                <div class="write-block">
+                    <label for="nomeBanco">Nome do Banco:</label>
+                    <input type="text" id="nomeBanco" name="nomeBanco" required>
                 </div>
-                <div class="read-block">
-                    <label for="valorEntrada">Valor Fixo da Entrada:</label>
-                    <p class="input">R$ {{entrada.valor_entrada}}</p>
+                
+                <div class="radio-block">
+                    <label for="tipoConta">Tipo da Conta:</label>
+                    <p onclick="poupanca()">
+                        <label>
+                            <input type="radio" id="poupanca" name="tipoConta" value="POUPANCA"> Poupança
+                        </label>
+                    </p>
+                    <p onclick="corrente()">
+                        <label>
+                            <input type="radio" id="corrente" name="tipoConta" value="CORRENTE" checked> Corrente 
+                        </label>
+                    </p>
                 </div>
-                <div class="read-block">
-                    <label for="nomeEntrada">Data da Entrada:</label>
-                    <p class="input">{{entrada.validade_entrada}}</p>
-                </div>
-            </fieldset>
-        </form>   
-       
-
+                <button type="submit" class="btn_calcular" name="btn_calcular">Salvar</button>
+            </fieldset>                
+        </form>        
     </div>
+
+    
 </body>
 </html>

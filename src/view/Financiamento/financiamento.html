@@ -42,37 +42,32 @@
         </div>   
         
     </div>
-
+    
     <div class="main">
-        <h1>
-            Editar Entrada
-            <a href="/entrada">
-                <img src="/imagem/voltar.png" alt="">
-                Voltar
-            </a>
-        </h1>
+        <h1>Financiamento</h1>
 
-        <form>
-            <fieldset class="dados-Top">
-                <div class="title">
-                    <legend>Dados Entrada</legend>
-                </div>
-                <div class="read-block">
-                    <label for="nomeEntrada">Noma da Entrada:</label>
-                    <p class="input">{{entrada.nome_entrada}}</p>
-                </div>
-                <div class="read-block">
-                    <label for="valorEntrada">Valor Fixo da Entrada:</label>
-                    <p class="input">R$ {{entrada.valor_entrada}}</p>
-                </div>
-                <div class="read-block">
-                    <label for="nomeEntrada">Data da Entrada:</label>
-                    <p class="input">{{entrada.validade_entrada}}</p>
-                </div>
-            </fieldset>
-        </form>   
-       
+        <table id="tabela-financiamento">    
+            <tr>
+                <td class="indent">Tipo Financiamento:</td>
+                <td class="indent">Valor:</td>
+                <td class="indent">Data Realização:</td>
+                <td class="indent">Taxa:</td>
+            </tr>
 
+            {%for financiamento in financiamentos%}
+                <tr>
+                    <td class="valor">{{financiamento.tipo_financiamento}}</td>
+                    <td class="valor">R$ {{financiamento.valor_financiamento }}</td>
+                    <td class="valor">{{financiamento.dt_financiamento}}</td>
+                    <td class="valor">{{financiamento.taxa_financiamento}}% a.a.</td>
+                </tr>
+            {%endfor%}            
+        </table>  
+        
+        <a href="/criarFinanciamento" id="novo-financiamento" class="button-top">
+            <img src="/imagem/financiamento.png" alt="Novo Financiamento">
+            <p>Novo Financiamento</p>
+        </a>
     </div>
 </body>
 </html>

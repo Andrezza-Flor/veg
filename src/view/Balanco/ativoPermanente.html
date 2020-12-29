@@ -30,7 +30,7 @@
                 <img src="/imagem/menu/caixa.png" alt="Caixa">
                 <p>Fluxo de Caixa</p>
              </a>
-             <a href="/financas" class="button-menu">
+             <a href="/financiamento" class="button-menu">
                 <img src="/imagem/menu/financas.png" alt="Finanças">
                 <p>Financiamento</p>
              </a>
@@ -46,26 +46,23 @@
     <div class="main">
         <h1>Ativo Permanente</h1>
 
-        <table id="tabela-balanco">
-            <tr class="title">
-                <td class="title-col" colspan="2">Ativo</th>
-            </tr>
+        <table id="tabela-itens-balanco">
             <tr>
-                <td class="indent">Tipo</td>
+                <td class="indent">Nome</td>
                 <td class="indent">Valor</td>
+                <td class="indent">Última Atualização</td>
             </tr>
+            {%for ativo in ativos%}
+                <tr>
+                    <td class="valor">{{ativo.nome_ativo}}</td>
+                    <td class="valor">R$ {{ativo.valor_ativo}}</td>
+                    <td class="valor">{{ativo.data_ativo}}</td>
+                </tr>
+            {%endfor%}
             <tr>
-                <td class="valor"> <a href="/ativosCirculantes">Ativo Circulante</a></td>
-                <td class="valor">R$ {{ativoCirculante}}</td>
+                <td class="total" colspan="3"> <strong>Total:</strong>  R$ {{totalAtivo}}</td>
             </tr>
-            <tr>
-                <td class="valor"><a href="/ativosPermanente">Ativo Permanente</a></td>
-                <td class="valor">R$ {{ativoPermanete}}</td>
-            </tr>
-            <tr>
-                <td class="valor" colspan="2">Total: R$ {{totalAtivo}}</td>
-            </tr>
-        </table>   
+        </table> 
     </div>
 </body>
 </html>

@@ -42,37 +42,48 @@
         </div>   
         
     </div>
-
+    
     <div class="main">
         <h1>
-            Editar Entrada
-            <a href="/entrada">
+            Sacar
+            <a href="/sacar">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
-
-        <form>
-            <fieldset class="dados-Top">
-                <div class="title">
-                    <legend>Dados Entrada</legend>
-                </div>
-                <div class="read-block">
-                    <label for="nomeEntrada">Noma da Entrada:</label>
-                    <p class="input">{{entrada.nome_entrada}}</p>
-                </div>
-                <div class="read-block">
-                    <label for="valorEntrada">Valor Fixo da Entrada:</label>
-                    <p class="input">R$ {{entrada.valor_entrada}}</p>
-                </div>
-                <div class="read-block">
-                    <label for="nomeEntrada">Data da Entrada:</label>
-                    <p class="input">{{entrada.validade_entrada}}</p>
-                </div>
-            </fieldset>
-        </form>   
        
+        
+        <form name="FormConta" action="/sacar" method="POST">
 
+            <fieldset name="dadosConta" class="dados-Top">
+                <div class="title">
+                    <legend>Escolha uma conta</legend>
+                </div>
+                <div class="read-block">
+                    <label for="emailFornecedor">Conta:</label>
+                    <p class="input">{{conta}}</p>
+                </div>   
+
+                <div class="write-block">
+                    <label for="valorSaque">Valor do Saque:</label>
+                    <input type="number" id="valorSaque" name="valorSaque" min=1 max={{maximoSaque}} step=".01" placeholder="R$ 000.00" required>
+                </div>
+                
+                <button type="submit" class="btn_calcular" name="btn_calcular">Fechar Conta</button>
+            </fieldset> 
+                           
+        </form>        
     </div>
+
+    
 </body>
+<script language="JavaScript">
+    function semCarencia() {
+        document.getElementById('valor-carencia').style.visibility = 'hidden';
+    }
+
+    function comCarencia() {
+        document.getElementById('valor-carencia').style.visibility = 'visible';
+    }
+</script>
 </html>

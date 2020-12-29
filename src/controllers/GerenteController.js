@@ -58,6 +58,7 @@ module.exports = {
 
             var dataAtual = new Date();
             const  mesReferencia = dataAtual.getMonth() + '-' + dataAtual.getFullYear();
+            const anoReferencia = dataAtual.getFullYear();
 
             await knex('FluxoCaixa').insert({
                 'mes_referencia': mesReferencia,
@@ -65,6 +66,34 @@ module.exports = {
                 'capital_inicial': 0,
                 'saldo_operacional': 0,
                 'saldo_transportar': 0,
+            })
+
+            await knex('BalancosPatrimonias').insert({
+                'cod_plantacao': parseInt(cod[0].cod_plantacao),
+                'ano_referencia': anoReferencia,
+                'valor_Ativo': 0,
+                'valor_Passivo': 0,
+                'patrimonio_liquido': 0,
+                'capital_social': 0,
+            })
+
+            // Criando o Ativo
+            await knex('Ativos')
+            .insert({
+                'cod_balanco': codBalancoAtual,
+                'tipo_ativo': 'ATIVO CIRCULANTE',
+                'nome_ativo': 'CAIXA - ' + anoReferencia,
+                'valor_ativo': 0,
+                'data_ativo': dataAtual,
+            })
+
+            await knex('Ativos')
+            .insert({
+                'cod_balanco': codBalancoAtual,
+                'tipo_ativo': 'ATIVO CIRCULANTE',
+                'nome_ativo': 'BANCO - ' + anoReferencia,
+                'valor_ativo': 0,
+                'data_ativo': dataAtual,
             })
             
             // Reiderizando a página

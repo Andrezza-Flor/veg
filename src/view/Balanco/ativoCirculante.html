@@ -30,7 +30,7 @@
                 <img src="/imagem/menu/caixa.png" alt="Caixa">
                 <p>Fluxo de Caixa</p>
              </a>
-             <a href="/financas" class="button-menu">
+             <a href="/financiamento" class="button-menu">
                 <img src="/imagem/menu/financas.png" alt="Finanças">
                 <p>Financiamento</p>
              </a>
@@ -46,9 +46,52 @@
     <div class="main">
         <h1>Ativo Circulante</h1>
 
-        <table id="tabela-balanco">
-            
+        <table id="tabela-itens-balanco">
+            <tr>
+                <td class="indent">Nome</td>
+                <td class="indent">Valor</td>
+                <td class="indent">Última Atualização</td>
+            </tr>
+
+            {%for ativo in ativos%}
+                <tr>
+                    <td class="valor">{{ativo.nome_ativo}}</td>
+                    <td class="valor">R$ {{ativo.valor_ativo}}</td>
+                    <td class="valor">{{ativo.data_ativo}}</td>
+                </tr>
+            {%endfor%}
+            <tr>
+                <td class="total" colspan="3"> <strong>Total:</strong>  R$ {{totalAtivo}}</td>
+            </tr>
         </table> 
+
+        {%if tamanhoAtivo==0%}
+        <div class="acoes-n-banco">
+            <a href="/criarConta" id="cadastrar-banco"> <p>Criar Conta Bancária</p> </a>
+        </div>
+            
+        {%else%}
+            {%if tamanhoAtivo>1%}
+                <div class="acoes-banco" id="container-para-bancos">
+                    <a href="/depositar" id="deposito"> <p>Depositar</p> </a>
+                    <a href="/sacar" id="saque"> <p>Sacar</p> </a>
+                    <a href="/transferir" id="saque"> <p>Transferir</p> </a>                
+                </div>
+            {%else%}
+                <div class="acoes-banco" id="container-para-bancos">
+                    <a href="/depositar" id="deposito"> <p>Depositar</p> </a>
+                    <a href="/sacar" id="saque"> <p>Sacar</p> </a>               
+                </div>
+            {%endif%}
+
+            <div class="acoes-n-banco">
+                <a href="/criarConta" id="cadastrar-banco"> <p>Criar Conta Bancária</p> </a>
+                <a href="/excluirConta" id="fechar-banco"> <p>Excluir Conta Bancária</p> </a>
+            </div>
+        {%endif%}
+        
+        
     </div>
+    <script></script>
 </body>
 </html>

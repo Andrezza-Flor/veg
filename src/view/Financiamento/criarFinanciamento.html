@@ -21,51 +21,19 @@
                 <img src="/imagem/menu/home.png" alt="Página Pricipal">
                 <p>Página Principal</p>
             </a>
-        
-            <a href="/celeiro" class="button-menu">
-                <img src="/imagem/menu/celeiro.png" alt="Celeiro">
-                <p>Celeiro</p>
-            </a>
        
-            <a href="/estufa" class="button-menu">
-                <img src="/imagem/menu/plantacao.png" alt="Plantacao">
-                <p>Plantação</p>
-            </a>
-        
-            <a href="/armazem" class="button-menu">
-                <img src="/imagem/menu/armazem.png" alt="Armazem">
-                <p>Armazém</p>
-            </a>
-            
-            <a href="/financas" class="button-menu">
-                <img src="/imagem/menu/financas.png" alt="Finanças">
-                <p>Finanças</p>
+            <a href="/balanco" class="button-menu">
+                <img src="/imagem/menu/balanco.png" alt="Balanco">
+                <p>Balanço</p>
              </a>
-           
-            <a href="/venda" class="button-menu">
-                <img src="/imagem/menu/fornecedor.png" alt="Fornecedor">
-                <p>Fornecedor</p>
-            </a>
-    
-            <a href="/colaborador" class="button-menu">
-                <img src="/imagem/menu/cliente.png" alt="Cliente">
-                <p>Cliente</p>
-            </a>
-            
-            <a href="/colaborador" class="button-menu">
-                <img src="/imagem/menu/colaborador.png" alt="Colaborador">
-                <p>Colaborador</p>
-            </a>
-            
-            <a href="/relatorio" class="button-menu">
-                <img src="/imagem/menu/relatorio.png" alt="Relatório">
-                <p>Relatório</p>
-              </a>
-
-            <a href="/atividade" class="button-menu">
-                <img src="/imagem/menu/ajuda.png" alt="Ajuda">
-                <p>Ajuda</p>
-            </a>
+             <a href="/fluxoCaixa" class="button-menu">
+                <img src="/imagem/menu/caixa.png" alt="Caixa">
+                <p>Fluxo de Caixa</p>
+             </a>
+             <a href="/financiamento" class="button-menu">
+                <img src="/imagem/menu/financas.png" alt="Finanças">
+                <p>Financiamento</p>
+             </a>
               
             <a href="/" class="button-menu">
                 <img src="/imagem/menu/sair.png" alt="Sair">
@@ -74,7 +42,7 @@
         </div>   
         
     </div>
-        
+    
     <div class="main">
         <h1>
             Cadastrar Financiamento
@@ -128,7 +96,7 @@
 
                 <div class="write-block">
                     <label for="taxaAnual">Taxa a.a. (%):</label>
-                    <input type="number" id="taxaAnual" name="taxaAnual" min="1" step=".01" placeholder="0.0 %" required>
+                    <input type="number" id="taxaAnual" name="taxaAnual" min="0.1" step=".01" placeholder="0.0 %" required>
                 </div>
             
                 <div class="radio-block">
@@ -170,7 +138,6 @@
     
 </body>
 <script language="JavaScript">
-    
     function semCarencia() {
         document.getElementById('valor-carencia').style.visibility = 'hidden';
     }

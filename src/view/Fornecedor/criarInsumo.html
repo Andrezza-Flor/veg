@@ -100,44 +100,50 @@
     
     <div class="main">
         <h1>
-            Compra
-            <a href="/criarInsumo">
+            Insumo
+            <a href="/">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
         
-        <form action="/criarHortalica" method="POST">
+        <form action="/criarInsumo" method="POST">
             <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Dados da Hortaliça - que o seu insumo vai gerar</legend>
+                    <legend>Cadastrar Insumo</legend>
                 </div>
-                <div class="read-block">
+                <div class="write-block">
                     <label for="nomeInsumo">Nome do Insumo:</label>
-                    <p class="input" name="nomeInsumo">{{ nomeInsumo }}</p>
+                    <input type="text" id="nomeInsumo" name="nomeInsumo" required>
                 </div>
-                <div class="write-block">
-                    <label for="nomeHortalica">Nome do Hortaliça:</label>
-                    <input type="text" id="nomeHortalica" name="nomeHortalica" required>
-                </div>
-
-                <div class="write-block">
-                    <label for="contagemHortalica">Como você gostaria que contássemos essa hortalica:</label>
-                    <select name="contagemHortalica" id="contagemHortalica" required>
-                        <option value="" disable="" hidden="">Selecione uma opição</option> 
-                        <option value="U">U - Unidade</option> 
-                        <option value="Kg">Kg - Quilograma</option>
-                        <option value="L">L - Litro</option>
-                    </select>
-                </div>
-
-                             
+                
+                <div class="radio-block">
+                    <label for="carencia">Tipo de Insumo:</label>
+                    <p>
+                        <label onclick="semCarencia()">
+                            <input type="radio" id="plantar" name="tipoInsumo" value="PLANTAR"> Plantar
+                        </label>
+                    </p>
+                    <p>
+                        <label onclick="comCarencia()">
+                            <input type="radio" id="aplicar" name="tipoInsumo" value="APLICAR" checked> Aplicar 
+                        </label>
+                    </p>
+                </div>           
             </fieldset>
 
-            <button type="submit" class="button-Salvar">
-                Salvar
-            </button>
+            {% if mensagem != "" %}
+                <div class="foot-dados-Botton">
+                    <div class="aviso-foot">
+                        <p>{{mensagem}}</p>
+                    </div>
+                </div>               
+            {% endif %}
+
+            <button type="submit" class="btn_calcular" name="btn_calcular">Próximo</button>
+
         </form> 
+        
     </div>
 </body>
 </html>
