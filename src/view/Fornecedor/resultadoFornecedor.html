@@ -100,91 +100,72 @@
     
     <div class="main">
         <h1>
-            Escolher Produtos
-            <a href="/criarFornecedor">
-                <img src="/imagem/voltar.png" alt="">
-                Voltar
-            </a>
+            Fornecedor 
         </h1>
-        
-        
-        <form action="/adicionarFerramenta" method="POST">
+    
+        <form action="" method="POST">
             <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Adicionar ferramenta para <strong>{{fornecedor.nomeFornecedor}}</strong></legend>
+                    <legend>Dados do Fornecedor</legend>
                 </div>
-
-                <div class="search-block">
-                    <div class="select-block">
-                        <div class="select">
-                            <label for="nomeFerramenta">Ferramenta:</label>
-                            <select name="codFerramenta" id="nomeFerramenta">
-                                <option value="" disable="" hidden="">Selecione uma opição</option> 
-                                {%for ferramenta in ferramentaLista%}
-                                    <option value={{ferramenta.cod_ferramenta}}>{{ ferramenta.nome_ferramenta }} - {{ ferramenta.caracteristica_ferramenta }}</option>
-                                {%endfor%}  
-                            </select>
-                        </div>
-                    </div>
+                <div class="read-block">
+                    <label for="nomeFornecedor">Nome do Fornecedor:</label>
+                    <p class="input">{{fornecedor.nomeFornecedor}}</p>
                 </div>
-                <div class="write-block">
-                    <label for="diaEntrega">Dias de entrega:</label>
-                    <input type="number" id="diaEntrega" name="diaEntrega" min="1" required>
+               <div class="read-block">
+                    <label for="docFornecedor">CNPJ do Fornecedor:</label>
+                    <p class="input">{{fornecedor.docFornecedor}} {{hortalica.contagem_Hortalica}}</p>
                 </div>
-                <div class="search-block">
-                    <div class="select-block">
-                        <div class="select">
-                            <label for="qualidadeProduto">Qualidade do produto:</label>
-                            <select name="qualidadeProduto" id="qualidadeProduto">
-                                <option value="" disable="" hidden="">Selecione uma opição</option> 
-                                <option value="OTIMA">Ótima</option>
-                                <option value="BOA">Boa</option>
-                                <option value="RUIM">Ruim</option>
-                                <option value="NS">Não sei</option>
-                            </select>
-                        </div>
-                    </div>
+                <div class="read-block">
+                    <label for="foneFornecedor">Telefone do Fornecedor:</label>
+                    <p class="input">{{fornecedor.telefoneFornecedor}}</p>
                 </div>
-                <button type="submit" class="btn_calcular" name="btn_calcular">Selecionar</button>
+                <div class="read-block">
+                    <label for="cepFornecedor">CEP do Fornecedor:</label>
+                    <p class="input">{{fornecedor.cepFornecedor}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="emailFornecedor">E-mail do Fornecedor:</label>
+                    <p class="input">{{fornecedor.emailFornecedor}}</p>
+                </div>
             </fieldset>
 
-            <div class="foot-dados-Botton">
-                <div class="aviso-foot">
-                    <p>Caso não tenha achado a ferramenta é possivel cria-la</p>
-                </div>
-                <div class="acoes-n-banco">
-                    <a href="/criarFerramenta" id="cadastrar-banco"> <p>Criar Ferramenta</p> </a>
-                </div>
-            </div>
-
+            <fieldset class="foot-dados-Botton">
+                <table class="table-Detalhe">
+                    <tr>
+                        <th colspan="4">Produtos Fornecidos</th>
+                    </tr>
+                    <tr class="head">
+                        <th>Código</th>
+                        <th>Nome do Produto</th>
+                        <th>Dias de espera</th>
+                        <th>Qualidade</th>
+                    </tr>
+                    {%for insumo in insumoFornecedor%}
+                        <tr>
+                            <td>{{insumo.codInsumo}}</td>
+                            <td>{{insumo.nomeInsumo}}</td>
+                            <td>{{insumo.diaEntrega}} dias</td>
+                            <td>{{insumo.qualidadeProduto}}</td>
+                        </tr>
+                    {%endfor%}  
+                    {%for ferramenta in ferramentaFornecedor%}
+                        <tr>
+                            <td>{{ferramenta.codFerramenta}}</td>
+                            <td>{{ferramenta.nomeFerramenta}}</td>
+                            <td>{{ferramenta.diaEntrega}} dias</td>
+                            <td>{{ferramenta.qualidadeProduto}}</td>
+                        </tr>
+                    {%endfor%}  
+                </table>
+            </fieldset>
         </form>
 
-        {%if tamanhoLista==0 %}
-
-        {%else%}
-            <form>
-                <fieldset class="foot-dados-Botton">
-                    <table class="table-Detalhe">
-                        <tr>
-                            <th colspan="2">Ferramentas Adicionadados</th>
-                        </tr>
-                        <tr class="head">
-                            <th>Nome do Ferramenta</th>
-                            <th>Dias de espera</th>
-                        </tr>
-                        {%for ferramenta in ferramentaFornecedor%}
-                            <tr>
-                                <td>{{ferramenta.nomeFerramenta}}</td>
-                                <td>{{ferramenta.diaEntrega}} dias</td>
-                            </tr>
-                        {%endfor%}  
-                    </table>
-                </fieldset>
-                <div class="acoes-n-banco">
-                    <a href="/salvarDados" id="cadastrar-banco"> <p>Próximo</p> </a>
-                </div>        
-            </form> 
-        {%endif%}
+        <div class="botoes-fim-cadastro">
+            <a href="/fornecedor" id="cancelar-cadastro"> <p>Cancelar</p> </a>
+            <a href="/cadastrarFornecedor" id="cadastrar-cadastro"> <p>Cadastrar</p> </a>
+        </div>  
+        
     </div>
 </body>
 </html>

@@ -672,10 +672,25 @@ module.exports = {
     },   
     async fornecedor(req, res, next){
         try {
-            const fornecedores = await knex('Fornecedores_Produtos')
+            const fornecedoresProduto = await knex('Fornecedores_Produtos')
             .where('cod_plantacao', Number(local('plantacao')))
             .select()
-            
+
+            var codsFornecedor = [];
+            var igual = false;
+            for (var i = 0; i < fornecedoresProduto.length; i++) {
+
+                codsFornecedor.push(fornecedoresProduto[i].cod_fornecedor)
+                         
+            }
+
+            const fornecedores = await knex('Fornecedores')
+            .whereIn('cod_fornecedor', codsFornecedor)
+            .select()
+
+            console.log(fornecedores)
+
+                       
             return res.render('Fornecedor/fornecedor.html', {fornecedores})
         } catch (error) {
             next(error)

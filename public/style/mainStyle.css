@@ -446,3 +446,49 @@ a#fechar-banco p{
     text-align: center;
     color: #000;
 }
+
+.botoes-fim-cadastro {
+    display: block;
+
+    padding:0 2rem;
+}
+
+.botoes-fim-cadastro #cancelar-cadastro {
+    background-color: var(--color-button-cancel);
+    border-radius: 0.8rem;
+
+    margin-left: 7rem;
+    margin-bottom: 2rem;
+    float: left;
+}
+
+.botoes-fim-cadastro #cancelar-cadastro:hover{
+    transition: 0.2s;
+    background-color: var(--color-button-cancel-dark);
+}
+
+.botoes-fim-cadastro #cadastrar-cadastro {
+    background-color: var(--color-secondary);
+    border-radius: 0.8rem;
+
+    margin-right: 10rem;
+    margin-bottom: 2rem;
+    float: right;
+}
+
+.botoes-fim-cadastro #cadastrar-cadastro:hover{
+    transition: 0.2s;
+    background-color: var(--color-secondary-dark);
+}
+
+.botoes-fim-cadastro p{
+    position: relative;
+    align-items: center;
+    text-align: center;
+    padding-top: 1.2rem;
+
+    width: 25rem;
+    height: 5rem;
+
+    color: #000;
+}

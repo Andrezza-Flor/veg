@@ -95,7 +95,9 @@ routes
     .post('/adicionarInsumo', Fornecedor.selecionarInsumo)
     .get('/adicionarFerramenta', Fornecedor.apresentarFerramenta)
     .post('/adicionarFerramenta', Fornecedor.selecionarFerramenta)
-    .get('/salvarFornecedor', Fornecedor.salvarDados)
+    .get('/salvarDados', Fornecedor.salvarDados)
+    .get('/cadastrarFornecedor', Fornecedor.cadastrarFornecedorProduto)
+
     // Insumo
     .get('/criarInsumo', Fornecedor.criarInsumo)
     .post('/criarInsumo', Fornecedor.salvarInsumo)

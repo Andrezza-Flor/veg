@@ -159,8 +159,8 @@ CREATE TABLE Fornecedores_Produtos (
   cod_fornecedor int(4) NOT NULL,
   cod_plantacao INT(4) NOT NULL,
   dia_entrega int(4) NOT NULL,
-  qualidade_produto int(4) NOT NULL,
-  contagem_produto int(4) NOT NULL,
+  qualidade_produto varchar(100) NOT NULL,
+  contagem_produto varchar(100) NOT NULL,
   PRIMARY KEY (cod_fornecedor, cod_produto),
   FOREIGN KEY (cod_fornecedor) REFERENCES Fornecedores (cod_fornecedor),
   FOREIGN KEY (cod_plantacao) REFERENCES Plantacoes (cod_plantacao)

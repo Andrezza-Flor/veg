@@ -19,7 +19,7 @@ var insumoLista = [];
 var ferramentaLista = [];
 
 var ferramentaFornecedor = [];
-var insumosFornecedor = [];
+var insumoFornecedor = [];
 var insumoPossui = false;
 var ferramentaPossui = false;
 
@@ -60,7 +60,7 @@ module.exports = {
             const tamanhoLista = 0;
 
             if(insumo == 'INSUMO' || ferramenta == 'FERRAMENTA'){
-                insumosFornecedor = [];
+                insumoFornecedor = [];
                 ferramentaFornecedor = [];
                 
                 if(insumo != 'INSUMO'){
@@ -107,11 +107,18 @@ module.exports = {
                 contagemProduto: contagemProduto,
             }
 
-            insumosFornecedor.push(insumo);
+            for (let index = 0; index < insumoFornecedor.length; index++) {
+                if(insumoFornecedor[index].codInsumo == insumo.codInsumo){
+                    insumoFornecedor.splice(index, 1);
+                }
+                
+            }
 
-            const tamanhoLista = insumosFornecedor.length;
+            insumoFornecedor.push(insumo);
 
-            return res.render('Fornecedor/adicionarInsumo.html', {fornecedor, insumoLista, tamanhoLista, insumosFornecedor, ferramentaPossui})      
+            const tamanhoLista = insumoFornecedor.length;
+
+            return res.render('Fornecedor/adicionarInsumo.html', {fornecedor, insumoLista, tamanhoLista, insumoFornecedor, ferramentaPossui})      
             
         } catch (error) {
             return next(error)
@@ -135,8 +142,7 @@ module.exports = {
             const {
                 codFerramenta,
                 diaEntrega,
-                qualidadeProduto,
-                contagemProduto
+                qualidadeProduto
             } = req.body
 
             const nomeFerramenta = await knex('Ferramentas')
@@ -147,8 +153,14 @@ module.exports = {
                 codFerramenta: codFerramenta,
                 nomeFerramenta: nomeFerramenta[0].nome_ferramenta,
                 diaEntrega: diaEntrega,
-                qualidadeProduto: qualidadeProduto,
-                contagemProduto: contagemProduto,
+                qualidadeProduto: qualidadeProduto
+            }
+
+            for (let index = 0; index < ferramentaFornecedor.length; index++) {
+                if(ferramentaFornecedor[index].codFerramenta == ferramenta.codFerramenta){
+                    ferramentaFornecedor.splice(index, 1);
+                }
+                
             }
 
             ferramentaFornecedor.push(ferramenta);
@@ -294,33 +306,84 @@ module.exports = {
         }
     },
 
-
-
-
-
     async salvarDados(req,res, next) {
         try {
 
-
-            console.log(ferramentaFornecedor);
-            console.log(insumosFornecedor)
-            // // Inserir na tabela Fornecedores
-            // await knex('Fornecedores').insert({
-            //     cod_Fornecedor: null,
-            //     doc_Fornecedor: docFornecedor,
-            //     nome_Fornecedor: nomeFornecedor,
-            //     telefone_Fornecedor: telefoneFornecedor,
-            //     cep_Fornecedor: cepFornecedor,
-            //     email_Fornecedor: emailFornecedor                
-            // })
-            // const cod = await knex('Fornecedores')
-            // .select('cod_Fornecedor')
-
-            return  res.render('Fornecedor/criarFornecedor.html', {produtos})
+            return  res.render('Fornecedor/resultadoFornecedor.html', {fornecedor, insumoFornecedor, ferramentaFornecedor})
         } catch (error) {
             return next(error)
         }
         
     },
+
+    async cadastrarFornecedorProduto(req,res, next) {
+        try {
+
+            // Cadastrar Fornecedor
+            await knex('Fornecedores')
+            .insert({
+                'nome_fornecedor': fornecedor.nomeFornecedor.toUpperCase(),
+                'doc_fornecedor': fornecedor.docFornecedor,
+                'telefone_fornecedor': fornecedor.telefoneFornecedor,
+                'cep_fornecedor': fornecedor.cepFornecedor,
+                'email_fornecedor': fornecedor.emailFornecedor,
+            })
+
+            var fornecedores = await knex('Fornecedores')
+            .where('nome_fornecedor', fornecedor.nomeFornecedor)
+            .select()
+
+            const codFornecedor = fornecedores[fornecedores.length - 1].cod_fornecedor
+
+            // Cadastrar FornecedorProduto
+            for (let index = 0; index < insumoFornecedor.length; index++) {
+                await knex('Fornecedores_Produtos')
+                .insert({
+                    'cod_produto': insumoFornecedor[index].codInsumo,
+                    'cod_Fornecedor': codFornecedor,
+                    'cod_plantacao': Number(local('plantacao')),
+                    'dia_entrega': insumoFornecedor[index].diaEntrega,
+                    'qualidade_produto': insumoFornecedor[index].qualidadeProduto,
+                    'contagem_produto': insumoFornecedor[index].contagemProduto
+                })
+            }
+
+            for (let index = 0; index < ferramentaFornecedor.length; index++) {
+                await knex('Fornecedores_Produtos')
+                .insert({
+                    'cod_produto': ferramentaFornecedor[index].codFerramenta,
+                    'cod_fornecedor': codFornecedor,
+                    'cod_plantacao': Number(local('plantacao')),
+                    'dia_entrega': ferramentaFornecedor[index].diaEntrega,
+                    'qualidade_produto': ferramentaFornecedor[index].qualidadeProduto,
+                    'contagem_produto': 'U', 
+                })
+            }
+
+            const fornecedoresProduto = await knex('Fornecedores_Produtos')
+            .where('cod_plantacao', Number(local('plantacao')))
+            .select()
+
+            var codsFornecedor = [];
+            var igual = false;
+            for (var i = 0; i < fornecedoresProduto.length; i++) {
+
+                codsFornecedor.push(fornecedoresProduto[i].cod_fornecedor)
+                         
+            }
+
+            fornecedores = await knex('Fornecedores')
+            .whereIn('cod_fornecedor', codsFornecedor)
+            .select()
+                       
+            return res.render('Fornecedor/fornecedor.html', {fornecedores})
+            
+        } catch (error) {
+            return next(error)
+        }
+        
+    },
+
+    
    
 }
