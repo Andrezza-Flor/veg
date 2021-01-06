@@ -14,6 +14,7 @@ var fornecedor = {
     cepFornecedor: '',
     emailFornecedor: '',
 }
+var codigoFornecedor = 0;
 var cadastroProduto= {};
 var insumoLista = [];
 var ferramentaLista = [];
@@ -24,6 +25,105 @@ var insumoPossui = false;
 var ferramentaPossui = false;
 
 module.exports = {
+    // Apresentar Fornecedor
+    async apresentarFornecedor(req,res, next) {
+        try {
+            const {
+                codFornecedor
+            } = req.body
+
+            codigoFornecedor = codFornecedor;
+
+            // Caracteristicas do Fornecedor
+            var fornecedor = await knex('Fornecedores')
+            .where('cod_fornecedor', codFornecedor)
+            .select()
+
+            fornecedor = fornecedor[0];
+
+            // Caracteristicas do Insumo
+            const insumos = await knex('Fornecedores_Produtos')
+            .where('cod_fornecedor', codFornecedor)
+            .where('tipo_produto', 'INSUMO')
+            .join('Insumos', 'Insumos.cod_insumo', '=', 'Fornecedores_Produtos.cod_produto')
+            .select()
+
+            // Caractercistica das Ferramentas
+            const ferramentas = await knex('Fornecedores_Produtos')
+            .where('cod_fornecedor', codFornecedor)
+            .where('tipo_produto', 'FERRAMENTA')
+            .join('Ferramentas', 'Ferramentas.cod_ferramenta', '=', 'Fornecedores_Produtos.cod_produto')
+            .select()         
+
+            return  res.render('Fornecedor/infoFornecedor.html', {fornecedor, ferramentas, insumos})
+        } catch (error) {
+            return next(error)
+        }
+        
+    },
+    async pagEditarPlantacao(req,res, next) {
+        try {
+            const {
+                codFornecedor
+            } = req.body
+
+            // Caracteristicas do Fornecedor
+            var fornecedor = await knex('Fornecedores')
+            .where('cod_fornecedor', codFornecedor)
+            .select()
+
+            fornecedor = fornecedor[0];
+
+            // Caracteristicas do Insumo
+            const insumos = await knex('Fornecedores_Produtos')
+            .where('cod_fornecedor', codFornecedor)
+            .where('tipo_produto', 'INSUMO')
+            .join('Insumos', 'Insumos.cod_insumo', '=', 'Fornecedores_Produtos.cod_produto')
+            .select()
+
+            // Caractercistica das Ferramentas
+            const ferramentas = await knex('Fornecedores_Produtos')
+            .where('cod_fornecedor', codFornecedor)
+            .where('tipo_produto', 'FERRAMENTA')
+            .join('Ferramentas', 'Ferramentas.cod_ferramenta', '=', 'Fornecedores_Produtos.cod_produto')
+            .select()         
+
+            return  res.render('Fornecedor/infoFornecedor.html', {fornecedor, ferramentas, insumos})
+        } catch (error) {
+            return next(error)
+        }
+        
+    },
+    async inabilitarFornecedor(req, res, next){
+        try {
+            // Excluindo fornecedor da tabela Fornecedores_Produtos
+            await knex('Fornecedores_Produtos')
+            .where('cod_fornecedor', codigoFornecedor)
+            .del()
+
+            // Pesquiso os Fornecedores vinculdos a plantacao
+            const fornecedoresProduto = await knex('Fornecedores_Produtos')
+            .where('cod_plantacao', Number(local('plantacao')))
+            .select()
+   
+            // Separar apenas os códigos das plantações
+            var codsFornecedor = [];
+            for (var i = 0; i < fornecedoresProduto.length; i++) {
+                codsFornecedor.push(fornecedoresProduto[i].cod_fornecedor)      
+            }
+       
+            // Buscar os dados dos fornecedores
+            const fornecedores = await knex('Fornecedores')
+            .whereIn('cod_fornecedor', codsFornecedor)
+            .select()
+                              
+            return res.render('Fornecedor/fornecedor.html', {fornecedores})
+
+        } catch (error) {
+            next(error)
+        }
+    },
+
     // CriarFornecedor
     async criarFornecedor(req,res, next) {
         try {
@@ -305,7 +405,6 @@ module.exports = {
             next(error)
         }
     },
-
     async salvarDados(req,res, next) {
         try {
 
@@ -315,7 +414,6 @@ module.exports = {
         }
         
     },
-
     async cadastrarFornecedorProduto(req,res, next) {
         try {
 
@@ -344,7 +442,8 @@ module.exports = {
                     'cod_plantacao': Number(local('plantacao')),
                     'dia_entrega': insumoFornecedor[index].diaEntrega,
                     'qualidade_produto': insumoFornecedor[index].qualidadeProduto,
-                    'contagem_produto': insumoFornecedor[index].contagemProduto
+                    'contagem_produto': insumoFornecedor[index].contagemProduto,
+                    'tipo_produto': 'INSUMO',
                 })
             }
 
@@ -357,6 +456,7 @@ module.exports = {
                     'dia_entrega': ferramentaFornecedor[index].diaEntrega,
                     'qualidade_produto': ferramentaFornecedor[index].qualidadeProduto,
                     'contagem_produto': 'U', 
+                    'tipo_produto': 'FERRAMENTA',
                 })
             }
 

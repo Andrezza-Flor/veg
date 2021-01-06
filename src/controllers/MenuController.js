@@ -615,11 +615,15 @@ module.exports = {
             .where('cod_balanco', codBalanco)
             .select('patrimonio_liquido', 'capital_social')
             
-            const patrimonioLiquido = balanco[0].patrimonio_liquido;
-            const capitalSocial = balanco[0].capital_social;
-            const totalAtivo = ativoCirculante + ativoPermanente;
-            const totalPassivo = passivoCirculante + passivoPermanente;
-                
+            const patrimonioLiquido = (balanco[0].patrimonio_liquido).toFixed(2);
+            const capitalSocial = (balanco[0].capital_social).toFixed(2);
+            const totalAtivo = (ativoCirculante + ativoPermanente).toFixed(2);
+            const totalPassivo = (passivoCirculante + passivoPermanente).toFixed(2);
+
+            ativoCirculante = ativoCirculante.toFixed(2)
+            ativoPermanente = ativoPermanente.toFixed(2)
+            passivoCirculante = passivoCirculante.toFixed(2)
+            passivoPermanente = passivoPermanente.toFixed(2)
 
             return res.render('Balanco/balanco.html', { ativoCirculante, ativoPermanente, totalAtivo, passivoCirculante, passivoPermanente, totalPassivo, patrimonioLiquido, capitalSocial})
         } catch(error) {
@@ -632,14 +636,19 @@ module.exports = {
             var totalEntrada = 0
             for (let index = 0; index < entradas.length; index++) {
                 totalEntrada = entradas[index].valor_entrada + totalEntrada;
+                entradas[idex].valor_entrada = (entradas[idex].valor_entrada).toFixed(2)
             }
+
+            totalEntrada = totalEntrada.toFixed(2)
 
             const saidas = await apresentacaoSaidas()
             var totalSaida = 0
             for (let index = 0; index < saidas.length; index++) {
                 totalSaida = saidas[index].valor_saida + totalSaida;
-                
+                saidas[index].valor_saida = (saidas[index].valor_saida).toFixed(2)
             }
+
+            totalSaida = totalSaida.toFixed(2)
 
             // Preparando o parâmetro mesAtual
             var dataAtual = new Date();
@@ -660,42 +669,83 @@ module.exports = {
                 fluxoCaixa = await criarFluxoCaixa(mesReferencia)
             } 
 
-            const capitalInicial = fluxoCaixa[0].capital_inicial;
-            const saldoOperacional = fluxoCaixa[0].saldo_operacional;
-            const saldoTrasportar = fluxoCaixa[0].saldo_transportar;
+            const capitalInicial = (fluxoCaixa[0].capital_inicial).toFixed(2);
+            const saldoOperacional = (fluxoCaixa[0].saldo_operacional).toFixed(2);
+            const saldoTrasportar = (fluxoCaixa[0].saldo_transportar).toFixed(2);
                 
             return  res.render('FluxoCaixa/fluxoCaixa.html', {entradas, saidas, totalEntrada, totalSaida, mesAtual, capitalInicial, saldoOperacional, saldoTrasportar})
         } catch (error) {
             next(error)
         }
         
-    },   
-    async fornecedor(req, res, next){
+    }, 
+
+    async compra(req,res, next) {
         try {
+           
+            return  res.render('Compra/compra.html')
+
+        } catch (error) {
+            next(error)
+        }   
+    }, 
+     async fornecedor(req, res, next){
+        try {
+            // Pesquiso os Fornecedores vinculdos a plantacao
             const fornecedoresProduto = await knex('Fornecedores_Produtos')
             .where('cod_plantacao', Number(local('plantacao')))
             .select()
 
+            // Separar apenas os códigos das plantações
             var codsFornecedor = [];
-            var igual = false;
             for (var i = 0; i < fornecedoresProduto.length; i++) {
-
-                codsFornecedor.push(fornecedoresProduto[i].cod_fornecedor)
-                         
+                codsFornecedor.push(fornecedoresProduto[i].cod_fornecedor)      
             }
 
+            // Buscar os dados dos fornecedores
             const fornecedores = await knex('Fornecedores')
             .whereIn('cod_fornecedor', codsFornecedor)
             .select()
-
-            console.log(fornecedores)
-
                        
             return res.render('Fornecedor/fornecedor.html', {fornecedores})
         } catch (error) {
             next(error)
         }
     },
+
+    async venda(req,res, next) {
+        try {
+            // Preparar a lista de itens no armazém
+            const codPlantacao = Number(local('plantacao'))
+            const listaHortalica = await knex('Armazens')
+            .where({'cod_Plantacao': codPlantacao})
+            .whereNot({'Armazens.valor_Hortalica': 0})
+            .whereNot({'Armazens.quant_Restante_Hortalica': 0})
+            .join('Hortalicas', 'Hortalicas.cod_Hortalica', '=', 'Armazens.cod_Hortalica')
+            .select('Armazens.cod_Posicao_Armazem', 
+                    'Hortalicas.nome_Hortalica', 
+                    'Armazens.quant_Restante_Hortalica', 
+                    'Hortalicas.contagem_Hortalica', 
+                    'Armazens.valor_Hortalica')
+            
+            return  res.render('venda.html', {listaHortalica})
+        } catch (error) {
+            next(error)
+        }
+        
+    },
+
+    async plantacao(req,res, next) {
+        try {
+            
+            return  res.render('Plantacao/plantacao.html')
+        } catch (error) {
+            next(error)
+        }
+        
+    },
+  
+
     async celeiro(req,res, next) {
         try {
             const codPlantacao = Number(local('plantacao'))
@@ -750,61 +800,14 @@ module.exports = {
                 var dataTabela = new Date(financiamentos[index].dt_financiamento);
                
                 financiamentos[index].dt_financiamento = dataTabela.getDate()+ ' / ' + (dataTabela.getMonth()+1)+ ' / ' + (dataTabela.getFullYear())
+            
+                financiamentos[index].valor_financiamento = (financiamentos[index].valor_financiamento).toFixed(2)
             }
 
             return res.render('Financiamento/financiamento.html', {financiamentos})
         } catch (error) {
             next(error)
         }   
-    },
-    async compra(req,res, next) {
-        try {
-            // Trazendo dados da tabela
-            const codPlantacao = Number(local('plantacao'))
-            const listaPedido = await knex('Pedidos_Compra')
-            .where({'cod_Plantacao': codPlantacao})
-            .where({'status_Pedido': 'esperando'})
-            .join('Fornecedores', 'Fornecedores.cod_Fornecedor', 'Pedidos_Compra.cod_Fornecedor')
-            .select('Pedidos_Compra.cod_Pedido_Compra', 'Pedidos_Compra.dt_Pedido_Compra', 'Fornecedores.nome_Fornecedor')
-        
-            for (let index = 0; index < listaPedido.length; index++) {
-                const dt = String(listaPedido[index].dt_Pedido_Compra)
-                const mes = dt.slice(4, 7)
-                const dia = dt.slice(8,10)
-                const ano = dt.slice(11, 15)
-
-                const data = dia + ' de ' + mes + '. ' + ano
-
-                listaPedido[index].dt_Pedido_Compra = data;                
-            }       
-
-            // Reiderizando da página para receber os dados
-            return  res.render('compra.html', {listaPedido})
-
-        } catch (error) {
-            next(error)
-        }   
-    },
-    async venda(req,res, next) {
-        try {
-            // Preparar a lista de itens no armazém
-            const codPlantacao = Number(local('plantacao'))
-            const listaHortalica = await knex('Armazens')
-            .where({'cod_Plantacao': codPlantacao})
-            .whereNot({'Armazens.valor_Hortalica': 0})
-            .whereNot({'Armazens.quant_Restante_Hortalica': 0})
-            .join('Hortalicas', 'Hortalicas.cod_Hortalica', '=', 'Armazens.cod_Hortalica')
-            .select('Armazens.cod_Posicao_Armazem', 
-                    'Hortalicas.nome_Hortalica', 
-                    'Armazens.quant_Restante_Hortalica', 
-                    'Hortalicas.contagem_Hortalica', 
-                    'Armazens.valor_Hortalica')
-            
-            return  res.render('venda.html', {listaHortalica})
-        } catch (error) {
-            next(error)
-        }
-        
     },
     async colaborador(req,res, next) {
         try {
@@ -822,34 +825,6 @@ module.exports = {
             return  res.render('colaborador.html', {listaColaborador})
         } catch (error) {
             return next(error)
-        }
-        
-    },
-    async estufa(req,res, next) {
-        try {
-            // Preparar parâmetro produto
-            const codPlantacao = Number(local('plantacao'))
-
-            // Preparando parâmetro produção
-            const producao = await knex('Plantio')
-            .where({'cod_Plantacao': codPlantacao})
-            .where({'status_Plantio':'plantado'})
-            .where({'tipo_Plantio': 'plantar'})
-            .join('Hortalicas', 'Hortalicas.cod_Insumo', 'Plantio.cod_Insumo')
-            .select('Hortalicas.nome_Hortalica', 'Plantio.quant_Plantada', 'Plantio.dt_Plantio', 'Plantio.cod_Plantacao_Hortalica')
-
-            for (let i = 0; i < producao.length; i++) {
-                const now = new Date(); // Data de hoje
-                const past = new Date(producao[i].dt_Plantio); // data do Plantio
-                const diff = Math.abs(now.getTime() - past.getTime()); // Subtrai uma data pela outra
-                const days = Math.ceil(diff / (1000 * 60 * 60 * 24)); 
-
-                producao[i].dt_Plantio = days
-            }
-
-            return  res.render('estufa.html', {producao})
-        } catch (error) {
-            next(error)
         }
         
     },
@@ -885,21 +860,27 @@ module.exports = {
 
             var data = dia + ' de ' + mes + '. ' + ano
 
-            dadosPerfil[0].dt_Admisso_Usuario = data;
+            dadosPerfil[0].dt_admisso_usuario = data;
 
 
-            var dt = String(dadosPerfil[0].dt_Nasc_Usuario)
+            var dt = String(dadosPerfil[0].dt_nasc_usuario)
             var mes = dt.slice(4, 7)
             var dia = dt.slice(8,10)
             var ano = dt.slice(11, 15)
 
             var data = dia + ' de ' + mes + '. ' + ano
 
-            dadosPerfil[0].dt_Nasc_Usuario = data;
+            dadosPerfil[0].dt_nasc_usuario = data;
             
             const usuario = dadosPerfil[0]
 
-            return res.render('perfil.html', { usuario });
+            const usuarios = await knex('Logins')
+            .where('cod_plantacao', Number(local('plantacao')))
+            .select()
+
+            var inabilitar = usuarios.length;
+
+            return res.render('Perfil/perfil.html', { usuario, inabilitar });
 
         } catch (error) {
             next(error);

@@ -79,44 +79,35 @@
     
     <div class="main">
         <h1>
-            Sacar
-            <a href="/ativoCirculante">
+            Plano de Prdução
+            <a href="/plantacao">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
-       
-        
-        <form name="FormConta" action="/sacarValor" method="POST">
 
-            <fieldset name="dadosConta" class="dados-Top">
+        <form name="FormPlanoProducao" action="/planoProducao" method="POST">
+
+            <fieldset name="listaFornecedor" class="dados-Top">
                 <div class="title">
-                    <legend>Escolha uma conta</legend>
+                    <legend>Escolha uma Plano de Produção</legend>
                 </div>
                 <div class="write-block">
-                    <label for="codConta">Conta:</label>
-                    <select name="codConta" id="codConta" required>
+                    <label for="codPlano">Plano de Produção:</label>
+                    <select name="codPlano" id="codPlano" required>
                         <option value="" disable="" hidden="">Selecione uma opção</option>
-                        {%for conta in contas%}
-                            <option value={{conta.cod_conta}}>CONTA {{conta.tipo_conta}} {{conta.nome_banco}}</option> 
+                        {%for plano in planosProducao%}
+                            <option value={{plano.cod_plano}}>{{plano.nome_plano}}</option> 
                         {%endfor%}
                     </select>
-                </div>                
+                </div>
                 <button type="submit" class="btn_calcular" name="btn_calcular">Selecionar</button>
-            </fieldset> 
-                           
-        </form>        
+            </fieldset>         
+        </form>    
+        
+        <div class="acoes-n-banco">
+            <a href="/criarPlanoProducao" id="cadastrar-banco"> <p>Criar Plano</p> </a>
+        </div>
     </div>
-
-    
 </body>
-<script language="JavaScript">
-    function semCarencia() {
-        document.getElementById('valor-carencia').style.visibility = 'hidden';
-    }
-
-    function comCarencia() {
-        document.getElementById('valor-carencia').style.visibility = 'visible';
-    }
-</script>
 </html>

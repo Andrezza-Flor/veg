@@ -16,29 +16,63 @@
 <body>
     <div class="menu">
         <h1>Escolha uma opção</h1>
-        <div class="botoes">        
-            <a href="/home" class="button-menu">
-                <img src="/imagem/menu/home.png" alt="Página Pricipal">
-                <p>Página Principal</p>
-            </a>
-       
+        <div class="botoes">               
             <a href="/balanco" class="button-menu">
                 <img src="/imagem/menu/balanco.png" alt="Balanco">
                 <p>Balanço</p>
-             </a>
-             <a href="/fluxoCaixa" class="button-menu">
+            </a>
+
+            <a href="/fluxoCaixa" class="button-menu">
                 <img src="/imagem/menu/caixa.png" alt="Caixa">
                 <p>Fluxo de Caixa</p>
-             </a>
-             <a href="/financiamento" class="button-menu">
+            </a>
+            <a href="/financiamento" class="button-menu">
                 <img src="/imagem/menu/financas.png" alt="Finanças">
                 <p>Financiamento</p>
-             </a>
-              
-            <a href="/" class="button-menu">
-                <img src="/imagem/menu/sair.png" alt="Sair">
-                <p>Sair</p>              
-             </a>             
+            </a>
+            <a href="/compra" class="button-menu">
+                <img src="/imagem/menu/compra.png" alt="Compra">
+                <p>Compra</p>
+            </a>
+            <a href="/venda" class="button-menu">
+                <img src="/imagem/menu/venda.png" alt="Venda">
+                <p>Venda</p>
+            </a>
+            <a href="/plantacao" class="button-menu">
+                <img src="/imagem/menu/plantacao.png" alt="Plantação">
+                <p>Plantação</p>
+            </a>
+            <a href="/celeiro" class="button-menu">
+                <img src="/imagem/menu/celeiro.png" alt="Celeiro">
+                <p>Celeiro</p>
+            </a>
+            <a href="/armazem" class="button-menu">
+                <img src="/imagem/menu/armazem.png" alt="Armazem">
+                <p>Armazém</p>
+            </a>
+            <a href="/colaborador" class="button-menu">
+                <img src="/imagem/menu/colaborador.png" alt="Colaborador">
+                <p>Colaborador</p>
+            </a>
+            <a href="/relatorio" class="button-menu">
+                <img src="/imagem/menu/relatorio.png" alt="Relatório">
+                <p>Relatório</p>
+            </a>
+            <div class="botoes-footer">
+                <a href="/" class="button-menu">
+                    <img src="/imagem/menu/sair.png" alt="Sair"> 
+                </a>  
+                <a href="/home" class="button-menu">
+                    <img src="/imagem/menu/home.png" alt="Página Pricipal">
+                </a> 
+                <a href="/ajuda" class="button-menu">
+                    <img src="/imagem/menu/ajuda.png" alt="Ajuda">
+                </a>
+                <a href="/perfil" class="button-menu">
+                    <img src="/imagem/menu/perfil.png" alt="Perfil">         
+                </a>  
+            </div>
+                       
         </div>   
         
     </div>
@@ -50,13 +84,11 @@
             <tr>
                 <td class="indent">Nome</td>
                 <td class="indent">Valor</td>
-                <td class="indent">Última Atualização</td>
             </tr>
             {%for ativo in ativos%}
                 <tr>
                     <td class="valor">{{ativo.nome_ativo}}</td>
                     <td class="valor">R$ {{ativo.valor_ativo}}</td>
-                    <td class="valor">{{ativo.data_ativo}}</td>
                 </tr>
             {%endfor%}
             <tr>

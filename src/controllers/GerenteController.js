@@ -68,7 +68,7 @@ module.exports = {
                 'saldo_transportar': 0,
             })
 
-            await knex('BalancosPatrimonias').insert({
+            await knex('BalancosPatrimoniais').insert({
                 'cod_plantacao': parseInt(cod[0].cod_plantacao),
                 'ano_referencia': anoReferencia,
                 'valor_Ativo': 0,
@@ -131,7 +131,7 @@ module.exports = {
             data = dia + ' de ' + mes + '. ' + ano
             dadosUsuario.dt_Nasc_Usuario = data; 
 
-        return  res.render('perfilEditar.html', {dadosUsuario})
+        return  res.render('Perfil/perfilEditar.html', {dadosUsuario})
 
         } catch (error) {
             next(error)
@@ -160,32 +160,32 @@ module.exports = {
              })
 
             const dadosPerfil = await knex.from('Usuarios')
-            .where({'Usuarios.email_Usuario': email})
-            .join('Logins', 'Logins.email_Usuario', '=', 'Usuarios.email_Usuario')
-            .select('Usuarios.*', 'Logins.dt_Admisso_Usuario')
+            .where({'Usuarios.email_usuario': email})
+            .join('Logins', 'Logins.email_usuario', '=', 'Usuarios.email_usuario')
+            .select('Usuarios.*', 'Logins.dt_admisso_usuario')
 
-            var dt = String(dadosPerfil[0].dt_Admisso_Usuario)
+            var dt = String(dadosPerfil[0].dt_admisso_usuario)
             var mes = dt.slice(4, 7)
             var dia = dt.slice(8,10)
             var ano = dt.slice(11, 15)
 
             var data = dia + ' de ' + mes + '. ' + ano
 
-            dadosPerfil[0].dt_Admisso_Usuario = data;
+            dadosPerfil[0].dt_admisso_usuario = data;
 
 
-            var dt = String(dadosPerfil[0].dt_Nasc_Usuario)
+            var dt = String(dadosPerfil[0].dt_nasc_usuario)
             var mes = dt.slice(4, 7)
             var dia = dt.slice(8,10)
             var ano = dt.slice(11, 15)
 
             var data = dia + ' de ' + mes + '. ' + ano
 
-            dadosPerfil[0].dt_Nasc_Usuario = data;
+            dadosPerfil[0].dt_nasc_usuario = data;
             
             const usuario = dadosPerfil[0]
 
-            return res.render('perfil.html', { usuario });
+            return res.render('Perfil/perfil.html', { usuario });
         } catch (error) {
             next(error)
         }

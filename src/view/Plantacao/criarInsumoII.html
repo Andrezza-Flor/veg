@@ -79,44 +79,32 @@
     
     <div class="main">
         <h1>
-            Sacar
-            <a href="/ativoCirculante">
+            Hortaliça
+            <a href="/criarItem">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
-       
         
-        <form name="FormConta" action="/sacarValor" method="POST">
-
-            <fieldset name="dadosConta" class="dados-Top">
+        <form action="/criarItemHortalica" method="POST">
+            <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Escolha uma conta</legend>
+                    <legend>Dados da Hortaliça </legend>
+                </div>
+                <div class="read-block">
+                    <label for="nomeInsumo">Nome do Insumo:</label>
+                    <p class="input" name="nomeInsumo">{{ cadastroProduto.nomeInsumo }}</p>
                 </div>
                 <div class="write-block">
-                    <label for="codConta">Conta:</label>
-                    <select name="codConta" id="codConta" required>
-                        <option value="" disable="" hidden="">Selecione uma opção</option>
-                        {%for conta in contas%}
-                            <option value={{conta.cod_conta}}>CONTA {{conta.tipo_conta}} {{conta.nome_banco}}</option> 
-                        {%endfor%}
-                    </select>
-                </div>                
-                <button type="submit" class="btn_calcular" name="btn_calcular">Selecionar</button>
-            </fieldset> 
-                           
-        </form>        
+                    <label for="nomeHortalica">Nome do Hortaliça:</label>
+                    <input type="text" id="nomeHortalica" name="nomeHortalica" required>
+                </div>                             
+            </fieldset>
+
+            <button type="submit" class="btn_calcular" name="btn_calcular">Salvar</button>
+
+        </form> 
+        
     </div>
-
-    
 </body>
-<script language="JavaScript">
-    function semCarencia() {
-        document.getElementById('valor-carencia').style.visibility = 'hidden';
-    }
-
-    function comCarencia() {
-        document.getElementById('valor-carencia').style.visibility = 'visible';
-    }
-</script>
 </html>

@@ -78,45 +78,67 @@
     </div>
     
     <div class="main">
-        <h1>
-            Sacar
-            <a href="/ativoCirculante">
-                <img src="/imagem/voltar.png" alt="">
-                Voltar
-            </a>
-        </h1>
-       
-        
-        <form name="FormConta" action="/sacarValor" method="POST">
-
-            <fieldset name="dadosConta" class="dados-Top">
+        <h1>Plantação</h1>
+        <form action="/detalheInsumo" method="POST">
+            <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Escolha uma conta</legend>
+                    <legend>Busca do produto:</legend>
                 </div>
-                <div class="write-block">
-                    <label for="codConta">Conta:</label>
-                    <select name="codConta" id="codConta" required>
-                        <option value="" disable="" hidden="">Selecione uma opção</option>
-                        {%for conta in contas%}
-                            <option value={{conta.cod_conta}}>CONTA {{conta.tipo_conta}} {{conta.nome_banco}}</option> 
-                        {%endfor%}
-                    </select>
-                </div>                
-                <button type="submit" class="btn_calcular" name="btn_calcular">Selecionar</button>
-            </fieldset> 
-                           
-        </form>        
+                
+                <div class="search-block">
+                    <div class="select">
+                        <label for="codPosicao">Produto:</label>
+                        <select name="codPlantio" id="codPlantio" required>
+                            <option value="" disable="" hidden="">Selecione uma opção</option> 
+                            {%for produto in producao%}
+                                <option value={{produto.cod_Plantacao_Hortalica}}>{{produto.cod_Plantacao_Hortalica}} - {{produto.nome_Hortalica}}</option>
+                            {%endfor%}  
+                        </select>
+                    </div>
+                    <button type="submit" class="salvar">
+                        <img src="/imagem/procurar.png" alt="Buscar">
+                    </button>
+                </div>
+            </fieldset>
+            <fieldset class="dados-Top">
+                <table class="table-Detalhe">
+                    <thead>
+                        <tr>
+                            <th colspan="4">O que está sendo produzido</th>
+                        </tr>
+                        <tr class="head">
+                            <th>Códido</th>
+                            <th>Nome da Produto</th>
+                            <th>Quantidade</th>
+                            <th>Dias de Produção</th>
+                        </tr>
+                        <tr>
+                            {%for produto in producao%}
+                                <tr>
+                                    <td>{{produto.cod_Plantacao_Hortalica}}</td>
+                                    <td>{{produto.nome_Hortalica}}</td>
+                                    <td>{{produto.quant_Plantada}}</td>
+                                    <td>{{produto.dt_Plantio}}</td>
+                                </tr>   
+                            {%endfor%} 
+                        </tr>
+                    </thead>
+                </table>
+            </fieldset>
+
+            <div class="button-main">
+                <a href="/aplicarInsumo">Aplicar Insumo</a>
+            </div>
+        </form>
+
+        <div class="foot-dados-Botton">
+            <div class="aviso-foot">
+                <p>Visualizar os planos de produção</p>
+            </div>
+            <div class="acoes-n-banco">
+                <a href="/planoProducao" id="cadastrar-banco"> <p>Plano do Produção</p> </a>
+            </div>
+        </div>
     </div>
-
-    
 </body>
-<script language="JavaScript">
-    function semCarencia() {
-        document.getElementById('valor-carencia').style.visibility = 'hidden';
-    }
-
-    function comCarencia() {
-        document.getElementById('valor-carencia').style.visibility = 'visible';
-    }
-</script>
 </html>

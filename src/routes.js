@@ -5,17 +5,18 @@ const routes  = express.Router()
 const GerenteController = require('./controllers/GerenteController')
 const LoginController = require('./controllers/LoginController')
 const MenuController = require('./controllers/MenuController')
-const ColaboradorController = require('./controllers/ColaboradorController')
-const AtividadeController = require('./controllers/AtividadeController')
-const CompraController = require('./controllers/ComprasController')
-const EstufaController = require('./controllers/EstufaController')
-const CeleiroController = require('./controllers/CeleiroController')
-const ArmazemController = require('./controllers/ArmazemController')
-const VendaController = require('./controllers/VendaController')
 const FinanciamentoController = require('./controllers/FinanciamentoController')
 const FluxoCaixa = require('./controllers/FluxoCaixaController')
 const Balanco = require('./controllers/BalancoController')
 const Fornecedor = require('./controllers/FornecedorController')
+
+const ColaboradorController = require('./controllers/ColaboradorController')
+const AtividadeController = require('./controllers/AtividadeController')
+const CompraController = require('./controllers/ComprasController')
+const PlantacaoController = require('./controllers/PlantacaoController')
+const CeleiroController = require('./controllers/CeleiroController')
+const ArmazemController = require('./controllers/ArmazemController')
+const VendaController = require('./controllers/VendaController')
 
 routes
 //Login
@@ -72,24 +73,9 @@ routes
     .post('/criarConta', FinanciamentoController.cadastrarConta)
     .get('/salvarFinanciamento', FinanciamentoController.finalizarFinanciamento)
     
-// Compra
-    .get('/compra', MenuController.compra)
-    
-    //Detalhe-Compra
-    .post('/detalhePedido', CompraController.detalhePedido)
-    .get('/entrarCeleiro', CompraController.entrarCeleiro)
-
-    //Comprar
-    .get('/realizarCompra', CompraController.comprar)
-    .post('/buscarFornecedor', CompraController.escolherFornecedor)
-    .get('/comprarInsumo', CompraController.comprarInsumo)
-    .post('/escolherInsumo', CompraController.escolherInsumo)
-    .post('/adicionarItem', CompraController.adicionarItem)
-    .get('/finalizaCompra', CompraController.finalizaCompra)
-    .get('/salvarCompra', CompraController.salvarCompra)
-
 // Fornecedor
     .get('/fornecedor', MenuController.fornecedor)
+    .post('/fornecedor', Fornecedor.apresentarFornecedor)
     .get('/criarFornecedor', Fornecedor.criarFornecedor)
     .post('/criarFornecedor', Fornecedor.salvarFornecedor)
     .post('/adicionarInsumo', Fornecedor.selecionarInsumo)
@@ -97,6 +83,7 @@ routes
     .post('/adicionarFerramenta', Fornecedor.selecionarFerramenta)
     .get('/salvarDados', Fornecedor.salvarDados)
     .get('/cadastrarFornecedor', Fornecedor.cadastrarFornecedorProduto)
+    .get('/inabilitarFornecedor', Fornecedor.inabilitarFornecedor)
 
     // Insumo
     .get('/criarInsumo', Fornecedor.criarInsumo)
@@ -109,7 +96,9 @@ routes
     // Hortaliça
     .post('/criarHortalica', CompraController.criarHortalica)
 
-    // Ferramentas
+// Compra
+    .get('/compra', MenuController.compra)
+
 
 
 
@@ -140,6 +129,21 @@ routes
     .get('/adicionarCliente', VendaController.adicionarCliente)
     .post('/adicionarCliente', VendaController.salvarCliente)
 
+// Plantação
+    .get('/plantacao', MenuController.plantacao)
+    .get('/planoProducao', PlantacaoController.planoProducao)
+    .get('/criarPlanoProducao', PlantacaoController.criarPlanoProducao)
+    .post('/criarPlano', PlantacaoController.adicionarDadosPlano)
+    .post('/adicionarItens', PlantacaoController.adicionarItem)
+    .post('/adicionarAplicacao', PlantacaoController.adicionarAplicacao)
+    .get('/resultadoPlano', PlantacaoController.resultadoPlano)
+    .get('/cadastrarPlano', PlantacaoController.salvarDados)
+    
+    // Cadastrar Insumo
+    .get('/criarItem', PlantacaoController.criarInsumo)
+    .post('/criarItem', PlantacaoController.salvarInsumo)
+    .post('/criarItemHortalica', PlantacaoController.salvarHortalica)
+    
 
 // Colaborador
     .get('/colaborador', MenuController.colaborador)
@@ -150,16 +154,6 @@ routes
     .get('/inabilitarColaborador', ColaboradorController.inabilitar)
     .post('/editarColaborador', ColaboradorController.editar)
     
-
-// Estufa
-    .get('/estufa', MenuController.estufa)
-    .get('/aplicarInsumo', EstufaController.paginaAplicarInsumo)
-    .post('/buscarInsumo', EstufaController.buscarInsumo)
-    .post('/aplicarInsumo', EstufaController.aplicarInsumo)
-    .post('/detalheInsumo', EstufaController.detalhePoduto)
-    .post('/colherInsumo', EstufaController.colherProduto)
-
-
 // Relatório
     .get('/relatorio', MenuController.relatorio) 
 

@@ -78,45 +78,68 @@
     </div>
     
     <div class="main">
-        <h1>
-            Sacar
-            <a href="/ativoCirculante">
-                <img src="/imagem/voltar.png" alt="">
-                Voltar
-            </a>
-        </h1>
-       
-        
-        <form name="FormConta" action="/sacarValor" method="POST">
+        <h1>Compra</h1>
 
-            <fieldset name="dadosConta" class="dados-Top">
+        <form action="/detalhePedido" method="POST">
+            <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Escolha uma conta</legend>
+                    <legend>Lista de Compra</legend>
                 </div>
-                <div class="write-block">
-                    <label for="codConta">Conta:</label>
-                    <select name="codConta" id="codConta" required>
-                        <option value="" disable="" hidden="">Selecione uma opção</option>
-                        {%for conta in contas%}
-                            <option value={{conta.cod_conta}}>CONTA {{conta.tipo_conta}} {{conta.nome_banco}}</option> 
-                        {%endfor%}
-                    </select>
-                </div>                
-                <button type="submit" class="btn_calcular" name="btn_calcular">Selecionar</button>
-            </fieldset> 
-                           
-        </form>        
+
+                <div class="search-block">
+                    <div class="select">
+                        <label for="codPedido">Pedido:</label>
+                        <select name="codPedido" id="codPedido">
+                            <option value="" disable="" hidden="">Selecione uma opção</option> 
+                            {%for pedido in listaPedido%}
+                                <option value={{pedido.cod_Pedido_Compra}}>{{pedido.cod_Pedido_Compra}} - {{pedido.nome_Fornecedor }}</option>
+                            {%endfor%}  
+                        </select>
+                    </div>
+                    <button type="submit" class="salvar">
+                        <img src="/imagem/procurar.png" alt="Buscar">
+                    </button>
+                </div>
+
+            </fieldset>
+            <fieldset class="dados-Button">
+                <table class="table-Detalhe">
+                    <thead>
+                        <tr>
+                            <th colspan="3">Aguardando entrega...</th>
+                        </tr>
+                        <tr class="head">
+                            <th>Codido do Pedido</th>
+                            <th>Nome do Fornecedor</th>
+                            <th>Data do Pedido</th>
+                        </tr>
+                        <tr>
+                            {%for pedido in listaPedido%}
+                                <tr>
+                                    <td>{{pedido.cod_Pedido_Compra}}</td>
+                                    <td>{{pedido.nome_Fornecedor}}</td>
+                                    <td>{{pedido.dt_Pedido_Compra}}</td>
+                                </tr>   
+                            {%endfor%} 
+                        </tr>
+                    </thead>
+                </table>
+            </fieldset>
+            <div class="button-main">
+                <a href="/realizarCompra">Comprar</a>
+            </div>
+        </form>
+
+        <div class="foot-dados-Botton">
+            <div class="aviso-foot">
+                <p>Visualizar os fornecedores</p>
+            </div>
+            <div class="acoes-n-banco">
+                <a href="/fornecedor" id="cadastrar-banco"> <p>Fornecedores</p> </a>
+            </div>
+        </div>
+        
+                
     </div>
-
-    
 </body>
-<script language="JavaScript">
-    function semCarencia() {
-        document.getElementById('valor-carencia').style.visibility = 'hidden';
-    }
-
-    function comCarencia() {
-        document.getElementById('valor-carencia').style.visibility = 'visible';
-    }
-</script>
 </html>

@@ -79,44 +79,77 @@
     
     <div class="main">
         <h1>
-            Sacar
-            <a href="/ativoCirculante">
+            Fornecedor
+            <a href="/fornecedor">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
-       
         
-        <form name="FormConta" action="/sacarValor" method="POST">
-
-            <fieldset name="dadosConta" class="dados-Top">
+        <form>
+            <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Escolha uma conta</legend>
+                    <legend>{{fornecedor[0].nome_fornecedor}}</legend>
                 </div>
-                <div class="write-block">
-                    <label for="codConta">Conta:</label>
-                    <select name="codConta" id="codConta" required>
-                        <option value="" disable="" hidden="">Selecione uma opção</option>
-                        {%for conta in contas%}
-                            <option value={{conta.cod_conta}}>CONTA {{conta.tipo_conta}} {{conta.nome_banco}}</option> 
-                        {%endfor%}
-                    </select>
-                </div>                
-                <button type="submit" class="btn_calcular" name="btn_calcular">Selecionar</button>
-            </fieldset> 
-                           
-        </form>        
+                             
+                <div class="read-block">
+                    <label for="nomeFornecedor">Nome do Fornecedor:</label>
+                    <p class="input">{{fornecedor.nome_fornecedor}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="docFornecedor">CNPJ do Fornecedor:</label>
+                    <p class="input">{{fornecedor.doc_fornecedor}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="telefoneFornecedor">Telefone do Fornecedor:</label>
+                    <p class="input">{{fornecedor.telefone_fornecedor}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="cepFornecedor">CEP do Fornecedor:</label>
+                    <p class="input">{{fornecedor.cep_fornecedor}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="emailFornecedor">E-mail do Fornecedor:</label>
+                    <p class="input">{{fornecedor.email_fornecedor}}</p>
+                </div> 
+                
+            </fieldset>
+
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados dos Produtos</legend>
+                </div>
+
+                <table class="table-Detalhe">
+                    <tr class="head">
+                        <th>Nome</th>
+                        <th>Dias de Entrega</th>
+                        <th>Qualidade</th>
+                    </tr>
+                    
+                    {%for insumo in insumos%}
+                        <tr>
+                            <td>{{insumo.nome_insumo}}</td>
+                            <td>{{insumo.dia_entrega}}</td>
+                            <td>{{insumo.qualidade_produto}}</td>
+                         </tr>   
+                    {%endfor%}  
+                    
+                    {%for ferramenta in ferramentas%}
+                        <tr>    
+                            <td>{{ferramenta.nome_ferramenta}}</td>
+                            <td>{{ferramenta.dia_entrega}}</td>
+                            <td>{{ferramenta.qualidade_produto}}</td>
+                        </tr>   
+                    {%endfor%} 
+                </table>
+            </fieldset>
+        </form>
+            
+        <div class="botoes-fim-cadastro">
+            <a href="/inabilitarFornecedor" id="cancelar-cadastro"> <p>Inabilitar</p> </a>
+            <!-- <a href="/editarFornecedor" id="cadastrar-cadastro"> <p>Editar</p> </a> -->
+        </div>  
     </div>
-
-    
 </body>
-<script language="JavaScript">
-    function semCarencia() {
-        document.getElementById('valor-carencia').style.visibility = 'hidden';
-    }
-
-    function comCarencia() {
-        document.getElementById('valor-carencia').style.visibility = 'visible';
-    }
-</script>
 </html>

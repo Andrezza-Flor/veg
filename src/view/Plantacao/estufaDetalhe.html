@@ -6,7 +6,6 @@
 
     <link rel="stylesheet" href="/style/main.css">
     <link rel="stylesheet" href="/style/mainStyle.css">
-    <link rel="stylesheet" href="/style/pagetable.css">
     <link rel="stylesheet" href="/style/formStyle.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
@@ -78,45 +77,54 @@
     </div>
     
     <div class="main">
-        <h1>
-            Sacar
-            <a href="/ativoCirculante">
-                <img src="/imagem/voltar.png" alt="">
+
+        <h1>Estufa
+            <a href="/estufa">
+                <img src="/imagem/voltar.png" alt="Voltar">
                 Voltar
             </a>
         </h1>
-       
-        
-        <form name="FormConta" action="/sacarValor" method="POST">
 
-            <fieldset name="dadosConta" class="dados-Top">
+        <form action="/colherInsumo" method="POST">
+            <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Escolha uma conta</legend>
+                    <legend>Dados do Produto</legend>
                 </div>
-                <div class="write-block">
-                    <label for="codConta">Conta:</label>
-                    <select name="codConta" id="codConta" required>
-                        <option value="" disable="" hidden="">Selecione uma opção</option>
-                        {%for conta in contas%}
-                            <option value={{conta.cod_conta}}>CONTA {{conta.tipo_conta}} {{conta.nome_banco}}</option> 
-                        {%endfor%}
-                    </select>
-                </div>                
-                <button type="submit" class="btn_calcular" name="btn_calcular">Selecionar</button>
-            </fieldset> 
-                           
-        </form>        
+                <div class="read-block">
+                    <label for="nomeProduto">Nome do Produto:</label>
+                    <p class="input">{{produto.nome_Hortalica}}</p>
+                </div>
+               <div class="write-block">
+                    <label for="quantProduto">Quantidade de produto Colido:</label>
+                    <input type="number" id="quantProduto" name="quantProduto" min='1' required>
+                </div>
+                <div class="read-block">
+                    <label for="dtPlantio">Data de Plantio:</label>
+                    <p class="input">{{produto.dt_Plantio}}</p>
+                </div> 
+                <div class="read-block">
+                    <label for="diasProducao">Dias de Produção:</label>
+                    <p class="input">{{days}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="nomeColaborador">Nome do {{produto.tipo_Usuario}}:</label>
+                    <p class="input">{{produto.nome_Usuario}}</p>
+                </div>
+
+            </fieldset>
+            <div class="foot-dados-Botton">
+                <div class="aviso-foot">
+                    <img src="/imagem/aviso.png" alt="Aviso">
+                    <p>Se o produto já estivar pronto para colher.</p>
+               </div>
+
+                <button class="button-colher">
+                    <img src="/imagem/hortalica.png" alt="Insumo">
+                    <p>Colher Produto</p>
+                </button>
+            </div> 
+
+        </form>
     </div>
-
-    
 </body>
-<script language="JavaScript">
-    function semCarencia() {
-        document.getElementById('valor-carencia').style.visibility = 'hidden';
-    }
-
-    function comCarencia() {
-        document.getElementById('valor-carencia').style.visibility = 'visible';
-    }
-</script>
 </html>

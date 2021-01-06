@@ -24,7 +24,11 @@ async function apresentarAtivoCirculanete(){
         ativos[index].data_ativo = dataAtivo.getDate() + '-' + (dataAtivo.getMonth() + 1) + '-' + dataAtivo.getFullYear()
         
         totalAtivo = totalAtivo + Number(ativos[index].valor_ativo)
+
+        ativos[index].valor_ativo = (ativos[index].valor_ativo).toFixed(2)
     }
+
+    totalAtivo = totalAtivo.toFixed(2)
 
     ativos.splice(1,1);
 
@@ -39,7 +43,7 @@ async function apresentarAtivoCirculanete(){
 
         var banco = {
             nome_ativo:"CONTA " + bancos[index].tipo_conta + " " + bancos[index].nome_banco,
-            valor_ativo: bancos[index].saldo_conta,
+            valor_ativo: (bancos[index].saldo_conta).toFixed(2),
             data_ativo: dtConta.getDate()+"-"+(dtConta.getMonth()+1)+"-"+dtConta.getFullYear(),
         }
         
@@ -418,7 +422,11 @@ module.exports = {
                 ativos[index].data_ativo = dataAtivo.getDate() + '-' + (dataAtivo.getMonth() + 1) + '-' + dataAtivo.getFullYear()
                 
                 totalAtivo = totalAtivo + Number(ativos[index].valor_ativo)
+
+                ativos[index].valor_ativo = (ativos[index].valor_ativo).toFixed(2)
             }
+
+            totalAtivo = totalAtivo.toFixed(2)
 
             return  res.render('Balanco/ativoPermanente.html', {ativos, totalAtivo})
         } catch (error) {
@@ -442,7 +450,11 @@ module.exports = {
                 passivos[index].data_passivo = dataPassivo.getDate() + '-' + (dataPassivo.getMonth() + 1) + '-' + dataPassivo.getFullYear()
                 
                 totalPassivo = totalPassivo + Number(passivos[index].valor_passivo)
+
+                passivos[index].valor_passivo = (passivos[index].valor_passivo).toFixed(2)
             }
+
+            totalPassivo = totalPassivo.toFixed(2)
 
             return  res.render('Balanco/passivoCirculante.html', {passivos, totalPassivo})
         } catch (error) {
@@ -454,10 +466,12 @@ module.exports = {
     // Função de apresentação Passivo Permanente
     async passivoPermanente(req,res, next) {
         try {
+            
+            const dataFinal = dataAtual.getFullYear() + '-'+'12-31'
 
             const passivos = await knex('Passivos')
             .where('tipo_passivo', 'PASSIVO PERMANENTE')
-            .whereBetween('data_passivo', [dataInicio, dataAtual])
+            .whereBetween('data_passivo', [dataInicio, dataFinal])
             .select()
             var totalPassivo = 0
             for (let index = 0; index < passivos.length; index++) {
@@ -466,7 +480,11 @@ module.exports = {
                 passivos[index].data_passivo = dataPassivo.getDate() + '-' + (dataPassivo.getMonth() + 1) + '-' + dataPassivo.getFullYear()
                 
                 totalPassivo = totalPassivo + Number(passivos[index].valor_passivo)
+
+                passivos[index].valor_passivo = (passivos[index].valor_passivo).toFixed(2)
             }
+
+            totalPassivo = totalPassivo.toFixed(2)
 
             return  res.render('Balanco/passivoPermanente.html', {passivos, totalPassivo})
         } catch (error) {

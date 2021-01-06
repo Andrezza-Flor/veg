@@ -60,6 +60,20 @@ body {
     background: var(--color-button-menu-dark);
 }
 
+.botoes-footer {
+    margin-left: 1.5rem;
+    display: flex;
+    padding: 0;
+    width: 100%;
+}
+
+.botoes-footer a.button-menu {
+    display: block;
+    width: 21.5%;
+    margin-left: 0.5rem;
+}
+
+
 img {
     padding-top: 0.5rem;
     padding-bottom: 0.8rem;

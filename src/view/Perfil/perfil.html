@@ -79,44 +79,61 @@
     
     <div class="main">
         <h1>
-            Sacar
-            <a href="/ativoCirculante">
-                <img src="/imagem/voltar.png" alt="">
-                Voltar
-            </a>
+            Perfil
         </h1>
-       
-        
-        <form name="FormConta" action="/sacarValor" method="POST">
 
-            <fieldset name="dadosConta" class="dados-Top">
+        <form>
+            <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Escolha uma conta</legend>
+                    <legend>Dados Pessoais</legend>
                 </div>
-                <div class="write-block">
-                    <label for="codConta">Conta:</label>
-                    <select name="codConta" id="codConta" required>
-                        <option value="" disable="" hidden="">Selecione uma opção</option>
-                        {%for conta in contas%}
-                            <option value={{conta.cod_conta}}>CONTA {{conta.tipo_conta}} {{conta.nome_banco}}</option> 
-                        {%endfor%}
-                    </select>
-                </div>                
-                <button type="submit" class="btn_calcular" name="btn_calcular">Selecionar</button>
-            </fieldset> 
-                           
+                <div class="read-block">
+                    <label for="nomeUsuario">Nome:</label>
+                    <p class="input">{{ usuario.nome_usuario }}</p>
+                </div>
+               <div class="read-block">
+                    <label for="cpfUsuario">CPF:</label>
+                    <p class="input">{{ usuario.cpf_usuario }}</p>
+                </div>
+                <div class="read-block">
+                    <label for="telefoneUsuario">Telefone:</label>
+                    <p class="input">{{ usuario.telefone_usuario }}</p>
+                </div>
+                <div class="read-block">
+                    <label for="dtNascimento">Data de Nascimento:</label>
+                    <p class="input">{{ usuario.dt_nasc_usuario }}</p>
+                </div> 
+            </fieldset>
+
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados da Acesso</legend>
+                </div>
+                <div class="read-block">
+                    <label for="emailUsuario">Email:</label>
+                    <p class="input">{{ usuario.email_usuario }}</p>
+                </div>
+                <div class="read-block">
+                    <label for="funcaoUsuario">Função:</label>
+                    <p class="input">{{ usuario.tipo_usuario }}</p>
+                </div>
+                <div class="read-block">
+                    <label for="dtAdmissao">Data da Admissão:</label>
+                    <p class="input">{{ usuario.dt_admisso_usuario }}</p>
+                </div>
+            </fieldset>
         </form>        
+
+        <div class="botoes-fim-cadastro">
+            {%if inabilitar==1 %}
+                <a href="/inabilitarPerfil" id="cancelar-cadastro"> <p>Inabilitar</p> </a>
+                <a href="/editarPerfil" id="cadastrar-cadastro"> <p>Editar</p> </a>
+            {%else%}
+                <a href="/editarPerfil" id="cadastrar-cadastro"> <p>Editar</p> </a>
+            {%endif%}
+            
+        </div>  
+
     </div>
-
-    
 </body>
-<script language="JavaScript">
-    function semCarencia() {
-        document.getElementById('valor-carencia').style.visibility = 'hidden';
-    }
-
-    function comCarencia() {
-        document.getElementById('valor-carencia').style.visibility = 'visible';
-    }
-</script>
 </html>
