@@ -82,57 +82,34 @@
 
         <form action="/detalhePedido" method="POST">
             <fieldset class="dados-Top">
-                <div class="title">
-                    <legend>Lista de Compra</legend>
-                </div>
+                {%if tamanhoCompra == 0%}
 
-                <div class="search-block">
-                    <div class="select">
-                        <label for="codPedido">Pedido:</label>
-                        <select name="codPedido" id="codPedido">
-                            <option value="" disable="" hidden="">Selecione uma opção</option> 
-                            {%for pedido in listaPedido%}
-                                <option value={{pedido.cod_Pedido_Compra}}>{{pedido.cod_Pedido_Compra}} - {{pedido.nome_Fornecedor }}</option>
-                            {%endfor%}  
-                        </select>
+                <p class="mensagem">Não há nenhuma compra em aberto</p>
+
+                {%else%}
+
+                <div class="conjunto-caixas">
+                    {%for compra in compras%}
+                    <div class="caixa-conteudo">
+                        <p class="title"> {{venda.nome_cliente}}</p>
+                        <p class="conteudo"> <strong>DATA:</strong> {{venda.data_entrega}}</p>
+                        <p class="conteudo"><strong>ITENS: </strong>{{venda.quantidade_produto}}</p>
+                        <a href={{venda.rota}}>Acessar</a>
                     </div>
-                    <button type="submit" class="salvar">
-                        <img src="/imagem/procurar.png" alt="Buscar">
-                    </button>
+                    {%endfor%}
                 </div>
 
+                {%endif%}
+                <a href="/criarCompra" class="button-footer">
+                    <img src="/imagem/compra.png" alt="Comprar">
+                    <p>Comprar</p>
+                </a>
             </fieldset>
-            <fieldset class="dados-Button">
-                <table class="table-Detalhe">
-                    <thead>
-                        <tr>
-                            <th colspan="3">Aguardando entrega...</th>
-                        </tr>
-                        <tr class="head">
-                            <th>Codido do Pedido</th>
-                            <th>Nome do Fornecedor</th>
-                            <th>Data do Pedido</th>
-                        </tr>
-                        <tr>
-                            {%for pedido in listaPedido%}
-                                <tr>
-                                    <td>{{pedido.cod_Pedido_Compra}}</td>
-                                    <td>{{pedido.nome_Fornecedor}}</td>
-                                    <td>{{pedido.dt_Pedido_Compra}}</td>
-                                </tr>   
-                            {%endfor%} 
-                        </tr>
-                    </thead>
-                </table>
-            </fieldset>
-            <div class="button-main">
-                <a href="/realizarCompra">Comprar</a>
-            </div>
         </form>
 
         <div class="foot-dados-Botton">
             <div class="aviso-foot">
-                <p>Visualizar os fornecedores</p>
+                <p>Caso queira cadastrar ou visualizar os seus fornecedores</p>
             </div>
             <div class="acoes-n-banco">
                 <a href="/fornecedor" id="cadastrar-banco"> <p>Fornecedores</p> </a>

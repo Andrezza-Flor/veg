@@ -13,6 +13,7 @@ async function apresentarAtivoCirculanete(){
 
     var ativos = await knex('Ativos')
     .where('tipo_ativo', 'ATIVO CIRCULANTE')
+    .where('cod_balanco', Number(local('balanco')))
     .whereBetween('data_ativo', [dataInicio, dataAtual])
     .select()
 
@@ -441,6 +442,7 @@ module.exports = {
 
             const passivos = await knex('Passivos')
             .where('tipo_passivo', 'PASSIVO CIRCULANTE')
+            .where('cod_balanco', Number(local('balanco')))
             .whereBetween('data_passivo', [dataInicio, dataAtual])
             .select()
             var totalPassivo = 0
@@ -471,6 +473,7 @@ module.exports = {
 
             const passivos = await knex('Passivos')
             .where('tipo_passivo', 'PASSIVO PERMANENTE')
+            .where('cod_balanco', Number(local('balanco')))
             .whereBetween('data_passivo', [dataInicio, dataFinal])
             .select()
             var totalPassivo = 0

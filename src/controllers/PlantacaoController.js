@@ -283,6 +283,16 @@ module.exports = {
                         'tipo_insumo': tipoInsumo,
                     })
 
+                    const codInumo = await knex('Insumos')
+                    .where('nome_insumo', nomeInsumo.toUpperCase())
+                    .select('cod_insumo')
+
+                    await knex('Produtos')
+                    .insert({
+                        'cod_produto': codInumo[0].cod_insumo,
+                        'tipo_produto': 'INSUMO'
+                    })
+
                     const insumoLista = await knex('Insumos')
                     .orderBy('nome_insumo')
                     .select()
@@ -320,6 +330,12 @@ module.exports = {
             const codInumo = await knex('Insumos')
             .where('nome_insumo', cadastroProduto.nomeInsumo)
             .select('cod_insumo')
+
+            await knex('Produtos')
+            .insert({
+                'cod_produto': codInumo[0].cod_insumo,
+                'tipo_produto': 'INSUMO'
+            })
 
             await knex('Hortalicas')
             .insert({

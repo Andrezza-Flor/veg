@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/style/mainStyle.css">
     <link rel="stylesheet" href="/style/pagetable.css">
     <link rel="stylesheet" href="/style/formStyle.css">
+    <link rel="stylesheet" href="/style/atividade.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
 
@@ -76,72 +77,49 @@
         </div>   
         
     </div>
-        
+    
     <div class="main">
-        <h1>Entrada de Caixa</h1>
-        <form action="/entrada" method="POST">
+        <h1>Venda</h1>
+        <form>
             <fieldset class="dados-Top">
-                <div class="title">
-                    <legend>Personalizar Busca</legend>
-                </div>
-                <div class="write-block">
-                    <label for="inicioBusca">Inicio da Busca</label>
-                    <input type="date" id="inicioBusca" name="inicioBusca">
-                </div>
-                <div class="write-block">
-                    <label for="fimBusca">Fim da Busca</label>
-                    <input type="date" id="fimBusca" name="fimBusca">
-                </div>    
-                <button type="submit">
-                   Buscar
-                </button>       
-            </fieldset>
-        </form>
 
-        <form action="/acessarEntrada" method="POST">
-            <fieldset class="dados-Top">
-                <div class="title">
-                    <legend>Buscar Entradas</legend>
-                </div>
-                <div class="search-block">
-                    <div class="select">
-                        <label for="codEntrada">Entradas:</label>
-                        <select name="codEntrada" id="codEntrada" required>
-                            <option value="" disable="" hidden="">Selecione uma opção</option> 
-                            {%for entrada in entradas%}
-                                <option value={{entrada.cod_entrada}}>{{entrada.nome_entrada}} - {{entrada.validade_entrada}}</option>
-                            {%endfor%}
-                        </select>
+                {%if tamanhoVenda == 0%}
+
+                <p class="mensagem">Não há nenhuma venda em aberto</p>
+
+                {%else%}
+
+                <div class="conjunto-caixas">
+                    {%for venda in vendas%}
+                    <div class="caixa-conteudo">
+                        <p class="title"> {{venda.nome_cliente}}</p>
+                        <p class="conteudo"> <strong>DATA:</strong> {{venda.data_entrega}}</p>
+                        <p class="conteudo"><strong>ITENS: </strong>{{venda.quantidade_produto}}</p>
+                        <a href={{venda.rota}}>Acessar</a>
                     </div>
-                    <button type="submit" class="salvar">
-                        Acessar
-                    </button>
-                </div>
-            </fieldset>
-            <fieldset class="dados-Button">
-                <table id="tabela-entrada">
-                    <tr>
-                        <td class="indent">Nome</td>
-                        <td class="indent">Valor</td>
-                        <td class="indent">Data</td>
-                    </tr>
-                    
-                    {%for entrada in entradas%}
-                        <tr>
-                            <td class="valor">{{entrada.nome_entrada}}</td>
-                            <td class="valor">R$ {{entrada.valor_entrada}}</td>
-                            <td class="valor">{{entrada.validade_entrada}}</td>
-                        </tr>
                     {%endfor%}
-                    
-        
-                </table>  
+                </div>
+
+                {%endif%}
+                
+                
+
+                <a href="/criarVenda" class="button-footer">
+                    <img src="/imagem/venda.png" alt="Comprar">
+                    <p>Vender</p>
+                </a>
             </fieldset>
         </form>
 
-        <div class="acoes-n-banco">
-            <a  href="/cadastrarEntrada" id="cadastrar-banco"> <p>Cadastrar Entradas</p> </a>
+        <div class="foot-dados-Botton">
+            <div class="aviso-foot">
+                <p>Caso queira cadastrar ou visualizar os seus clientes</p>
+            </div>
+            <div class="acoes-n-banco">
+                <a href="/cliente" id="cadastrar-banco"> <p>Cliente</p> </a>
+            </div>
         </div>
+
 
     </div>
 </body>

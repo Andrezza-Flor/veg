@@ -97,7 +97,7 @@
                     <div class="select">
                         <label for="codItem">Nome do Item:</label>
                         <select style="width: 65rem;" name="codItem" id="codItem">
-                            <option value="" disable="" hidden="">Selecione uma opição</option> 
+                            <option value="" disable="" hidden="">Selecione uma opção</option> 
                             {%for insumo in insumoLista%}
                                 <option value={{insumo.cod_insumo}}>{{ insumo.nome_insumo }}</option>
                             {%endfor%}  
@@ -108,7 +108,7 @@
                     <div class="select">
                         <label for="contagemItem">Contagem do Item:</label>
                         <select style="width: 65rem;" name="contagemItem" id="contagemItem">
-                            <option value="" disable="" hidden="">Selecione uma opição</option> 
+                            <option value="" disable="" hidden="">Selecione uma opção</option> 
                             <option value="KG">KG</option> 
                             <option value="L">Litro</option>
                             <option value="U">Unidade</option>

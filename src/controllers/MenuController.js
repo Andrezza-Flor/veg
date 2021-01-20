@@ -64,6 +64,7 @@ async function varreduraFluxoCaixa(mesReferencia) {
         // Entradas
     var entradas = await knex('Entradas')
     .whereBetween('validade_entrada', [dataInicio, dataFim])
+    .where('cod_plantacao', Number(local('plantacao')))
     .select()
 
     var totalEntrada = 0;
@@ -74,6 +75,7 @@ async function varreduraFluxoCaixa(mesReferencia) {
         // Saidas
     var saidas = await knex('Saidas')
     .whereBetween('validade_saida', [dataInicio, dataFim])
+    .where('cod_plantacao', Number(local('plantacao')))
     .select()
 
     var totalSaida = 0;
@@ -270,6 +272,8 @@ async function varreduraBalanco(codPlantacao) {
     .where('cod_plantacao', codPlantacao)
     .where('ano_referencia', dataAtual.getFullYear())
     .select();
+
+    local('balanco', String(balanco[0].cod_balanco));
 
     if(balanco.length == 0){
         balanco = await criarBalanco(dataAtual.getFullYear())
@@ -561,6 +565,21 @@ const nomeDosMeses = [
     'DEZEMBRO'
 ]
 
+const nomeDosMesesAbre = [
+    'Jan. ',
+    'Fev. ',
+    'Mar. ',
+    'Abr. ',
+    'Maio ',
+    'Jun. ',
+    'Jul. ',
+    'Ago. ',
+    'Set. ',
+    'Out. ',
+    'Nov. ',
+    'Dez. '
+]
+
 module.exports = {
     
     async home(req, res, next) {
@@ -636,7 +655,7 @@ module.exports = {
             var totalEntrada = 0
             for (let index = 0; index < entradas.length; index++) {
                 totalEntrada = entradas[index].valor_entrada + totalEntrada;
-                entradas[idex].valor_entrada = (entradas[idex].valor_entrada).toFixed(2)
+                entradas[index].valor_entrada = (entradas[index].valor_entrada).toFixed(2)
             }
 
             totalEntrada = totalEntrada.toFixed(2)
@@ -669,6 +688,8 @@ module.exports = {
                 fluxoCaixa = await criarFluxoCaixa(mesReferencia)
             } 
 
+
+
             const capitalInicial = (fluxoCaixa[0].capital_inicial).toFixed(2);
             const saldoOperacional = (fluxoCaixa[0].saldo_operacional).toFixed(2);
             const saldoTrasportar = (fluxoCaixa[0].saldo_transportar).toFixed(2);
@@ -682,14 +703,40 @@ module.exports = {
 
     async compra(req,res, next) {
         try {
-           
-            return  res.render('Compra/compra.html')
+
+            const listaCompras = await knex('Compras')
+            .where('Compras.cod_plantacao', Number(local('plantacao')))
+            .where('status_compra', 'ABERTO')
+            .select()
+
+            var compras = []
+
+            for (let index = 0; index < listaCompras.length; index++) {
+                const itensCompra = await knex('Itens_Compra')
+                .where('cod_compra', listaCompras[index].cod_compra)
+                .select()
+
+                var data = new Date(listaCompras[index].dt_entrega)
+                
+                var compra = {
+                    'nome_fornecedor': listaCompras[index].nome_cliente,
+                    'data_entrega': data.getDate() + ' de ' + nomeDosMesesAbre[data.getMonth()] + data.getFullYear(),
+                    'quantidade_produto': itensCompra.length + ' produtos',
+                    'rota': '/apresentarCompra/' + listaCompras[index].cod_compra
+                }
+
+                compras.push(compra)
+            }
+
+            var tamanhoCompra = compras.length
+            
+            return  res.render('Compra/compra.html', {compras, tamanhoCompra})
 
         } catch (error) {
             next(error)
         }   
     }, 
-     async fornecedor(req, res, next){
+    async fornecedor(req, res, next){
         try {
             // Pesquiso os Fornecedores vinculdos a plantacao
             const fornecedoresProduto = await knex('Fornecedores_Produtos')
@@ -715,24 +762,51 @@ module.exports = {
 
     async venda(req,res, next) {
         try {
-            // Preparar a lista de itens no armazém
-            const codPlantacao = Number(local('plantacao'))
-            const listaHortalica = await knex('Armazens')
-            .where({'cod_Plantacao': codPlantacao})
-            .whereNot({'Armazens.valor_Hortalica': 0})
-            .whereNot({'Armazens.quant_Restante_Hortalica': 0})
-            .join('Hortalicas', 'Hortalicas.cod_Hortalica', '=', 'Armazens.cod_Hortalica')
-            .select('Armazens.cod_Posicao_Armazem', 
-                    'Hortalicas.nome_Hortalica', 
-                    'Armazens.quant_Restante_Hortalica', 
-                    'Hortalicas.contagem_Hortalica', 
-                    'Armazens.valor_Hortalica')
+            const listaVendas = await knex('Vendas')
+            .where('Vendas.cod_plantacao', Number(local('plantacao')))
+            .where('status_venda', 'ABERTO')
+            .join('Clientes', 'Clientes.cod_cliente', 'Vendas.cod_cliente')
+            .select()
+
+            var vendas = []
+
+            for (let index = 0; index < listaVendas.length; index++) {
+                const itensVenda = await knex('Itens_Venda')
+                .where('cod_venda', listaVendas[index].cod_venda)
+                .select()
+
+                var data = new Date(listaVendas[index].dt_entrega)
+                
+                var venda = {
+                    'nome_cliente': listaVendas[index].nome_cliente,
+                    'data_entrega': data.getDate() + ' de ' + nomeDosMesesAbre[data.getMonth()] + data.getFullYear(),
+                    'quantidade_produto': itensVenda.length + ' produtos',
+                    'rota': '/apresentarVenda/' + listaVendas[index].cod_venda
+                }
+
+                vendas.push(venda)
+
+                
+            }
+
+            var tamanhoVenda = vendas.length
             
-            return  res.render('venda.html', {listaHortalica})
+            return  res.render('Venda/venda.html', {vendas, tamanhoVenda})
         } catch (error) {
             next(error)
         }
         
+    },
+    async cliente(req, res, next){
+        try {
+            const listaCliente = await knex('Clientes')
+            .where({'cod_plantacao': Number(local('plantacao'))})
+            .select()
+            
+            return res.render('Cliente/cliente.html', {listaCliente})
+        } catch (error) {
+            next(error)
+        }
     },
 
     async plantacao(req,res, next) {

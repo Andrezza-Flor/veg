@@ -45,55 +45,25 @@ module.exports = {
             const insumos = await knex('Fornecedores_Produtos')
             .where('cod_fornecedor', codFornecedor)
             .where('tipo_produto', 'INSUMO')
-            .join('Insumos', 'Insumos.cod_insumo', '=', 'Fornecedores_Produtos.cod_produto')
+            .join('Produtos', 'Produtos.id_produto', 'Fornecedores_Produtos.id_produto')
+            .join('Insumos', 'Insumos.cod_insumo', '=', 'Produtos.cod_produto')
             .select()
 
-            // Caractercistica das Ferramentas
+            // Caracteristicas do Ferramenta
             const ferramentas = await knex('Fornecedores_Produtos')
             .where('cod_fornecedor', codFornecedor)
+            .join('Produtos', 'Produtos.id_produto', 'Fornecedores_Produtos.id_produto')
+            .join('Ferramentas', 'Ferramentas.cod_ferramenta', '=', 'Produtos.cod_produto')
             .where('tipo_produto', 'FERRAMENTA')
-            .join('Ferramentas', 'Ferramentas.cod_ferramenta', '=', 'Fornecedores_Produtos.cod_produto')
-            .select()         
-
-            return  res.render('Fornecedor/infoFornecedor.html', {fornecedor, ferramentas, insumos})
+            .select()
+            
+            return  res.render('Fornecedor/infoFornecedor.html', {fornecedor, insumos, ferramentas})
         } catch (error) {
             return next(error)
         }
         
     },
-    async pagEditarPlantacao(req,res, next) {
-        try {
-            const {
-                codFornecedor
-            } = req.body
 
-            // Caracteristicas do Fornecedor
-            var fornecedor = await knex('Fornecedores')
-            .where('cod_fornecedor', codFornecedor)
-            .select()
-
-            fornecedor = fornecedor[0];
-
-            // Caracteristicas do Insumo
-            const insumos = await knex('Fornecedores_Produtos')
-            .where('cod_fornecedor', codFornecedor)
-            .where('tipo_produto', 'INSUMO')
-            .join('Insumos', 'Insumos.cod_insumo', '=', 'Fornecedores_Produtos.cod_produto')
-            .select()
-
-            // Caractercistica das Ferramentas
-            const ferramentas = await knex('Fornecedores_Produtos')
-            .where('cod_fornecedor', codFornecedor)
-            .where('tipo_produto', 'FERRAMENTA')
-            .join('Ferramentas', 'Ferramentas.cod_ferramenta', '=', 'Fornecedores_Produtos.cod_produto')
-            .select()         
-
-            return  res.render('Fornecedor/infoFornecedor.html', {fornecedor, ferramentas, insumos})
-        } catch (error) {
-            return next(error)
-        }
-        
-    },
     async inabilitarFornecedor(req, res, next){
         try {
             // Excluindo fornecedor da tabela Fornecedores_Produtos
@@ -196,11 +166,13 @@ module.exports = {
             } = req.body
 
             const nomeInsumo = await knex('Insumos')
-            .where('cod_insumo', codInsumo)
+            .where('Insumos.cod_insumo', codInsumo)
+            .join('Produtos', 'Produtos.cod_produto', 'Insumos.cod_insumo')
+            .where('Produtos.tipo_produto', 'INSUMO')
             .select()
 
             const insumo = {
-                codInsumo: codInsumo,
+                codInsumo: nomeInsumo[0].id_produto,
                 nomeInsumo: nomeInsumo[0].nome_insumo,
                 diaEntrega: diaEntrega,
                 qualidadeProduto: qualidadeProduto,
@@ -246,11 +218,13 @@ module.exports = {
             } = req.body
 
             const nomeFerramenta = await knex('Ferramentas')
-            .where('cod_ferramenta', codFerramenta)
+            .where('Ferramentas.cod_ferramenta', codFerramenta)
+            .join('Produtos', 'Produtos.cod_produto', '=', 'Ferramentas.cod_ferramenta')
+            .where('Produtos.tipo_produto', 'FERRAMENTA')
             .select()
 
             const ferramenta = {
-                codFerramenta: codFerramenta,
+                codFerramenta: nomeFerramenta[0].id_produto,
                 nomeFerramenta: nomeFerramenta[0].nome_ferramenta,
                 diaEntrega: diaEntrega,
                 qualidadeProduto: qualidadeProduto
@@ -299,6 +273,12 @@ module.exports = {
             .where('nome_insumo', cadastroProduto.nomeInsumo)
             .select('cod_insumo')
 
+            await knex('Produtos')
+            .insert({
+                'cod_produto': codInumo[0].cod_insumo,
+                'tipo_produto': 'INSUMO'
+            })
+
             await knex('Hortalicas')
             .insert({
                 'nome_hortalica': nomeHortalica.toUpperCase(),
@@ -310,7 +290,7 @@ module.exports = {
 
             const tamanhoLista = insumoLista.length;
 
-            return res.render('Fornecedor/adicionarInsumo.html', {fornecedor, insumoLista, tamanhoLista, insumosFornecedor})
+            return res.render('Fornecedor/adicionarInsumo.html', {fornecedor, insumoLista, tamanhoLista, insumoFornecedor})
         } catch (error) {
             next(error)
         }
@@ -326,16 +306,23 @@ module.exports = {
             .where('nome_insumo', nomeInsumo.toUpperCase())
             .select();
 
-            console.log(insumo)
-
             if (insumo.length == 0) {
 
-                console.log('não exixte insumo com esse nome')
                 if(tipoInsumo == 'APLICAR'){
                     await knex('Insumos')
                     .insert({
                         'nome_insumo': nomeInsumo.toUpperCase(),
                         'tipo_insumo': tipoInsumo,
+                    })
+
+                    const codInumo = await knex('Insumos')
+                    .where('nome_insumo', nomeInsumo.toUpperCase())
+                    .select('cod_insumo')
+
+                    await knex('Produtos')
+                    .insert({
+                        'cod_produto': codInumo[0].cod_insumo,
+                        'tipo_produto': 'INSUMO'
                     })
 
                     insumoLista = await knex('Insumos')
@@ -388,6 +375,16 @@ module.exports = {
                     'caracteristica_ferramenta': caracteristicaFerramenta.toUpperCase(),
                 })
 
+                const codFerramenta = await knex('Ferramentas')
+                    .where('nome_ferramenta', nomeFerramenta.toUpperCase())
+                    .select('cod_ferramenta')
+
+                await knex('Produtos')
+                .insert({
+                    'cod_produto': codFerramenta[0].cod_ferramenta,
+                    'tipo_produto': 'FERRAMENTA'
+                })
+
                 ferramentaLista = await knex('Ferramentas')
                 .orderBy('nome_ferramenta')
 
@@ -417,7 +414,7 @@ module.exports = {
     async cadastrarFornecedorProduto(req,res, next) {
         try {
 
-            // Cadastrar Fornecedor
+            //Cadastrar Fornecedor
             await knex('Fornecedores')
             .insert({
                 'nome_fornecedor': fornecedor.nomeFornecedor.toUpperCase(),
@@ -437,26 +434,24 @@ module.exports = {
             for (let index = 0; index < insumoFornecedor.length; index++) {
                 await knex('Fornecedores_Produtos')
                 .insert({
-                    'cod_produto': insumoFornecedor[index].codInsumo,
+                    'id_produto': insumoFornecedor[index].codInsumo,
                     'cod_Fornecedor': codFornecedor,
                     'cod_plantacao': Number(local('plantacao')),
                     'dia_entrega': insumoFornecedor[index].diaEntrega,
                     'qualidade_produto': insumoFornecedor[index].qualidadeProduto,
                     'contagem_produto': insumoFornecedor[index].contagemProduto,
-                    'tipo_produto': 'INSUMO',
                 })
             }
 
             for (let index = 0; index < ferramentaFornecedor.length; index++) {
                 await knex('Fornecedores_Produtos')
                 .insert({
-                    'cod_produto': ferramentaFornecedor[index].codFerramenta,
+                    'id_produto': ferramentaFornecedor[index].codFerramenta,
                     'cod_fornecedor': codFornecedor,
                     'cod_plantacao': Number(local('plantacao')),
                     'dia_entrega': ferramentaFornecedor[index].diaEntrega,
                     'qualidade_produto': ferramentaFornecedor[index].qualidadeProduto,
                     'contagem_produto': 'U', 
-                    'tipo_produto': 'FERRAMENTA',
                 })
             }
 

@@ -76,73 +76,88 @@
         </div>   
         
     </div>
-        
+    
     <div class="main">
-        <h1>Entrada de Caixa</h1>
-        <form action="/entrada" method="POST">
-            <fieldset class="dados-Top">
+        <h1>
+            Venda
+            <a href="/venda">
+                <img src="/imagem/voltar.png" alt="">
+                Voltar
+            </a>
+        </h1>
+
+        <form action="/escolherCliente" method="POST">
+
+            <fieldset name="listaFornecedor" class="dados-Top">
                 <div class="title">
-                    <legend>Personalizar Busca</legend>
+                    <legend>Contrato de Venda</legend>
                 </div>
                 <div class="write-block">
-                    <label for="inicioBusca">Inicio da Busca</label>
-                    <input type="date" id="inicioBusca" name="inicioBusca">
+                    <label for="codCliente">Nome do cliente:</label>
+                    <select name="codCliente" id="codCliente" required>
+                        <option value="" disable="" hidden="">Selecione uma opção</option>
+                        {%for cliente in listaCliente%}
+                            <option value={{cliente.cod_cliente}}>{{cliente.nome_cliente}}</option> 
+                        {%endfor%}
+                    </select>
                 </div>
-                <div class="write-block">
-                    <label for="fimBusca">Fim da Busca</label>
-                    <input type="date" id="fimBusca" name="fimBusca">
-                </div>    
-                <button type="submit">
-                   Buscar
-                </button>       
-            </fieldset>
-        </form>
 
-        <form action="/acessarEntrada" method="POST">
-            <fieldset class="dados-Top">
-                <div class="title">
-                    <legend>Buscar Entradas</legend>
+                </br>
+
+                <div class="radio-block">
+                    <label for="entreaga">Tipo da Entrega:</label>
+                    <p>
+                        <label>
+                            <input type="radio" name="entrega" value="COM TRANSPORTE" checked> Sem Transporte
+                        </label>
+                    </p>
+                    <p>
+                        <label>
+                            <input type="radio" name="entrega" value="SEM TRANSPORTE"> Com Transporte
+                        </label>
+                    </p>
                 </div>
-                <div class="search-block">
-                    <div class="select">
-                        <label for="codEntrada">Entradas:</label>
-                        <select name="codEntrada" id="codEntrada" required>
-                            <option value="" disable="" hidden="">Selecione uma opção</option> 
-                            {%for entrada in entradas%}
-                                <option value={{entrada.cod_entrada}}>{{entrada.nome_entrada}} - {{entrada.validade_entrada}}</option>
-                            {%endfor%}
-                        </select>
-                    </div>
-                    <button type="submit" class="salvar">
-                        Acessar
-                    </button>
+                
+                </br>
+                
+                <div class="radio-block">
+                    <label for="entreaga">Tipo de venda:</label>
+                    <p>
+                        <label onclick="imediato()">
+                            <input type="radio" name="venda" value="IMEDIATA" checked> Imediata
+                        </label>
+                    </p>
+                    <p>
+                        <label onclick="encomenda()">
+                            <input type="radio" name="venda" value="SOB ENCOMENDA" > Sob Encomenda
+                        </label>
+                    </p>
                 </div>
-            </fieldset>
-            <fieldset class="dados-Button">
-                <table id="tabela-entrada">
-                    <tr>
-                        <td class="indent">Nome</td>
-                        <td class="indent">Valor</td>
-                        <td class="indent">Data</td>
-                    </tr>
-                    
-                    {%for entrada in entradas%}
-                        <tr>
-                            <td class="valor">{{entrada.nome_entrada}}</td>
-                            <td class="valor">R$ {{entrada.valor_entrada}}</td>
-                            <td class="valor">{{entrada.validade_entrada}}</td>
-                        </tr>
-                    {%endfor%}
-                    
-        
-                </table>  
-            </fieldset>
-        </form>
 
-        <div class="acoes-n-banco">
-            <a  href="/cadastrarEntrada" id="cadastrar-banco"> <p>Cadastrar Entradas</p> </a>
-        </div>
+                <div style="visibility: hidden;" class="write-block" id="dtEntrega">
+                    <label for="dataEntrega">Data da Entrega:</label>
+                    <input type="date" id="dataEntrega" name="dataEntrega" required>
+                </div>
 
+                
+
+                
+                 
+                <button type="submit" class="btn_calcular" name="btn_calcular">Próximo</button>
+            </fieldset>         
+        </form>    
     </div>
-</body>
+
+   </body>
+
+<script language="JavaScript">
+    function imediato() {
+        document.getElementById('dtEntrega').style.visibility = 'hidden';
+    }
+
+    function encomenda() {
+        document.getElementById('dtEntrega').style.visibility = 'visible';
+    }
+</script>
+
 </html>

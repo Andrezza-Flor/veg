@@ -77,3 +77,68 @@
     font-size: 2rem;
     font-family: Poppins;
 } 
+
+/* Configuração das vendas */
+.conjunto-caixas {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2fr 2fr;
+    margin: 2rem;
+
+    width: 70rem;
+    height: 20rem;
+}
+
+.caixa-conteudo {
+    position: relative;
+    margin: 1rem;
+    padding: 0.5rem;
+    display: block;
+    border: solid;
+    border-radius: 0.8rem;
+    border-width: thin;
+
+    width: 80%;
+    height: 80%;
+}
+
+.caixa-conteudo p,
+.caixa-conteudo a {
+    position: relative;
+    font-family: Poppins;
+}
+
+.caixa-conteudo p.title {
+    position: relative;
+    font-size: 1.7rem;
+    display: block;
+    text-align: center;
+
+    border-bottom: solid;
+    border-bottom-width: thin;
+    margin-bottom: 0.5rem;
+}
+
+.caixa-conteudo p.conteudo {
+    position: relative;
+    font-size: 1.3rem;
+    color: var(--color-text);
+    padding-bottom: 0.7rem;
+}
+
+.caixa-conteudo a {
+    position: relative;
+    font-size: 1.7rem;
+    color: #000;
+
+    display: block;
+    text-align: center;
+    background-color: var(--color-secondary);
+    margin: 2rem 2rem;
+    border-radius: 0.8rem;
+}
+
+.caixa-conteudo a:hover {
+    transition: background 0.2s;
+    background: var(--color-secondary-dark);
+}

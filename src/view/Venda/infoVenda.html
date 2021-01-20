@@ -76,73 +76,97 @@
         </div>   
         
     </div>
-        
+    
     <div class="main">
-        <h1>Entrada de Caixa</h1>
-        <form action="/entrada" method="POST">
+        <h1>
+            Venda
+            <a href="/escolherHortalica">
+                <img src="/imagem/voltar.png" alt="">
+                Voltar
+            </a>
+        </h1>
+        
+        <form>
             <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Personalizar Busca</legend>
+                    <legend>Dados da Venda</legend>
                 </div>
-                <div class="write-block">
-                    <label for="inicioBusca">Inicio da Busca</label>
-                    <input type="date" id="inicioBusca" name="inicioBusca">
+                <div class="read-block">
+                    <label for="nomeColaborador">Nome do {{usuario.tipo_usuario}}:</label>
+                    <p class="input">{{venda.nome_usuario}}</p>
                 </div>
-                <div class="write-block">
-                    <label for="fimBusca">Fim da Busca</label>
-                    <input type="date" id="fimBusca" name="fimBusca">
-                </div>    
-                <button type="submit">
-                   Buscar
-                </button>       
+                <div class="read-block">
+                    <label for="dataCompra">Data da Venda:</label>
+                    <p class="input">{{venda.dt_venda}}</p>
+                </div>
             </fieldset>
-        </form>
 
-        <form action="/acessarEntrada" method="POST">
-            <fieldset class="dados-Top">
+            <fieldset class="dados-Botton">
                 <div class="title">
-                    <legend>Buscar Entradas</legend>
+                    <legend>Dados do Clinte</legend>
                 </div>
-                <div class="search-block">
-                    <div class="select">
-                        <label for="codEntrada">Entradas:</label>
-                        <select name="codEntrada" id="codEntrada" required>
-                            <option value="" disable="" hidden="">Selecione uma opção</option> 
-                            {%for entrada in entradas%}
-                                <option value={{entrada.cod_entrada}}>{{entrada.nome_entrada}} - {{entrada.validade_entrada}}</option>
-                            {%endfor%}
-                        </select>
-                    </div>
-                    <button type="submit" class="salvar">
-                        Acessar
-                    </button>
+                <div class="read-block">
+                    <label for="nomeCliente">Nome do Cliente:</label>
+                    <p class="input">{{venda.nome_cliente}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="telefoneCliente">Telefone do Cliente:</label>
+                    <p class="input">{{venda.telefone_cliente}}</p>    
+                </div>
+                <div class="read-block">
+                    <label for="cepCliente">CEP do Cliente:</label>
+                    <p class="input">{{venda.cep_cliente}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="emailCliente">E-mail do Cliente:</label>
+                    <p class="input">{{venda.email_cliente}}</p>
                 </div>
             </fieldset>
-            <fieldset class="dados-Button">
-                <table id="tabela-entrada">
-                    <tr>
-                        <td class="indent">Nome</td>
-                        <td class="indent">Valor</td>
-                        <td class="indent">Data</td>
+
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados da Venda</legend>
+                </div>
+                <div class="read-block">
+                    <label>Data da Venda:</label>
+                    <p class="input">{{venda.dt_venda}}</p>
+                </div>
+                <div class="read-block">
+                    <label>Data da Entrega:</label>
+                    <p class="input">{{venda.dt_entrega}}</p>    
+                </div>
+                <div class="read-block">
+                    <label>Tipo de Entrega:</label>
+                    <p class="input">{{venda.tipo_entrega}}</p>
+                </div>
+            </fieldset>
+
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>LIsta de Produtos:</legend>
+                </div>
+                <table class="table-Detalhe">
+                    <tr class="head">
+                        <th>Nome</th>
+                        <th>Quantidade</th>
+                        <th>Valor Total</th>
                     </tr>
-                    
-                    {%for entrada in entradas%}
+                    {%for item in listaProdutos%}
                         <tr>
-                            <td class="valor">{{entrada.nome_entrada}}</td>
-                            <td class="valor">R$ {{entrada.valor_entrada}}</td>
-                            <td class="valor">{{entrada.validade_entrada}}</td>
+                            <td>{{item.nome_hortalica}}</td>
+                            <td>{{item.quantidade_produto}}</td>
+                            <td>R$ {{item.valor_produto}} </td>
                         </tr>
                     {%endfor%}
                     
-        
-                </table>  
+                </table>
+                <div class="read-block-botton">
+                    <label for="totalCompra">Total da Venda: </label>
+                    <p class="button-input"> <strong>R$ {{venda.total_venda}}</strong></p>
+                </div>
             </fieldset>
-        </form>
-
-        <div class="acoes-n-banco">
-            <a  href="/cadastrarEntrada" id="cadastrar-banco"> <p>Cadastrar Entradas</p> </a>
-        </div>
-
+            
+        </form> 
     </div>
 </body>
 </html>

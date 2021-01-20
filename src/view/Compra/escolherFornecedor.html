@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/mainStyle.css">
+    <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">
+        <h1>Escolha uma opção</h1>
+        <div class="botoes">               
+            <a href="/balanco" class="button-menu">
+                <img src="/imagem/menu/balanco.png" alt="Balanco">
+                <p>Balanço</p>
+            </a>
+
+            <a href="/fluxoCaixa" class="button-menu">
+                <img src="/imagem/menu/caixa.png" alt="Caixa">
+                <p>Fluxo de Caixa</p>
+            </a>
+            <a href="/financiamento" class="button-menu">
+                <img src="/imagem/menu/financas.png" alt="Finanças">
+                <p>Financiamento</p>
+            </a>
+            <a href="/compra" class="button-menu">
+                <img src="/imagem/menu/compra.png" alt="Compra">
+                <p>Compra</p>
+            </a>
+            <a href="/venda" class="button-menu">
+                <img src="/imagem/menu/venda.png" alt="Venda">
+                <p>Venda</p>
+            </a>
+            <a href="/plantacao" class="button-menu">
+                <img src="/imagem/menu/plantacao.png" alt="Plantação">
+                <p>Plantação</p>
+            </a>
+            <a href="/celeiro" class="button-menu">
+                <img src="/imagem/menu/celeiro.png" alt="Celeiro">
+                <p>Celeiro</p>
+            </a>
+            <a href="/armazem" class="button-menu">
+                <img src="/imagem/menu/armazem.png" alt="Armazem">
+                <p>Armazém</p>
+            </a>
+            <a href="/colaborador" class="button-menu">
+                <img src="/imagem/menu/colaborador.png" alt="Colaborador">
+                <p>Colaborador</p>
+            </a>
+            <a href="/relatorio" class="button-menu">
+                <img src="/imagem/menu/relatorio.png" alt="Relatório">
+                <p>Relatório</p>
+            </a>
+            <div class="botoes-footer">
+                <a href="/" class="button-menu">
+                    <img src="/imagem/menu/sair.png" alt="Sair"> 
+                </a>  
+                <a href="/home" class="button-menu">
+                    <img src="/imagem/menu/home.png" alt="Página Pricipal">
+                </a> 
+                <a href="/ajuda" class="button-menu">
+                    <img src="/imagem/menu/ajuda.png" alt="Ajuda">
+                </a>
+                <a href="/perfil" class="button-menu">
+                    <img src="/imagem/menu/perfil.png" alt="Perfil">         
+                </a>  
+            </div>
+                       
+        </div>   
+        
+    </div>
+    
+    <div class="main">
+        <h1>
+            Compra 
+            <a href="/criarCompra">
+                <img src="/imagem/voltar.png" alt="">
+                Voltar
+            </a>
+        </h1>
+
+        <form action="/selecionarFornecedor" method="POST">
+            {%if fornecedorInsumo != 0%}
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend style="font-size: 2.6rem;" >Selecione os fornecedores do <strong>Insumo</strong>: </legend>
+                </div>
+            </fieldset>
+
+
+            {%for insumo in fornecedorInsumo%}
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend> <strong>{{insumo.nome_produto}}</strong> </legend>
+                </div>
+                <div class="radio-block">
+                    <table class="table-Detalhe" id="tabela-venda">
+                        <tr class="head">
+                            <th>Fornecedor</th>
+                            <th>Qualidade</th>
+                            <th>Tempo de Entrega</th>
+                            <th></th>
+                        </tr>
+                        {%for fornecedor in insumo.fornecedor%}
+                            <tr>
+                                <td>{{fornecedor.nome_fornecedor}}</td>                                    
+                                <td>{{fornecedor.qualidade_produto}}</td>
+                                <td> {{fornecedor.dias_entrega}} DIAS </td>
+                                <td>
+                                    <p>
+                                        <label>
+                                            <input type="checkbox" name="produto" value={{fornecedor.rota_selecionar}}> 
+                                        </label>
+                                    </p>
+                                </td>
+                            </tr>
+                        {%endfor%}
+                    </table>
+                    
+                </div>
+            </fieldset>
+            {%endfor%}
+
+            {%endif%}
+            
+            {%if fornecedorFerramenta != 0%}
+
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend style="font-size: 2.6rem;" >Selecione os fornecedores da <strong>Ferramanta</strong>: </legend>
+                </div>
+            </fieldset>
+
+            {%for ferramenta in fornecedorFerramenta%}
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend> <strong>{{ferramenta.nome_produto}}</strong> </legend>
+                </div>
+                <div class="radio-block">
+                    <table class="table-Detalhe" id="tabela-venda">
+                        <tr class="head">
+                            <th>Fornecedor</th>
+                            <th>Qualidade</th>
+                            <th>Tempo de Entrega</th>
+                            <th></th>
+                        </tr>
+                        {%for fornecedor in ferramenta.fornecedor%}
+                            <tr>
+                                <td>{{fornecedor.nome_fornecedor}}</td>                                    
+                                <td>{{fornecedor.qualidade_produto}}</td>
+                                <td> {{fornecedor.dias_entrega}} DIAS </td>
+                                <td>
+                                    <p>
+                                        <label>
+                                            <input type="checkbox" name="produto" value={{fornecedor.rota_selecionar}}> 
+                                        </label>
+                                    </p>
+                                </td>
+                                
+                        {%endfor%}
+                    </table>
+                    
+                </div>
+            </fieldset>
+            {%endfor%}
+            
+            {%endif%}
+            <p  style="font-size: 2rem; font-family: Poppins; color: red;" >{{mensagem}}
+                <label>
+                    <input type="checkbox" name="produto" value=0 style="visibility: hidden;" checked> 
+                </label>
+            </p>
+
+            <button type="submit" class="btn_calcular" name="btn_calcular">Finalizar</button>
+          
+        </form>
+
+    </div>
+</body>
+</html>

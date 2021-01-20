@@ -69,7 +69,7 @@ module.exports = {
             })
 
             await knex('BalancosPatrimoniais').insert({
-                'cod_plantacao': parseInt(cod[0].cod_plantacao),
+                'cod_plantacao': Number(cod[0].cod_plantacao),
                 'ano_referencia': anoReferencia,
                 'valor_Ativo': 0,
                 'valor_Passivo': 0,
@@ -77,25 +77,22 @@ module.exports = {
                 'capital_social': 0,
             })
 
+            const codBalancoAtual = await knex('BalancosPatrimoniais')
+            .where('cod_balanco', Number(cod[0].cod_plantacao))
+            .select()
+
             // Criando o Ativo
             await knex('Ativos')
             .insert({
-                'cod_balanco': codBalancoAtual,
+                'cod_balanco': codBalancoAtual[codBalancoAtual.length - 1].cod_balanco,
+                'cod_plantacao': Number(cod[0].cod_plantacao),
                 'tipo_ativo': 'ATIVO CIRCULANTE',
                 'nome_ativo': 'CAIXA - ' + anoReferencia,
                 'valor_ativo': 0,
                 'data_ativo': dataAtual,
             })
 
-            await knex('Ativos')
-            .insert({
-                'cod_balanco': codBalancoAtual,
-                'tipo_ativo': 'ATIVO CIRCULANTE',
-                'nome_ativo': 'BANCO - ' + anoReferencia,
-                'valor_ativo': 0,
-                'data_ativo': dataAtual,
-            })
-            
+                        
             // Reiderizando a página
             return res.render('loginPage.html')
 

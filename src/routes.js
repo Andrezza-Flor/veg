@@ -9,10 +9,11 @@ const FinanciamentoController = require('./controllers/FinanciamentoController')
 const FluxoCaixa = require('./controllers/FluxoCaixaController')
 const Balanco = require('./controllers/BalancoController')
 const Fornecedor = require('./controllers/FornecedorController')
+const Cliente = require('./controllers/ClienteController')
 
 const ColaboradorController = require('./controllers/ColaboradorController')
 const AtividadeController = require('./controllers/AtividadeController')
-const CompraController = require('./controllers/ComprasController')
+const Compra = require('./controllers/ComprasController')
 const PlantacaoController = require('./controllers/PlantacaoController')
 const CeleiroController = require('./controllers/CeleiroController')
 const ArmazemController = require('./controllers/ArmazemController')
@@ -93,14 +94,32 @@ routes
     .get('/criarFerramenta', Fornecedor.criarFerramenta)
     .post('/criarFerramenta', Fornecedor.salvarFerramenta)
     
-    // Hortaliça
-    .post('/criarHortalica', CompraController.criarHortalica)
-
 // Compra
     .get('/compra', MenuController.compra)
+    .get('/criarCompra', Compra.compra)
+    .post('/apresentarFornecedores', Compra.selecionarFornecedor)
+    .get('/apresentarFornecedor', Compra.apresentarFornecedor)
+    .post('/selecionarFornecedor', Compra.salvarFornecedor)
+    .get('/excluirItemCompra/:id', Compra.excluirItemCompra)
+    .post('/apresentarCompra', Compra.apresentaCompra)
 
 
-
+// Venda
+    .get('/venda', MenuController.venda)
+    .get('/criarVenda', VendaController.vender)
+    .post('/escolherCliente', VendaController.escolherCliente)
+    .post('/escolherHortalica', VendaController.escolherHortalica)
+    .get('/escolherHOrtalica', VendaController.voltarEscolherHortalica)
+    .get('/excluirItem/:id', VendaController.excluirItem)
+    .post('/apresentarVenda', VendaController.apresentarVenda)
+    .post('/salvarVenda', VendaController.cadastarVenda)
+    .get('/apresentarVenda/:id', VendaController.infoVenda)
+   
+    //Cliente
+    .get('/cliente', MenuController.cliente)
+    .post('/cliente', Cliente.apresentarCliente)
+    .get('/criarCliente', Cliente.criarCliente)
+    .post('/salvarCliente', Cliente.salvarCliente)
 
 
 
@@ -113,21 +132,7 @@ routes
     .get('/editarHortalica', ArmazemController.paginaEdicao)
     .post('/editarHortalica', ArmazemController.editarHortalica)
 
-// Venda
-    .get('/venda', MenuController.venda)
-    
-    //Vender
-    .get('/escolherCliete', VendaController.vender)
-    .post('/escolherCliente', VendaController.escolherCliente)
-    .get('/escolherHortalica', VendaController.buscaHortalica)
-    .post('/escolherHortalica', VendaController.escolherHortalica)
-    .post('/adicionarHortalica', VendaController.adicioanarItem)
-    .get('/finalizarVenda', VendaController.finalizarVenda)
-    .get('/salvarVenda', VendaController.salvarVenda)
 
-    //Cliente
-    .get('/adicionarCliente', VendaController.adicionarCliente)
-    .post('/adicionarCliente', VendaController.salvarCliente)
 
 // Plantação
     .get('/plantacao', MenuController.plantacao)
