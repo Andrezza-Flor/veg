@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/style/mainStyle.css">
     <link rel="stylesheet" href="/style/pagetable.css">
     <link rel="stylesheet" href="/style/formStyle.css">
-    <link rel="stylesheet" href="/style/atividade.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
 
@@ -79,49 +78,96 @@
     </div>
     
     <div class="main">
-        <h1>Compra</h1>
-
+        <h1>
+            Informações Compra
+        </h1>
+    
         <form>
             <fieldset class="dados-Top">
-                {%if tamanhoCompra == 0%}
-
-                <p class="mensagem">Não há nenhuma compra em aberto</p>
-
-                {%else%}
-
-                <div class="conjunto-caixas">
-                    {%for compra in compras%}
-                    <div class="caixa-conteudo">
-                        <p class="title"> {{compra.nome_compra}}</p>
-                        <p class="conteudo"> <strong>DATA:</strong> {{compra.data_compra}}</p>
-                        <p class="conteudo"><strong>ITENS: </strong>{{compra.quantidade_produto}}</p>
-                        <a href={{compra.rota}}>Acessar</a>
-                    </div>
-                    {%endfor%}
+                <div class="title">
+                    <legend>Itens da Compra</legend>
                 </div>
-
-                {%endif%}
-
-                <a href="/criarCompra" class="button-footer">
-                    <img src="/imagem/compra.png" alt="Comprar">
-                    <p>Comprar</p>
-                </a>
+                
+                <table class="table-Detalhe">
+                    <tr class="head">
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Total por produto</th>
+                    </tr>
+                    {%for item in comprasInsumo%}
+                        <tr>
+                            <td> <strong>{{item.nome_insumo}}</strong> - {{item.nome_fornecedor}}</td>
+                            <td> {{item.quantidade_item}} {{item.contagem_item}} </td>
+                            <td>R${{item.valor_item}}</td>
+                        </tr>
+                    {%endfor%} 
+                    {%for item in comprasFerramenta%}
+                        <tr>
+                            <td> <strong>{{item.nome_ferramenta}}</strong> - {{item.nome_fornecedor}}</td>
+                            <td> {{item.quantidade_item}} {{item.contagem_item}} </td>
+                            <td>R${{item.valor_item}}</td>
+                        </tr>
+                    {%endfor%} 
+                    <tr>
+                        <td colspan="2">SUBTOTAL: </td>
+                        <td>R$ {{dadosCompra.totalParcial_compra}}</td>
+                    </tr>
+                </table>
                 
             </fieldset>
 
             
         </form>
 
-        <div class="foot-dados-Botton">
-            <div class="aviso-foot">
-                <p>Caso queira cadastrar ou visualizar os seus fornecedores</p>
-            </div>
-            <div class="acoes-n-banco">
-                <a href="/fornecedor" id="cadastrar-banco"> <p>Fornecedores</p> </a>
-            </div>
-        </div>
-        
-                
+        <form>
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados da Compra</legend>
+                </div>
+
+                <table class="table-Detalhe">
+                    <tr class="head">
+                        <th>Parcela Principal</th>
+                        <th>Juros</th>
+                        <th>Parcela Total</th>
+                        <th>Saldo Devedor</th>
+                    </tr>
+                    {%for parcela in parcelamentos%}
+                        <tr>
+                            <td> R${{parcela.parcela_principal}} </td>
+                            <td> R${{parcela.juros}} </td>
+                            <td> R${{parcela.parcela_total}} </td>
+                            <td> R${{parcela.saldo_devedor}} </td>
+                        </tr>
+                    {%endfor%} 
+                    
+                </table>
+
+                <div class="read-block">
+                    <label>Valor do Frete:</label>
+                    <p class="input">R${{dadosCompra.valor_frete}} - Valor incluso na primeira parcela</p>
+                </div> 
+
+                <div class="read-block">
+                    <label>Total da Compra:</label>
+                    <p class="input">R${{dadosCompra.total_compra}}</p>
+                </div> 
+
+                <div class="read-block">
+                    <label>Data da Entrega:</label>
+                    <p class="input">{{dadosCompra.data_entrega}} - <strong>SITUAÇÃO:</strong> {{dadosCompra.status_compra}}</p>
+                </div> 
+
+            </fieldset>   
+
+        </form> 
+
+        <div class="botoes-fim-cadastro">
+            <a href={{dadosCompra.rota_entrada}} id="cadastrar-cadastro"> <p>Chegou</p> </a>
+        </div>  
+
     </div>
 </body>
+
+
 </html>

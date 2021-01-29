@@ -2,6 +2,7 @@ const knex = require('../database');
 const e = require('express');
 const local = require('local-storage');
 const { apresentarCriarFornecedor } = require('./ComprasController');
+const { insert } = require('../database');
 
 async function criarFluxoCaixa(mesReferencia) {
     // Pegando o saldo a transportar do mês anterior 
@@ -223,7 +224,7 @@ async function criarBalanco(anoReferencia){
         'cod_plantacao': Number(local('plantacao')),
         'cod_balanco': codBalancoAtual,
         'tipo_ativo': 'ATIVO CIRCULANTE',
-        'nome_ativo': 'BANCOS - ' + anoReferencia,
+        'nome_ativo': 'BANCO - ' + anoReferencia,
         'valor_ativo': 0,
         'data_ativo': dataAtual,
     })
@@ -263,6 +264,7 @@ async function criarBalanco(anoReferencia){
 
 
 }
+
 async function varreduraBalanco(codPlantacao) {
     // Capturar data atual
     const dataAtual = new Date();
@@ -334,6 +336,50 @@ async function varreduraBalanco(codPlantacao) {
         'valor_ativo': caixaAtivo[0].valor_ativo + totalEntrada,
         'data_ativo': dataAtual,
     })
+
+    // Atualização do Ativo Circulante - CELEIRO
+        // Soma dos valores no celeiro
+    const itensCeleiro = await knex('Celeiros')
+    .where('cod_plantacao', Number(local('plantacao')))
+    .join('Itens_Compra', 'Itens_Compra.cod_itemCompra', '=', 'Celeiros.cod_itemCompra')
+    .select('Celeiros.quantidade_item', 'Itens_Compra.valor_item')
+
+    var totalCeleiro = 0
+    for (let index = 0; index < itensCeleiro.length; index++) {
+        totalCeleiro = totalCeleiro + (itensCeleiro[index].quantidade_item * itensCeleiro[index].valor_item)             
+    }
+
+        // busca do Ativo Permanente
+    var celeiroAtivo = await knex('Ativos')
+    .where('cod_balanco', codBalanco)
+    .where('nome_ativo', ('ESTOQUE NO CELEIRO - ' + dataAtual.getFullYear()))
+    .select('cod_ativo', 'valor_ativo')
+    
+            // Caso não haja Caixa refernce a esse balanco
+    if (celeiroAtivo.length == 0){
+        await knex('Ativos')
+        .insert({
+            'cod_balanco': codBalanco,
+            'cod_plantacao': codPlantacao,
+            'tipo_ativo': 'ATIVO PERMANENTE',
+            'nome_ativo': ('ESTOQUE NO CELEIRO - ' + dataAtual.getFullYear()),
+            'valor_ativo': 0,
+            'data_ativo': dataAtual,
+        });
+    
+        celeiroAtivo = await knex('Ativos')
+        .where('cod_balanco', codBalanco)
+        .where('nome_ativo', ('CAIXA - ' + dataAtual.getFullYear()))
+        .select('cod_ativo', 'valor_ativo')
+    }
+    await knex('Ativos')
+    .where('cod_ativo', celeiroAtivo[0].cod_ativo)
+    .update({
+        'valor_ativo': totalCeleiro,
+        'data_ativo': dataAtual,
+    })
+
+
 
     // Atualização dos Passivos Circulates e Passivos Permanentes
     const saidas = await knex('Saidas')
@@ -711,18 +757,20 @@ module.exports = {
 
             var compras = []
 
-            for (let index = 0; index < listaCompras.length; index++) {
+            for (var i = 0; i < listaCompras.length; i++) {
                 const itensCompra = await knex('Itens_Compra')
-                .where('cod_compra', listaCompras[index].cod_compra)
+                .where('cod_compra', listaCompras[i].cod_compra)
+                // .join('Fornecedores', 'Fornecedores.cod_fornecedor', '=', 'Itens_Compra.cod_fornecedor')
                 .select()
 
-                var data = new Date(listaCompras[index].dt_entrega)
+                var data = new Date(listaCompras[i].dt_compra)              
                 
                 var compra = {
-                    'nome_fornecedor': listaCompras[index].nome_cliente,
-                    'data_entrega': data.getDate() + ' de ' + nomeDosMesesAbre[data.getMonth()] + data.getFullYear(),
+                    'nome_compra': 'COMPRA - ' + i,
+                    'nome_fornecedor': itensCompra[0].nome_fornecedor,
+                    'data_compra': data.getDate() + ' de ' + nomeDosMesesAbre[data.getMonth()] + data.getFullYear(),
                     'quantidade_produto': itensCompra.length + ' produtos',
-                    'rota': '/apresentarCompra/' + listaCompras[index].cod_compra
+                    'rota': '/apresentarCompra/' + listaCompras[i].cod_compra,
                 }
 
                 compras.push(compra)
@@ -822,15 +870,58 @@ module.exports = {
 
     async celeiro(req,res, next) {
         try {
-            const codPlantacao = Number(local('plantacao'))
+            var listaItensI = [];
+            var listaItensII = [];
+
             const listaInsumo = await knex('Celeiros')
-            .where({'cod_Plantacao': codPlantacao})
-            .whereNot({'Celeiros.quant_Insumo': 0})
-            .join('Insumos', 'Insumos.cod_Insumo', 'Celeiros.cod_Insumo')
-            .join('Fornecedores', 'Fornecedores.cod_Fornecedor', 'Celeiros.cod_Fornecedor')
-            .select('Celeiros.cod_Insumo', 'Insumos.nome_Insumo', 'Insumos.contagem_Insumo', 'Celeiros.quant_Insumo', 'Fornecedores.nome_Fornecedor')
+            .where('cod_plantacao', Number(local('plantacao')))
+            .where('Produtos.tipo_produto', 'INSUMO')
+            .join('Produtos', 'Produtos.id_produto', '=', 'Celeiros.cod_item')
+            .join('Insumos', 'Insumos.cod_insumo', '=', 'Produtos.cod_produto')
+            .join('Fornecedores', 'Fornecedores.cod_fornecedor', '=', 'Celeiros.cod_fornecedor')
+            .select()
+
+            for (let index = 0; index < listaInsumo.length; index++) {
+                var data = new Date(listaInsumo[index].validade_insumo)
+
+                var item = {
+                    'rota': '/acessoItemCeleiro/'+listaInsumo[index].cod_posicao,
+                    'nome_item': listaInsumo[index].nome_insumo,
+                    'nome_fornecedor': listaInsumo[index].nome_fornecedor,
+                    'data_validade': data.getDate() + ' ' + nomeDosMesesAbre[data.getMonth()] + ' ' + data.getFullYear(),
+                    'quantidade_item': listaInsumo[index].quantidade_item,
+                    'contagem_item': listaInsumo[index].contagem_item,
+                }    
+                
+                listaItensI.push(item);
+                
+            }
+
+            const listaFerramenta = await knex('Celeiros')
+            .where('cod_plantacao', Number(local('plantacao')))
+            .where('Produtos.tipo_produto', 'FERRAMENTA')
+            .join('Produtos', 'Produtos.id_produto', '=', 'Celeiros.cod_item')
+            .join('Ferramentas', 'Ferramentas.cod_ferramenta', '=', 'Produtos.cod_produto')
+            .join('Fornecedores', 'Fornecedores.cod_fornecedor', '=', 'Celeiros.cod_fornecedor')
+
             
-            return  res.render('celeiro.html', {listaInsumo})
+            for (let index = 0; index < listaFerramenta.length; index++) {
+
+                var item = {
+                    'rota': '/acessoItemCeleiro/'+listaFerramenta[index].cod_posicao,
+                    'nome_item': listaFerramenta[index].nome_ferramenta,
+                    'nome_fornecedor': listaFerramenta[index].nome_fornecedor,
+                    'quantidade_item': listaFerramenta[index].quantidade_item,
+                    'contagem_item': listaFerramenta[index].contagem_item,
+                }    
+                
+                listaItensII.push(item);
+                
+            }
+
+            const tamanhoCeleiro = listaItensI.length + listaItensII.length;
+
+            return  res.render('Celeiro/celeiro.html', {listaItensI, listaItensII, tamanhoCeleiro})
         } catch (error) {
             next(error)
         }

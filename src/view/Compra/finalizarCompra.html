@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/mainStyle.css">
+    <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">
+        <h1>Escolha uma opção</h1>
+        <div class="botoes">               
+            <a href="/balanco" class="button-menu">
+                <img src="/imagem/menu/balanco.png" alt="Balanco">
+                <p>Balanço</p>
+            </a>
+
+            <a href="/fluxoCaixa" class="button-menu">
+                <img src="/imagem/menu/caixa.png" alt="Caixa">
+                <p>Fluxo de Caixa</p>
+            </a>
+            <a href="/financiamento" class="button-menu">
+                <img src="/imagem/menu/financas.png" alt="Finanças">
+                <p>Financiamento</p>
+            </a>
+            <a href="/compra" class="button-menu">
+                <img src="/imagem/menu/compra.png" alt="Compra">
+                <p>Compra</p>
+            </a>
+            <a href="/venda" class="button-menu">
+                <img src="/imagem/menu/venda.png" alt="Venda">
+                <p>Venda</p>
+            </a>
+            <a href="/plantacao" class="button-menu">
+                <img src="/imagem/menu/plantacao.png" alt="Plantação">
+                <p>Plantação</p>
+            </a>
+            <a href="/celeiro" class="button-menu">
+                <img src="/imagem/menu/celeiro.png" alt="Celeiro">
+                <p>Celeiro</p>
+            </a>
+            <a href="/armazem" class="button-menu">
+                <img src="/imagem/menu/armazem.png" alt="Armazem">
+                <p>Armazém</p>
+            </a>
+            <a href="/colaborador" class="button-menu">
+                <img src="/imagem/menu/colaborador.png" alt="Colaborador">
+                <p>Colaborador</p>
+            </a>
+            <a href="/relatorio" class="button-menu">
+                <img src="/imagem/menu/relatorio.png" alt="Relatório">
+                <p>Relatório</p>
+            </a>
+            <div class="botoes-footer">
+                <a href="/" class="button-menu">
+                    <img src="/imagem/menu/sair.png" alt="Sair"> 
+                </a>  
+                <a href="/home" class="button-menu">
+                    <img src="/imagem/menu/home.png" alt="Página Pricipal">
+                </a> 
+                <a href="/ajuda" class="button-menu">
+                    <img src="/imagem/menu/ajuda.png" alt="Ajuda">
+                </a>
+                <a href="/perfil" class="button-menu">
+                    <img src="/imagem/menu/perfil.png" alt="Perfil">         
+                </a>  
+            </div>
+                       
+        </div>   
+        
+    </div>
+    
+    <div class="main">
+        <h1>
+            Compra
+        </h1>
+
+        <form>
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Itens da Compra</legend>
+                </div>
+                
+                <table class="table-Detalhe">
+                    <tr class="head">
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Total por produto</th>
+                    </tr>
+                    {%for item in listaCompra%}
+                        <tr>
+                            <td> <strong>{{item.nome_produto}}</strong> - {{item.nome_fornecedor}}</td>
+                            <td> {{item.quantidade_produto}} {{item.contagem01}} </td>
+                            <td>R${{item.total}}</td>
+                        </tr>
+                    {%endfor%} 
+                    <tr>
+                        <td colspan="2">TOTAL DA COMPRA: </td>
+                        <td>R$ {{dadosCompra.total_compra}}</td>
+                    </tr>
+                </table>
+                
+            </fieldset>
+
+            
+        </form>
+    
+        <form action="/salvarCompra" method="POST">
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Dados do Pagamento</legend>
+                </div>
+
+                <div class="radio-block">
+                    <label for="tipoPagamento">Entrega:</label>
+                    <p>
+                        <label onclick="comFrete()">
+                            <input type="radio" name="entrega" value="COM FRETE" checked> com FRETE
+                        </label>
+                    </p>
+                    <p>
+                        <label onclick="semFrete()">
+                            <input type="radio" name="entrega" value="SEM FRETE"> sem FRETE
+                        </label>
+                    </p>
+                </div>
+
+                <div id="frete"  class="write-block">
+                    <label>Valor do Frete:</label>
+                    <input type="number" name="valorFrete" step=".01" min="0" placeholder="R$ 0000.00" >
+                </div>
+
+                </br>
+
+                <div class="radio-block">
+                    <label for="tipoPagamento">Tipo do Pagamento:</label>
+                    <p>
+                        <label onclick="vista()">
+                            <input type="radio" name="tipoPagamento" value="VISTA"> Pagamento à VISTA
+                        </label>
+                    </p>
+                    <p>
+                        <label onclick="prazo()">
+                            <input type="radio" name="tipoPagamento" value="PRAZO" checked> Pagamento à PRAZO
+                        </label>
+                    </p>
+                </div>
+
+                <div id="parcelamento">
+
+                    <div class="mix-write-block">
+                        <label for="parcelamento">Número de parcelas:</label>
+                        <input type="number" name="numParcelas" min="2" >
+                        <select name="diaPagamento" id="diaPagamento">
+                            <option value=0 disable="" hidden="">Selecione o dia do pagamento</option>
+                            <option value=1> 1° dia</option> 
+                            <option value=2> 2° dia</option> 
+                            <option value=3> 3° dia</option> 
+                            <option value=4> 4° dia</option> 
+                            <option value=5> 5° dia</option> 
+                            <option value=6> 6° dia</option> 
+                            <option value=7> 7° dia</option> 
+                            <option value=8> 8° dia</option> 
+                            <option value=9> 9° dia</option> 
+                            <option value=10> 10° dia</option> 
+                            <option value=11> 11° dia</option> 
+                            <option value=12> 12° dia</option> 
+                            <option value=13> 13° dia</option> 
+                            <option value=14> 14° dia</option> 
+                            <option value=15> 15° dia</option>
+                            <option value=16> 16° dia</option> 
+                            <option value=17> 17° dia</option> 
+                            <option value=18> 18° dia</option> 
+                            <option value=19> 19° dia</option> 
+                            <option value=20> 20° dia</option> 
+                            <option value=21> 21° dia</option> 
+                            <option value=22> 22° dia</option> 
+                            <option value=23> 23° dia</option> 
+                            <option value=24> 24° dia</option> 
+                            <option value=25> 25° dia</option> 
+                            <option value=26> 26° dia</option> 
+                            <option value=27> 27° dia</option> 
+                            <option value=28> 28° dia</option> 
+                            <option value=29> 29° dia</option> 
+                            <option value=30> 30° dia</option>
+                            <option value=31> 31° dia</option> 
+                        </select>
+                    </div>
+    
+                    <div class="radio-block">
+                        <label for="tipoPagamento">Juros:</label>
+                        <p>
+                            <label onclick="comJuros()">
+                                <input type="radio" name="juros" value="COM JUROS" checked> Com Juros
+                            </label>
+                        </p>
+                        <p>
+                            <label onclick="semJuros()">
+                                <input type="radio" name="juros" value="SEM JUROS" > Sem Juros
+                            </label>
+                        </p>
+                    </div>
+
+                    <div id="valorjuros">
+                        <div class="write-block">
+                            <label for="valorJuros">Valor do Juros (%):</label>
+                            <input type="number" name="valorJuros" step="0.1" min="0" placeholder="00.0 %">
+                        </div>
+                    </div>
+                </div>
+
+                
+
+            </fieldset>  
+            
+            <p  style="font-size: 2rem; font-family: Poppins; color: red;" >{{mensagem}}
+
+            <button type="submit" class="btn_calcular" name="btn_calcular">Finalizar</button>
+
+        </form> 
+
+
+        
+
+        
+    </div>
+</body>
+
+<script language="JavaScript">
+    function vista() {
+        document.getElementById('parcelamento').style.visibility = 'hidden';
+        document.getElementById('valorjuros').style.visibility = 'hidden';
+    }
+
+    function prazo() {
+        document.getElementById('parcelamento').style.visibility = 'visible';
+        document.getElementById('valorjuros').style.visibility = 'visible';
+    }
+
+    function semFrete() {
+        document.getElementById('frete').style.visibility = 'hidden';
+    }
+
+    function comFrete() {
+        document.getElementById('frete').style.visibility = 'visible';
+    }
+
+    function semJuros() {
+        document.getElementById('valorjuros').style.visibility = 'hidden';
+    }
+
+    function comJuros() {
+        document.getElementById('valorjuros').style.visibility = 'visible';
+    }
+</script>
+
+</html>

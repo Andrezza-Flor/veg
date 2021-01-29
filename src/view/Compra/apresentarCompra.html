@@ -78,69 +78,82 @@
     </div>
     
     <div class="main">
-        <h1>Balanço Patrimonial</h1>
-
-        <div id="tabela-balanco">
-            <table id="tabela-ativo">
-                <tr class="title">
-                    <td class="title-col" colspan="2">Ativo</th>
-                </tr>
-                <tr>
-                    <td class="indent">Tipo</td>
-                    <td class="indent">Valor</td>
-                </tr>
-                <tr>
-                    <td class="valor"> <a href="/ativoCirculante">Ativo Circulante</a></td>
-                    <td class="valor">R$ {{ativoCirculante}}</td>
-                </tr>
-                <tr>
-                    <td class="valor"><a href="/ativoPermanente">Ativo Permanente</a></td>
-                    <td class="valor">R$ {{ativoPermanente}}</td>
-                </tr>
-                <tr>
-                    <td class="valor" colspan="2">Total: R$ {{totalAtivo}}</td>
-                </tr>
-            </table> 
+        <h1>
+            Resultado Compra
+        </h1>
     
-            <table id="tabela-passivo">
-                <tr class="title">
-                    <td class="title-col" colspan="2">Passivo</th>
-                </tr>
-                <tr>
-                    <td class="indent">Tipo</td>
-                    <td class="indent">Valor</td>
-                </tr>
-                <tr>
-                    <td class="valor"> <a href="/passivoCirculante">Passivo Circulante</a></td>
-                    <td class="valor">R$ {{passivoCirculante}}</td>
-                </tr>
-                <tr>
-                    <td class="valor"><a href="/passivoPermanente">Passivo Permanente</a></td>
-                    <td class="valor">R$ {{passivoPermanente}}</td>
-                </tr>
-                <tr>
-                    <td class="valor" colspan="2">Total: R$ {{totalPassivo}}</td>
-                </tr>
-            </table>  
+        <form>
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Itens da Compra</legend>
+                </div>
+                
+                <table class="table-Detalhe">
+                    <tr class="head">
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Total por produto</th>
+                    </tr>
+                    {%for item in listaCompra%}
+                        <tr>
+                            <td> <strong>{{item.nome_produto}}</strong> - {{item.nome_fornecedor}}</td>
+                            <td> {{item.quantidade_produto}} {{item.contagem01}} </td>
+                            <td>R${{item.total}}</td>
+                        </tr>
+                    {%endfor%} 
+                    <tr>
+                        <td colspan="2">TOTAL DA COMPRA: </td>
+                        <td>R$ {{dadosCompra.total_compra}}</td>
+                    </tr>
+                </table>
+                
+            </fieldset>
 
-            <table id="tabela-patrimonio">
-                <tr class="title">
-                    <td class="title-col" colspan="2">Patrimônio Líquido</th>
-                </tr>
-                <tr>
-                    <td class="indent">Tipo</td>
-                    <td class="indent">Valor</td>
-                </tr>
-                <tr>
-                    <td class="valor">Capital Social</td>
-                    <td class="valor">R$ {{capitalSocial}}</td>
-                </tr>
-                <tr>
-                    <td class="valor">Patrimonio Líquido</td>
-                    <td class="valor">R$ {{patrimonioLiquido}}</td>
-                </tr>
-            </table> 
-        </div>     
+            
+        </form>
+
+        <form>
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados da Compra</legend>
+                </div>
+
+                <table class="table-Detalhe">
+                    <tr class="head">
+                        <th style="padding: 1rem 1rem ;" >Pagamento</th>
+                        <th>Parcela Principal</th>
+                        <th>Juros</th>
+                        <th>Parcela Total</th>
+                        <th>Saldo Devedor</th>
+                    </tr>
+                    {%for parcela in valoresParcelas%}
+                        <tr>
+                            <td> {{parcela.dia_pagamento}} </td>
+                            <td> R${{parcela.parcela_principal}} </td>
+                            <td> R${{parcela.juros}} </td>
+                            <td> R${{parcela.parcela_total}} </td>
+                            <td> R${{parcela.saldo_devedor}} </td>
+                        </tr>
+                    {%endfor%} 
+                    
+                </table>
+
+                {%if dadosCompra.frete > 0%}
+
+                <p id="obs">OBS.: Valor do frete ( R${{dadosCompra.frete}}.00 ) foi somado na primeira parcela.</p>
+                 {%else%}
+                 {%endif%}
+            </fieldset>   
+
+        </form> 
+
+        <div class="botoes-fim-cadastro">
+            <a href="/venda" id="cancelar-cadastro"> <p>Cancelar</p> </a>
+            <a href="/finalizarCompra" id="cadastrar-cadastro"> <p>Cadastrar</p> </a>
+        </div>  
+
     </div>
 </body>
+
+
 </html>

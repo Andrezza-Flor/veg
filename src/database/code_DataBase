@@ -269,8 +269,11 @@ CREATE TABLE Itens_Venda (
 CREATE TABLE Compras (
   cod_compra INT(4) AUTO_INCREMENT,
   dt_compra timestamp NOT NULL DEFAULT current_timestamp(),
-  dt_entrega DATE NOT NULL,
   total_compra DECIMAL(10,2) NOT NULL,
+  juros_compra DECIMAL(10,2) NOT NULL,
+  valor_frete DECIMAL(10,2) NOT NULL,
+  numero_parcela INT(4) NOT NULL,
+  dia_pagamento INT(4) NOT NULL,
   cod_plantacao INT(4) NOT NULL,
   email_usuario VARCHAR(500) NOT NULL,
   status_compra VARCHAR(10) NOT NULL,
@@ -280,29 +283,37 @@ CREATE TABLE Compras (
 );
 
 CREATE TABLE Itens_Compra (
+  cod_itemVenda INT(4) AUTO_INCREMENT,
   cod_item INT(4) NOT NULL,
   cod_fornecedor INT(4) NOT NULL,
   cod_compra INT(4) NOT NULL,
   quantidade_item INT(10) NOT NULL,
   valor_item DECIMAL(10,2) NOT NULL,
-  PRIMARY KEY (cod_item, cod_fornecedor, cod_compra),
+  contagem_item VARCHAR(10) NOT NULL,
+  PRIMARY KEY (cod_itemVenda),
   FOREIGN KEY (cod_compra) REFERENCES Compras(cod_compra),
   FOREIGN KEY (cod_item) REFERENCES Fornecedores_Produtos(id_produto),
   FOREIGN KEY (cod_fornecedor) REFERENCES Fornecedores_Produtos(cod_fornecedor)  
 );
-------------------------------------------PAREI--------------------------------------------
 
 CREATE TABLE Celeiros (
-  cod_posicao_celeiro int(4) AUTO_INCREMENT,
-  cod_Insumo int(4) NOT NULL,
-  cod_Fornecedor int(4) NOT NULL,
-  cod_Plantacao int(4) NOT NULL,
-  quant_Insumo decimal(10,2) NOT NULL,
-  PRIMARY KEY (cod_posicao_celeiro, cod_Insumo,cod_Fornecedor, cod_Plantacao),
-  FOREIGN KEY (cod_Insumo) REFERENCES Fornecedores_Insumos (cod_Insumo),
-  FOREIGN KEY (cod_Fornecedor) REFERENCES Fornecedores_Insumos (cod_Fornecedor),
-  FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes (cod_Plantacao)
+  cod_posicao int(4) AUTO_INCREMENT,
+  cod_itemVenda INT(4) NOT NULL,
+  cod_item int(4) NOT NULL,
+  cod_compra INT(4) NOT NULL,
+  cod_fornecedor int(4) NOT NULL,
+  cod_plantacao INT(4) NOT NULL,
+  quantidade_item decimal(10,2) NOT NULL,
+  validade_insumo DATE,
+  contagem_item VARCHAR(10) NOT NULL,
+  PRIMARY KEY (cod_posicao),
+  FOREIGN KEY (cod_plantacao) REFERENCES Plantacoes(cod_plantacao),
+  FOREIGN KEY (cod_itemVenda) REFERENCES Itens_Compra(cod_itemVenda),
+  FOREIGN KEY (cod_item) REFERENCES Itens_Compra(cod_item),
+  FOREIGN KEY (cod_fornecedor) REFERENCES Itens_Compra(cod_fornecedor),
+  FOREIGN KEY (cod_compra) REFERENCES Itens_Compra(cod_compra)
 );
+------------------------------------------PAREI--------------------------------------------
 
 
 CREATE TABLE Plantio (

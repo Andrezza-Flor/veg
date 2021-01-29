@@ -78,69 +78,52 @@
     </div>
     
     <div class="main">
-        <h1>Balanço Patrimonial</h1>
+        <h1>
+            Entrada no Celeiro
+            <a href={{rota_volta}}>
+                <img src="/imagem/voltar.png" alt="">
+                Voltar
+            </a>
+        </h1>
 
-        <div id="tabela-balanco">
-            <table id="tabela-ativo">
-                <tr class="title">
-                    <td class="title-col" colspan="2">Ativo</th>
-                </tr>
-                <tr>
-                    <td class="indent">Tipo</td>
-                    <td class="indent">Valor</td>
-                </tr>
-                <tr>
-                    <td class="valor"> <a href="/ativoCirculante">Ativo Circulante</a></td>
-                    <td class="valor">R$ {{ativoCirculante}}</td>
-                </tr>
-                <tr>
-                    <td class="valor"><a href="/ativoPermanente">Ativo Permanente</a></td>
-                    <td class="valor">R$ {{ativoPermanente}}</td>
-                </tr>
-                <tr>
-                    <td class="valor" colspan="2">Total: R$ {{totalAtivo}}</td>
-                </tr>
-            </table> 
-    
-            <table id="tabela-passivo">
-                <tr class="title">
-                    <td class="title-col" colspan="2">Passivo</th>
-                </tr>
-                <tr>
-                    <td class="indent">Tipo</td>
-                    <td class="indent">Valor</td>
-                </tr>
-                <tr>
-                    <td class="valor"> <a href="/passivoCirculante">Passivo Circulante</a></td>
-                    <td class="valor">R$ {{passivoCirculante}}</td>
-                </tr>
-                <tr>
-                    <td class="valor"><a href="/passivoPermanente">Passivo Permanente</a></td>
-                    <td class="valor">R$ {{passivoPermanente}}</td>
-                </tr>
-                <tr>
-                    <td class="valor" colspan="2">Total: R$ {{totalPassivo}}</td>
-                </tr>
-            </table>  
+        <form action="/entradaCeleiro" method="POST">
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Dados da Entrada</legend>
+                </div>
 
-            <table id="tabela-patrimonio">
-                <tr class="title">
-                    <td class="title-col" colspan="2">Patrimônio Líquido</th>
-                </tr>
-                <tr>
-                    <td class="indent">Tipo</td>
-                    <td class="indent">Valor</td>
-                </tr>
-                <tr>
-                    <td class="valor">Capital Social</td>
-                    <td class="valor">R$ {{capitalSocial}}</td>
-                </tr>
-                <tr>
-                    <td class="valor">Patrimonio Líquido</td>
-                    <td class="valor">R$ {{patrimonioLiquido}}</td>
-                </tr>
-            </table> 
-        </div>     
+                <div class="radio-block">
+                    <table class="table-Detalhe" id="tabela-venda">
+                        <tr class="head">
+                            <th style="width: 15rem;"  >Item</th>
+                            <th style="width: 20rem;" >Fornecedor</th>
+                            <th>Quantidade</th>
+                            <th>Validade</th>
+                        </tr>
+                        {%for item in insumosCompras%}
+                            <tr>
+                                <td>{{item.nome_insumo}}</td> 
+                                <td>{{item.nome_fornecedor}}</td>                           
+                                <td>{{item.quantidade_item}} {{item.contagem_item}}</td>
+                                <td class="input"><input style="width: 15.3rem;" class="valorProduto" type="date" name="validade"  required> </td>
+                            </tr>
+                        {%endfor%}
+                        {%for item in ferramentasCompras%}
+                            <tr>
+                                <td>{{item.nome_ferramenta}}</td> 
+                                <td>{{item.nome_fornecedor}}</td>                                       
+                                <td>{{item.quantidade_item}} {{item.contagem_item}}</td>
+                                <td> *** </td>
+                            </tr>
+                        {%endfor%}
+                    </table>
+                    
+                </div>
+                
+                <button type="submit" class="btn_calcular" name="btn_calcular">Registrar</button>
+            </fieldset>
+        </form>
+        
     </div>
 </body>
 </html>

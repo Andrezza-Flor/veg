@@ -10,12 +10,13 @@ const FluxoCaixa = require('./controllers/FluxoCaixaController')
 const Balanco = require('./controllers/BalancoController')
 const Fornecedor = require('./controllers/FornecedorController')
 const Cliente = require('./controllers/ClienteController')
+const Compra = require('./controllers/ComprasController')
+const Celeiro= require('./controllers/CeleiroController')
+
 
 const ColaboradorController = require('./controllers/ColaboradorController')
 const AtividadeController = require('./controllers/AtividadeController')
-const Compra = require('./controllers/ComprasController')
 const PlantacaoController = require('./controllers/PlantacaoController')
-const CeleiroController = require('./controllers/CeleiroController')
 const ArmazemController = require('./controllers/ArmazemController')
 const VendaController = require('./controllers/VendaController')
 
@@ -102,6 +103,20 @@ routes
     .post('/selecionarFornecedor', Compra.salvarFornecedor)
     .get('/excluirItemCompra/:id', Compra.excluirItemCompra)
     .post('/apresentarCompra', Compra.apresentaCompra)
+    .post('/salvarCompra', Compra.cadastrarPagamento)
+    .get('/finalizarCompra', Compra.salvarCompra)
+    .get('/apresentarCompra/:id', Compra.mostrarCompra)
+
+// Celeiro
+    .get('/celeiro', MenuController.celeiro)
+    .get('/registroEntrada/:id', Celeiro.entrarItem)
+    .post('/entradaCeleiro', Celeiro.cadastrarItem)
+    .get('/acessoItemCeleiro/:id', Celeiro.acessarItem)
+    .get('/inabilitarItemCeleiro', Celeiro.quantidadeInabilitar)
+    .post('/inabilitarItemCeleiro', Celeiro.inabilitar)
+    .get('/venderItemCeleiro', Celeiro.quantidadeVender)
+    .post('/venderItemCeleiro', Celeiro.vender)
+
 
 
 // Venda
@@ -123,9 +138,7 @@ routes
 
 
 
-// Celeiro
-.get('/celeiro', MenuController.celeiro)
-
+// ------------------------------------------------------------------------
 // Armazem
     .get('/armazem', MenuController.armazem)
     .post('/detalheHortalica', ArmazemController.detalheHortalica)

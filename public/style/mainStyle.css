@@ -337,6 +337,10 @@ a p{
     background-color: var(--color-secondary-dark);
 }
 
+.botao-acao{
+    display: block;
+}
+
 .main a.button-footer:hover{
     transition: 0.2s;
     background-color: var(--color-third-dark);
@@ -549,4 +553,11 @@ p.mensagem {
     font-size: 2rem;
     display: block;
     text-align: center;
+}
+
+p#obs {
+    margin-top: 1rem;
+    font-family: Poppins;
+    font-size: 1.5rem;
+    display: block;
 }

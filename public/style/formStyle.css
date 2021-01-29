@@ -468,7 +468,8 @@ legend {
 }
 
 .btn_calcular,
-.btn_salvar {
+.btn_salvar,
+.btn_inabilitar {
     position: relative;
 
     background-color: var(--color-secondary);
@@ -485,6 +486,16 @@ legend {
     margin-left: 60%;
     margin-top: 2rem;
     padding: 0 2rem;
+}
+
+.btn_inabilitar {
+    background-color: var(--color-button-cancel);
+}
+
+
+.btn_inabilitar:hover {
+    background-color: var(--color-button-cancel-dark);
+    transition: 0.2s;
 }
 
 .btn_calcular:hover,

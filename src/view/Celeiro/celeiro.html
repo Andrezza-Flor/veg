@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/style/mainStyle.css">
     <link rel="stylesheet" href="/style/pagetable.css">
     <link rel="stylesheet" href="/style/formStyle.css">
+    <link rel="stylesheet" href="/style/atividade.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
 
@@ -78,79 +79,41 @@
     </div>
     
     <div class="main">
-        <h1>
-            Resultado da Copra
-        </h1>
-    
-        <form action="" method="POST">
+        <h1>Celeiro</h1>
+        <form>
             <fieldset class="dados-Top">
-                <div class="title">
-                    <legend>Dados do Principais</legend>
+
+                {%if tamanhoCeleiro == 0%}
+
+                <p class="mensagem">Não há nenhuma item no Celeiro</p>
+
+                {%else%}
+
+                <div class="conjunto-caixas">
+                    {%for item in listaItensI%}
+                    <div class="caixa-conteudo">
+                        <p class="title"> {{item.nome_item}}</p>
+                        <p class="conteudo"> <strong>FORNECEDOR:</strong> {{item.nome_fornecedor}}</p>
+                        <p class="conteudo"> <strong>QUANTIDADE:</strong> {{item.quantidade_item}} {{item.contagem_item}} </p>
+                        <p class="conteudo"><strong>VALIDADE: </strong>{{item.data_validade}}</p>
+                        <a href={{item.rota}}>Acessar</a>
+                    </div>
+                    {%endfor%}
+                    {%for item in listaItensII%}
+                    <div class="caixa-conteudo">
+                        <p class="title"> {{item.nome_item}}</p>
+                        <p class="conteudo"> <strong>FORNECEDOR:</strong> {{item.nome_fornecedor}}</p>
+                        <p class="conteudo"> <strong>QUANTIDADE:</strong> {{item.quantidade_item}} {{item.contagem_item}} </p>
+                        <a href={{item.rota}}>Acessar</a>
+                    </div>
+                    {%endfor%}
                 </div>
-                <div class="read-block">
-                    <label for="nomeCliente">Nome do Cliente:</label>
-                    <p class="input">{{dadosVenda.nome_cliente}}</p>
-                </div>
-                <div class="read-block">
-                    <label for="diaEntrega">Data da Entrega:</label>
-                    <p class="input">{{dadosVenda.data_escrita}} - {{dadosVenda.tipo_venda}}</p>
-                </div>
-                <div class="read-block">
-                    <label for="areaProducao">Área de Produção:</label>
-                    <p class="input">{{dadosVenda.area_producao}} m²</p>
-                </div>
-                <div class="read-block">
-                    <label for="diaProducao">Dias Totais de Produção:</label>
-                    <p class="input">{{dadosVenda.dias_producao}}</p>
-                </div>
-                <div class="read-block">
-                    <label for="tipoTransporte">Tipo da Entrega:</label>
-                    <p class="input">{{dadosVenda.tipo_entrega}}</p>
-                </div>
+
+                {%endif%}
                 
             </fieldset>
-
-            
         </form>
 
-        <form action="/salvarVenda" method="POST">
-            <fieldset class="dados-Botton">
-                <div class="title">
-                    <legend>Produtos Selecionados</legend>
-                </div>
-
-                <table class="table-Detalhe">
-                    <tr class="head">
-                        <th>Produto</th>
-                        <th>Quantidade</th>
-                        <th>Valor</th>
-                        <th>Total</th>
-                    </tr>
-                    {%for item in itensVenda%}
-                        <tr>
-                            <td>{{item.nome_hortalica}}</td>
-                            <td>{{item.quantidade_hortalica}} {{item.contagem_hortalica}}</td>
-                            <td>R$ {{item.valor_produto}}</td>
-                            <td>R$ {{item.total_valor}}</td>
-                        </tr>
-                    {%endfor%} 
-                    <tr>
-                        <td colspan="3">Sub Total: </td>
-                        <td>{{dadosVenda.valor_venda}}</td>
-                    </tr>
-                </table>
-                <br>
-                <div class="write-block">
-                    <label for="totalVenda">Total Venda:</label>
-                    <input  class="v" type="number" name="totalVenda"  step=".01" min={{dadosVenda.valor_venda}} value={{dadosVenda.valor_venda}} required>
-                </div>
-
-            </fieldset>   
-            <button type="submit" class="btn_calcular" name="btn_calcular">Continuar</button>
-
-        </form> 
-
-        
     </div>
 </body>
 </html>
