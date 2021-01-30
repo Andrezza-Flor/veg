@@ -264,7 +264,6 @@ async function criarBalanco(anoReferencia){
 
 
 }
-
 async function varreduraBalanco(codPlantacao) {
     // Capturar data atual
     const dataAtual = new Date();
@@ -595,6 +594,27 @@ async function varreduraBalanco(codPlantacao) {
 
     return codBalanco;
 }
+async function varreduraProducao(){
+    const listaProducao = await knex('Producoes')
+    .where('cod_plantacao', Number(local('plantacao')))
+    .where('status_producao', 'ATERTA')
+    .select()
+
+    for (let index = 0; index < listaProducao.length; index++) {
+        const now = new Date(); // Data de hoje
+        const past = new Date(listaProducao[index].dt_inicio); // Outra data no passado
+        const diff = Math.abs(now.getTime() - past.getTime()); // Subtrai uma data pela outra
+        const days = Math.ceil(diff / (1000 * 60 * 60 * 24)); 
+
+        await knex('Producoes')
+        .where('cod_producao', listaProducao[index].cod_producao)
+        .update({
+            'dias_produca': days,
+        })
+        
+        
+    }
+}
 
 const nomeDosMeses = [
     'JANEIRO',
@@ -859,15 +879,72 @@ module.exports = {
 
     async plantacao(req,res, next) {
         try {
+            await varreduraProducao()
+
+            const listaProducao = await knex('Producoes')
+            .where('Producoes.cod_plantacao', Number(local('plantacao')))
+            .where('status_producao', 'ABERTA')
+            .join('Planos_Producao', 'Planos_Producao.cod_plano', '=', 'Producoes.cod_plano')
+            .join('Hortalicas', 'Hortalicas.cod_hortalica', '=', 'Planos_Producao.cod_hortalica')
+            .select(
+                'Producoes.cod_producao',
+                'Producoes.dias_producao',
+                'Planos_Producao.nome_plano'
+            )
+
             
-            return  res.render('Plantacao/plantacao.html')
+            var producoes = []
+            var unidadeProducao;
+
+            for (var i = 0; i < listaProducao.length; i++) {
+                var item = await knex('Itens_Producao')
+                .where('cod_producao', listaProducao[i].cod_producao)
+                .where('status_aplicacao', 'NÃO REALIZADA')
+                .join('Insumos', 'Insumos.cod_insumo', '=', 'Itens_Producao.cod_item')
+                .select()
+
+                if (item.length == 0){
+                    item = await knex('Itens_Producao')
+                    .where('cod_producao', listaProducao[i].cod_producao)
+                    .where('status_aplicacao', 'NÃO REALIZADA')
+                    .join('Insumos', 'Insumos.cod_insumo', '=', 'Itens_Producao.cod_item')
+                    .select()
+
+                    unidadeProducao = {
+                        'nome_plano': listaProducao[i].nome_plano,
+                        'dias_producao': listaProducao[i].dias_producao,
+                        'proxima_etapa': item[0].nome_insumo,
+                        'quantidade': item[0].quantidade_item,
+                        'contagem_item': item[0].contagem_item,
+                        'situacao': 'ATRASADA',
+                        'rota': listaProducao[i].cod_producao
+                    }
+                } else {
+                    unidadeProducao = {
+                        'nome_plano': listaProducao[i].nome_plano,
+                        'dias_producao': listaProducao[i].dias_producao,
+                        'proxima_etapa': item[0].nome_insumo,
+                        'quantidade': item[0].quantidade_item,
+                        'contagem_item': item[0].contagem_item,
+                        'situacao': 'EM DIA',
+                        'rota': listaProducao[i].cod_producao
+                    }
+                }
+
+                
+                
+                producoes.push(unidadeProducao)
+               
+            }
+
+            const tamanhoProducao = producoes.length
+            
+            return  res.render('Producao/plantacao.html', {producoes, tamanhoProducao})
         } catch (error) {
             next(error)
         }
         
     },
-  
-
     async celeiro(req,res, next) {
         try {
             var listaItensI = [];
@@ -927,6 +1004,7 @@ module.exports = {
         }
         
     },
+
     async armazem(req,res, next) {
         try {
              // Preparar a lista de itens no armazém

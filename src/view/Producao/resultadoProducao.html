@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/mainStyle.css">
+    <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">
+        <h1>Escolha uma opção</h1>
+        <div class="botoes">               
+            <a href="/balanco" class="button-menu">
+                <img src="/imagem/menu/balanco.png" alt="Balanco">
+                <p>Balanço</p>
+            </a>
+
+            <a href="/fluxoCaixa" class="button-menu">
+                <img src="/imagem/menu/caixa.png" alt="Caixa">
+                <p>Fluxo de Caixa</p>
+            </a>
+            <a href="/financiamento" class="button-menu">
+                <img src="/imagem/menu/financas.png" alt="Finanças">
+                <p>Financiamento</p>
+            </a>
+            <a href="/compra" class="button-menu">
+                <img src="/imagem/menu/compra.png" alt="Compra">
+                <p>Compra</p>
+            </a>
+            <a href="/venda" class="button-menu">
+                <img src="/imagem/menu/venda.png" alt="Venda">
+                <p>Venda</p>
+            </a>
+            <a href="/plantacao" class="button-menu">
+                <img src="/imagem/menu/plantacao.png" alt="Plantação">
+                <p>Plantação</p>
+            </a>
+            <a href="/celeiro" class="button-menu">
+                <img src="/imagem/menu/celeiro.png" alt="Celeiro">
+                <p>Celeiro</p>
+            </a>
+            <a href="/armazem" class="button-menu">
+                <img src="/imagem/menu/armazem.png" alt="Armazem">
+                <p>Armazém</p>
+            </a>
+            <a href="/colaborador" class="button-menu">
+                <img src="/imagem/menu/colaborador.png" alt="Colaborador">
+                <p>Colaborador</p>
+            </a>
+            <a href="/relatorio" class="button-menu">
+                <img src="/imagem/menu/relatorio.png" alt="Relatório">
+                <p>Relatório</p>
+            </a>
+            <div class="botoes-footer">
+                <a href="/" class="button-menu">
+                    <img src="/imagem/menu/sair.png" alt="Sair"> 
+                </a>  
+                <a href="/home" class="button-menu">
+                    <img src="/imagem/menu/home.png" alt="Página Pricipal">
+                </a> 
+                <a href="/ajuda" class="button-menu">
+                    <img src="/imagem/menu/ajuda.png" alt="Ajuda">
+                </a>
+                <a href="/perfil" class="button-menu">
+                    <img src="/imagem/menu/perfil.png" alt="Perfil">         
+                </a>  
+            </div>
+                       
+        </div>   
+        
+    </div>
+    
+    <div class="main">
+        <h1>
+            Produção            
+        </h1>
+    
+        <form name="FormFinanciamento" action="/criarConta" method="POST">
+            <fieldset  id="dados-Parcelas" class="dados-Botton">
+                <div class="title">
+                    <legend>{{infoPlano.nome_plano}}</legend>
+                </div>
+
+                <div class="read-block">
+                    <label> Dias de Produção</label>
+                    <p class="input">{{infoPlano.dias_producao}} dias</p>
+                </div>
+
+                <div class="read-block">
+                    <label>Área para cultivo</label>
+                    <p class="input">{{infoPlano.area}} m²</p>
+                </div>
+
+                <div class="read-block">
+                    <label>Resultado da Produção</label>
+                    <p class="input"> {{infoPlano.quantidade}} {{infoPlano.contagem_hortalica}} de {{infoPlano.nome_hortalica}}</p>
+                </div>
+
+                    
+            </fieldset>
+
+            <fieldset  id="dados-Parcelas" class="dados-Botton">
+                <div class="title">
+                    <legend>Itens para a produção</legend>
+                </div>
+
+                <table id="tabela-financiamento">
+                    <tr>
+                        <td>Insumo</td>
+                        <td>Quantidade Necessário</td>
+                        <td>Quantidade Atual</td>
+                    </tr>
+                    {%for item in itensPlano%}
+                        <tr>
+                            <td class="{{item.status_item}}">{{item.nome_insumo}}</td>
+                            <td class="{{item.status_item}}">{{item.quantidade_item}} {{item.contagem_item}} </td>
+                            <td class="{{item.status_item}}">{{item.quantidade_insumo}} {{item.contagem_item}} </td>
+                        </tr>
+                    {%endfor%}
+                </table>  
+                
+                <div class="legenda">
+                    <div class="legParcela"><p> <strong>Insumo suficiente</strong> </p></div>
+                    <div class="legCarencia"><p> <strong>Insumo insuficiente</strong> </p></div>
+                    <div class="legFalta"><p> <strong>Insumo em falta</strong> </p></div>
+                </div>            
+            </fieldset>
+        </form>  
+
+        <div class="botoes-fim-cadastro">
+            <a href="/plantacao" id="cancelar-cadastro"> <p>Cancelar</p> </a>
+            <a href="/cadastrarProducao" id="cadastrar-cadastro"> <p>Iniciar</p> </a>
+        </div>  
+    </div>
+
+    
+</body>
+
+</html>

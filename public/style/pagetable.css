@@ -127,7 +127,8 @@ a {
 }
 
 .legenda .legCarencia,
-.legenda .legParcela {
+.legenda .legParcela,
+.legenda .legFalta {
     height: 2rem;
 }
 
@@ -137,6 +138,20 @@ a {
 
 .legenda .legParcela{
     background-color: #AEFF47;
+}
+
+.legenda .legFalta {
+    background-color: #FFA347;
+}
+
+td.suficiente {
+    background-color: #AEFF47;
+}
+td.insuficiente {
+    background-color: #FFF976;
+}
+td.falta {
+    background-color: #FFA347;
 }
 
 .main .button-main  {

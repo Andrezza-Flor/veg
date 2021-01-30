@@ -12,11 +12,12 @@ const Fornecedor = require('./controllers/FornecedorController')
 const Cliente = require('./controllers/ClienteController')
 const Compra = require('./controllers/ComprasController')
 const Celeiro= require('./controllers/CeleiroController')
+const Plano = require('./controllers/PlanoController')
+const Producao = require('./controllers/Producao')
 
 
 const ColaboradorController = require('./controllers/ColaboradorController')
 const AtividadeController = require('./controllers/AtividadeController')
-const PlantacaoController = require('./controllers/PlantacaoController')
 const ArmazemController = require('./controllers/ArmazemController')
 const VendaController = require('./controllers/VendaController')
 
@@ -119,7 +120,7 @@ routes
 
 
 
-// Venda
+    // Venda
     .get('/venda', MenuController.venda)
     .get('/criarVenda', VendaController.vender)
     .post('/escolherCliente', VendaController.escolherCliente)
@@ -136,6 +137,26 @@ routes
     .get('/criarCliente', Cliente.criarCliente)
     .post('/salvarCliente', Cliente.salvarCliente)
 
+    // Plantação
+    .get('/plantacao', MenuController.plantacao)
+    .get('/criarProducao', Producao.criarProducao)
+    .post('/apresentarProducao', Producao.apresentarProducao)
+    .get('/cadastrarProducao', Producao.cadastrarProducao)
+
+        // Plano Producao
+    .get('/planoProducao', Plano.planoProducao)
+    .get('/criarPlanoProducao', Plano.criarPlanoProducao)
+    .post('/criarPlano', Plano.adicionarDadosPlano)
+    .post('/adicionarItens', Plano.adicionarItem)
+    .post('/adicionarAplicacao', Plano.adicionarAplicacao)
+    .get('/resultadoPlano', Plano.resultadoPlano)
+    .get('/cadastrarPlano', Plano.salvarDados)
+
+        // Cadastrar Insumo
+    .get('/criarItem', Plano.criarInsumo)
+    .post('/criarItem', Plano.salvarInsumo)
+    .post('/criarItemHortalica', Plano.salvarHortalica)
+
 
 
 // ------------------------------------------------------------------------
@@ -143,25 +164,7 @@ routes
     .get('/armazem', MenuController.armazem)
     .post('/detalheHortalica', ArmazemController.detalheHortalica)
     .get('/editarHortalica', ArmazemController.paginaEdicao)
-    .post('/editarHortalica', ArmazemController.editarHortalica)
-
-
-
-// Plantação
-    .get('/plantacao', MenuController.plantacao)
-    .get('/planoProducao', PlantacaoController.planoProducao)
-    .get('/criarPlanoProducao', PlantacaoController.criarPlanoProducao)
-    .post('/criarPlano', PlantacaoController.adicionarDadosPlano)
-    .post('/adicionarItens', PlantacaoController.adicionarItem)
-    .post('/adicionarAplicacao', PlantacaoController.adicionarAplicacao)
-    .get('/resultadoPlano', PlantacaoController.resultadoPlano)
-    .get('/cadastrarPlano', PlantacaoController.salvarDados)
-    
-    // Cadastrar Insumo
-    .get('/criarItem', PlantacaoController.criarInsumo)
-    .post('/criarItem', PlantacaoController.salvarInsumo)
-    .post('/criarItemHortalica', PlantacaoController.salvarHortalica)
-    
+    .post('/editarHortalica', ArmazemController.editarHortalica)    
 
 // Colaborador
     .get('/colaborador', MenuController.colaborador)

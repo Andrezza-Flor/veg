@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="/style/mainStyle.css">
+    <link rel="stylesheet" href="/style/pagetable.css">
+    <link rel="stylesheet" href="/style/formStyle.css">
+    <link rel="stylesheet" href="/style/atividade.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <title>Veg</title>
+</head>
+<body>
+    <div class="menu">
+        <h1>Escolha uma opção</h1>
+        <div class="botoes">               
+            <a href="/balanco" class="button-menu">
+                <img src="/imagem/menu/balanco.png" alt="Balanco">
+                <p>Balanço</p>
+            </a>
+
+            <a href="/fluxoCaixa" class="button-menu">
+                <img src="/imagem/menu/caixa.png" alt="Caixa">
+                <p>Fluxo de Caixa</p>
+            </a>
+            <a href="/financiamento" class="button-menu">
+                <img src="/imagem/menu/financas.png" alt="Finanças">
+                <p>Financiamento</p>
+            </a>
+            <a href="/compra" class="button-menu">
+                <img src="/imagem/menu/compra.png" alt="Compra">
+                <p>Compra</p>
+            </a>
+            <a href="/venda" class="button-menu">
+                <img src="/imagem/menu/venda.png" alt="Venda">
+                <p>Venda</p>
+            </a>
+            <a href="/plantacao" class="button-menu">
+                <img src="/imagem/menu/plantacao.png" alt="Plantação">
+                <p>Plantação</p>
+            </a>
+            <a href="/celeiro" class="button-menu">
+                <img src="/imagem/menu/celeiro.png" alt="Celeiro">
+                <p>Celeiro</p>
+            </a>
+            <a href="/armazem" class="button-menu">
+                <img src="/imagem/menu/armazem.png" alt="Armazem">
+                <p>Armazém</p>
+            </a>
+            <a href="/colaborador" class="button-menu">
+                <img src="/imagem/menu/colaborador.png" alt="Colaborador">
+                <p>Colaborador</p>
+            </a>
+            <a href="/relatorio" class="button-menu">
+                <img src="/imagem/menu/relatorio.png" alt="Relatório">
+                <p>Relatório</p>
+            </a>
+            <div class="botoes-footer">
+                <a href="/" class="button-menu">
+                    <img src="/imagem/menu/sair.png" alt="Sair"> 
+                </a>  
+                <a href="/home" class="button-menu">
+                    <img src="/imagem/menu/home.png" alt="Página Pricipal">
+                </a> 
+                <a href="/ajuda" class="button-menu">
+                    <img src="/imagem/menu/ajuda.png" alt="Ajuda">
+                </a>
+                <a href="/perfil" class="button-menu">
+                    <img src="/imagem/menu/perfil.png" alt="Perfil">         
+                </a>  
+            </div>
+                       
+        </div>   
+        
+    </div>
+    
+    <div class="main">
+        <h1>Plantação</h1>
+        <form>
+            <fieldset class="dados-Top">
+
+                {%if tamanhoProducao == 0%}
+
+                <p class="mensagem">Não há nenhuma produção em aberto</p>
+
+                {%else%}
+                <div class="conjunto-caixas">
+                    {%for producao in producoes%}
+                    <div class="caixa-conteudo">
+                        <p class="title"> {{producao.nome_plano}}</p>
+                        <p class="conteudo"> <strong>DIA DA PRODUCAO:</strong> {{producao.dias_producao}}° dia</p>
+                        <p class="conteudo"><strong>PRÓXIMA: </strong>{{producao.quantidade}} {{producao.contagem_item}} {{producao.proxima_etapa}}</p>
+                        <p class="conteudo"><strong>SITUAÇÃO: </strong>{{producao.situacao}}</p>
+                        <a href={{producao.rota}}>Acessar</a>
+                    </div>
+                    {%endfor%}
+                </div>
+
+                {%endif%}
+                
+                
+
+                <a href="/criarProducao" class="button-footer">
+                    <img src="/imagem/cultivar.png" alt="Cultivar">
+                    <p>Produzir</p>
+                </a>
+            </fieldset>
+        </form>
+
+        <div class="foot-dados-Botton">
+            <div class="aviso-foot">
+                <p>Visualizar os planos de produção</p>
+            </div>
+            <div class="acoes-n-banco">
+                <a href="/planoProducao" id="cadastrar-banco"> <p>Plano do Produção</p> </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

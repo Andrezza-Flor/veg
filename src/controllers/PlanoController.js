@@ -18,6 +18,7 @@ var listaItem = [];         // Variavel que vai receber os itens
 var item = {}               // Variável que vai receber as informações dos itens
 var aplicacaoItem = []      // Variável que vai receber as informações da alicação
 module.exports = {
+       
     // Plano de Produção
     async planoProducao(req,res, next) {
         try {
@@ -25,7 +26,7 @@ module.exports = {
             .where('cod_plantacao', Number(local('plantacao')))
             .select()
             
-            return  res.render('Plantacao/planoProducao.html', { planosProducao })
+            return  res.render('PlanoProducao/planoProducao.html', { planosProducao })
         } catch (error) {
             next(error)
         }
@@ -43,7 +44,7 @@ module.exports = {
             .orderBy('nome_hortalica')
             .select()
             
-            return  res.render('Plantacao/criarPlanoProducao.html', {hortalicaLista})
+            return  res.render('PlanoProducao/criarPlanoProducao.html', {hortalicaLista})
         } catch (error) {
             next(error)
         }
@@ -81,7 +82,7 @@ module.exports = {
 
             const tamanhoLista = aplicacaoItem.length
 
-            return  res.render('Plantacao/adicionarItens.html', {dadosPlano, insumoLista, tamanhoLista, totalDia, aplicacaoItem})
+            return  res.render('PlanoProducao/adicionarItens.html', {dadosPlano, insumoLista, tamanhoLista, totalDia, aplicacaoItem})
         } catch (error) {
             next(error)
         }
@@ -125,7 +126,7 @@ module.exports = {
                 totalDia.push(index)
             }
 
-            return  res.render('Plantacao/adicionarItensII.html', {dadosPlano, listaItem, tamanhoLista, item, totalDia, totalAplicacoes, aplicacaoItem})
+            return  res.render('PlanoProducao/adicionarItensII.html', {dadosPlano, listaItem, tamanhoLista, item, totalDia, totalAplicacoes, aplicacaoItem})
         } catch (error) {
             next(error)
         }
@@ -169,7 +170,7 @@ module.exports = {
 
             const totalDia = Number(dadosPlano.diasProducao)       
 
-            return  res.render('Plantacao/adicionarItens.html', {dadosPlano, insumoLista, tamanhoLista, totalDia, aplicacaoItem})
+            return  res.render('PlanoProducao/adicionarItens.html', {dadosPlano, insumoLista, tamanhoLista, totalDia, aplicacaoItem})
         } catch (error) {
             next(error)
         }
@@ -195,7 +196,7 @@ module.exports = {
                 return a.dia_aplicacao - b.dia_aplicacao
             })
             
-            return  res.render('Plantacao/resultadoPlanoProducao.html', {dadosPlano, aplicacaoItem})
+            return  res.render('PlanoProducao/resultadoPlanoProducao.html', {dadosPlano, aplicacaoItem})
         } catch (error) {
             next(error)
         }
@@ -247,7 +248,7 @@ module.exports = {
             .where('cod_plantacao', Number(local('plantacao')))
             .select()
             
-            return  res.render('Plantacao/planoProducao.html', { planosProducao })
+            return  res.render('PlanoProducao/planoProducao.html', { planosProducao })
         } catch (error) {
             next(error)
         }
@@ -258,7 +259,7 @@ module.exports = {
     // Adicionar Insumos
     async criarInsumo(req, res, next){
         try {
-            return res.render('Plantacao/criarInsumo.html')
+            return res.render('PlanoProducao/criarInsumo.html')
         } catch (error) {
             next(error)
         }
@@ -299,18 +300,18 @@ module.exports = {
 
                     const tamanhoLista = insumoLista.length
 
-                    return  res.render('Plantacao/adicionarItens.html', {dadosPlano, insumoLista, tamanhoLista})
+                    return  res.render('PlanoProducao/adicionarItens.html', {dadosPlano, insumoLista, tamanhoLista})
                 } else {
                     cadastroProduto = {
                         nomeInsumo: nomeInsumo.toUpperCase(),
                         tipoInsumo: tipoInsumo,
                     }
 
-                    return res.render('Plantacao/criarInsumoII.html', {cadastroProduto})
+                    return res.render('PlanoProducao/criarInsumoII.html', {cadastroProduto})
                 } 
             } else {
                 var mensagem = insumo[0].nome_insumo + " já foi cadastrado"
-                return res.render('Plantacao/criarInsumo.html', {mensagem})
+                return res.render('PlanoProducao/criarInsumo.html', {mensagem})
             }
         } catch (error) {
             next(error)
@@ -348,7 +349,7 @@ module.exports = {
             .select()
 
             const tamanhoLista = insumoLista.length
-            return  res.render('Plantacao/adicionarItens.html', {dadosPlano, insumoLista, tamanhoLista})
+            return  res.render('PlanoProducao/adicionarItens.html', {dadosPlano, insumoLista, tamanhoLista})
         } catch (error) {
             next(error)
         }
@@ -372,7 +373,6 @@ module.exports = {
             next(error)
         }
     },
-
     async buscarInsumo(req, res, next){
         try {
             const codPlantacao = Number(local('plantacao'))
@@ -406,7 +406,6 @@ module.exports = {
             next(error)
         }
     },
-
     async aplicarInsumo(req, res, next){
         try {
             const codPlantacao = Number(local('plantacao'))
@@ -472,7 +471,6 @@ module.exports = {
             next(error)
         }
     },
-
     async detalhePoduto(req, res, next){
         try {
             const {
@@ -508,7 +506,6 @@ module.exports = {
             next(error)
         }
     },
-
     async colherProduto(req, res, next){
         try {
             const codPlantacao = Number(local('plantacao'))

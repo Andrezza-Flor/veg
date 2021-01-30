@@ -255,12 +255,13 @@ CREATE TABLE Vendas (
 );
 
 CREATE TABLE Itens_Venda (
+  cod_item INT(4) not null AUTO_INCREMENT,
   cod_produto INT(4) NOT NULL,
   cod_venda INT(4) NOT NULL,
-  quantidade_produto INT(5) NOT NULL,
+  quantidade_produto FLOAT(10,2) NOT NULL,
   valor_produto FLOAT(10,2) NOT NULL,
   cod_plano INT(4) NOT NULL,
-  PRIMARY KEY (cod_produto, cod_venda),
+  PRIMARY KEY (cod_item),
   FOREIGN KEY (cod_produto) REFERENCES Hortalicas(cod_hortalica),
   FOREIGN KEY (cod_venda) REFERENCES Vendas(cod_venda),
   FOREIGN KEY (cod_plano) REFERENCES Planos_Producao(cod_plano)
@@ -313,25 +314,37 @@ CREATE TABLE Celeiros (
   FOREIGN KEY (cod_fornecedor) REFERENCES Itens_Compra(cod_fornecedor),
   FOREIGN KEY (cod_compra) REFERENCES Itens_Compra(cod_compra)
 );
+
+CREATE TABLE Producoes (
+  cod_producao INT(10) AUTO_INCREMENT,
+  cod_plano INT(4) not null,
+  cod_plantacao INT(4) not null,
+  dt_inicio timestamp NOT NULL DEFAULT current_timestamp(),
+  dt_termino DATE NOT NULL,
+  status_producao VARCHAR(50),
+  dias_producao INT(4),
+  quantidade_hortalica DECIMAL(10,2) NOT NULL,
+  email_usuario VARCHAR(500),
+  PRIMARY KEY (cod_producao),
+  FOREIGN KEY (cod_plano) REFERENCES Planos_Producao(cod_plano),
+  FOREIGN KEY (cod_plantacao) REFERENCES Plantacoes(cod_plantacao),
+  FOREIGN KEY (email_usuario) REFERENCES Usuarios(email_usuario)
+);
+
+CREATE TABLE Itens_Producao (
+  cod_acao INT(4) NOT NULL AUTO_INCREMENT,
+  cod_producao INT(10) NOT NULL,
+  cod_item INT(4) NOT NULL,
+  quantidade_item DECIMAL(10,2) NOT NULL,
+  contagem_item VARCHAR(10) NOT NULL,
+  data_aplicacao DATE NOT NULL,
+  status_aplicacao VARCHAR(20) NOT NULL,
+  PRIMARY KEY (cod_acao),
+  FOREIGN KEY (cod_producao) REFERENCES Producoes(cod_producao),
+  FOREIGN KEY (cod_item) REFERENCES Insumos(cod_insumo)
+);
 ------------------------------------------PAREI--------------------------------------------
 
-
-CREATE TABLE Plantio (
-    cod_Plantacao_Hortalica INT(10) AUTO_INCREMENT,
-    cod_Plantacao INT(4) not null,
-    cod_Insumo INT(4) not null,
-    cod_Fornecedor INT(4) not null,
-    quant_Plantada INT(10) not null,
-    dt_Plantio timestamp NOT NULL DEFAULT current_timestamp(),
-    email_Usuario_Plantou VARCHAR(500) NOT NULL,
-    status_Plantio VARCHAR(10) not null,
-    tipo_Plantio VARCHAR(10) not null,  
-    PRIMARY KEY (cod_Plantacao_Hortalica),
-    FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao),
-    FOREIGN KEY (cod_Insumo) REFERENCES Insumos(cod_Insumo),
-    FOREIGN KEY (cod_Fornecedor) REFERENCES Fornecedores(cod_Fornecedor),
-    FOREIGN KEY (email_Usuario_Plantou) REFERENCES Usuarios(email_Usuario)
-);
 
 CREATE TABLE Armazens (
   cod_Posicao_Armazem int(4) AUTO_INCREMENT,
