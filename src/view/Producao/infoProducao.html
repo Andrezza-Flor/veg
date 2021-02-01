@@ -79,89 +79,68 @@
     
     <div class="main">
         <h1>
-            Venda
-            <a href="/venda">
+            Produção
+            <a href="/plantacao">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
-
-        <form action="/escolherCliente" method="POST">
-
-            <fieldset name="listaFornecedor" class="dados-Top">
+        
+        <form>
+            <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Contrato de Venda</legend>
+                    <legend>Dados da Produção</legend>
                 </div>
-                <div class="write-block">
-                    <label for="codCliente">Nome do cliente:</label>
-                    <select name="codCliente" id="codCliente" required>
-                        <option value="" disable="" hidden="">Selecione uma opção</option>
-                        {%for cliente in listaCliente%}
-                            <option value={{cliente.cod_cliente}}>{{cliente.nome_cliente}}</option> 
-                        {%endfor%}
-                    </select>
+                <div class="read-block">
+                    <label>Resultado da Produção:</label>
+                    <p class="input">{{producao.quantidade_hortalica}} {{producao.contagem_hortalicao}} de {{producao.nome_hortalica}}</p>
                 </div>
+                <div class="read-block">
+                    <label>Data de Início:</label>
+                    <p class="input">{{producao.data_inicio}}</p>
+                </div>
+                <div class="read-block">
+                    <label>Data prevista para Término:</label>
+                    <p class="input">{{producao.data_termino}}</p>
+                </div>
+            </fieldset>
 
-                </br>
 
-                <div class="radio-block">
-                    <label for="entreaga">Tipo da Entrega:</label>
-                    <p>
-                        <label>
-                            <input type="radio" name="entrega" value="COM TRANSPORTE" checked> Sem Transporte
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            <input type="radio" name="entrega" value="SEM TRANSPORTE"> Com Transporte
-                        </label>
-                    </p>
-                </div>
-                
-                </br>
-                
-                <div class="radio-block">
-                    <label for="entreaga">Tipo de venda:</label>
-                    <p>
-                        <label onclick="imediato()">
-                            <input type="radio" name="venda" value="IMEDIATA" checked> Imediata
-                        </label>
-                    </p>
-                    <p>
-                        <label onclick="encomenda()">
-                            <input type="radio" name="venda" value="SOB ENCOMENDA" > Sob Encomenda
-                        </label>
-                    </p>
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>LIsta de Produtos:</legend>
                 </div>
 
-                <div style="visibility: hidden;" class="write-block" id="dtEntrega">
-                    <label for="dataEntrega">Data da Entrega:</label>
-                    <input type="date" id="dataEntrega" name="dataEntrega">
-                </div>
-
-                
-                {%if mensagem == "DATA INVÁLIDA"%}
-                <p style="color: red;" class="mensagem">{{mensagem}}</p>
-                {%else%}
-                {%endif%}
-
-                
-                 
-                <button type="submit" class="btn_calcular" name="btn_calcular">Próximo</button>
-            </fieldset>         
-        </form>    
+                <div class="legenda">
+                    <div class="legFalta"><p> <strong>Precisa Comprar</strong> </p></div>
+                </div> 
+                <br>
+                <table class="table-Detalhe">
+                    <tr class="head">
+                        <th>Insumo</th>
+                        <th style="padding: 0.6rem;">Quantidade</th>
+                        <th>Aplicação</th>
+                        <th>Situação</th>
+                        <th></th>
+                    </tr>
+                    {%for item in listaItens%}
+                        <tr>
+                            <td class={{item.situacao_celeiro}} >{{item.nome_insumo}}</td>
+                            <td class={{item.situacao_celeiro}} >{{item.quantidade_insumo}}{{item.contagem_item}} </td>
+                            <td class={{item.situacao_celeiro}} >{{item.data_aplicacao}}</td>
+                            <td class={{item.situacao_celeiro}} >{{item.situacao}}</td>
+                            <td style="padding: 0.6rem;" class={{item.situacao_celeiro}} >
+                                {%if item.aplicar == 1%}
+                                    <a href={{item.rota_aplicar}}>Aplicar</a>
+                                {%else%}
+                                    {{item.rota_aplicar}}
+                                {%endif%}
+                            </td>
+                        </tr>
+                    {%endfor%}
+                </table>
+            </fieldset>
+        </form> 
     </div>
-
-   </body>
-
-<script language="JavaScript">
-    function imediato() {
-        document.getElementById('dtEntrega').style.visibility = 'hidden';
-    }
-
-    function encomenda() {
-        document.getElementById('dtEntrega').style.visibility = 'visible';
-    }
-</script>
-
+</body>
 </html>

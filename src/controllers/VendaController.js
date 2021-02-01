@@ -139,6 +139,18 @@ module.exports = {
                 .select()
 
             } else {
+                if (dataEntrega == '') {
+                    const listaCliente = await knex('Clientes')
+                    .where({'cod_Plantacao': Number(local('plantacao'))})
+                    .select()
+
+                    itensVenda = []
+                    listaCompra = []
+
+                    const mensagem = "DATA INVÁLIDA"
+                    
+                    return res.render('Venda/escolherCliente.html', {listaCliente, mensagem})
+                }
                 dadosVenda.data_entrega = dataEntrega;
 
                 listaHortalica = await knex('Planos_Producao')

@@ -595,24 +595,41 @@ async function varreduraBalanco(codPlantacao) {
     return codBalanco;
 }
 async function varreduraProducao(){
+
     const listaProducao = await knex('Producoes')
     .where('cod_plantacao', Number(local('plantacao')))
-    .where('status_producao', 'ATERTA')
+    .where('status_producao', 'ABERTA')
     .select()
 
-    for (let index = 0; index < listaProducao.length; index++) {
+    for (var index = 0; index < listaProducao.length; index++) {
         const now = new Date(); // Data de hoje
         const past = new Date(listaProducao[index].dt_inicio); // Outra data no passado
         const diff = Math.abs(now.getTime() - past.getTime()); // Subtrai uma data pela outra
         const days = Math.ceil(diff / (1000 * 60 * 60 * 24)); 
 
+        // Atualizar os dias de produção.
         await knex('Producoes')
         .where('cod_producao', listaProducao[index].cod_producao)
         .update({
-            'dias_produca': days,
+            'dias_producao': days,
         })
-        
-        
+
+        // Atualizar os status das Itens_Producao
+        const listaItens = await knex('Itens_Producao')
+        .where('cod_producao', listaProducao[index].cod_producao)
+        .whereNot('status_aplicacao', 'REALIZADA')
+        .select()
+
+        for (var j = 0; j < listaItens.length; j++) {
+            const diaAplicacao = new Date(listaItens[j].data_aplicacao)
+            if(diaAplicacao < now) {
+                await knex('Itens_Producao')
+                .where('cod_acao', listaItens[j].cod_acao)
+                .update({
+                    'status_aplicacao': 'ATRASADO',
+                })
+            }  
+        }
     }
 }
 
@@ -897,28 +914,47 @@ module.exports = {
             var unidadeProducao;
 
             for (var i = 0; i < listaProducao.length; i++) {
+
                 var item = await knex('Itens_Producao')
                 .where('cod_producao', listaProducao[i].cod_producao)
-                .where('status_aplicacao', 'NÃO REALIZADA')
+                .where('status_aplicacao', 'ATRASADO')
                 .join('Insumos', 'Insumos.cod_insumo', '=', 'Itens_Producao.cod_item')
                 .select()
-
+                
+        
                 if (item.length == 0){
                     item = await knex('Itens_Producao')
                     .where('cod_producao', listaProducao[i].cod_producao)
                     .where('status_aplicacao', 'NÃO REALIZADA')
                     .join('Insumos', 'Insumos.cod_insumo', '=', 'Itens_Producao.cod_item')
                     .select()
-
-                    unidadeProducao = {
-                        'nome_plano': listaProducao[i].nome_plano,
-                        'dias_producao': listaProducao[i].dias_producao,
-                        'proxima_etapa': item[0].nome_insumo,
-                        'quantidade': item[0].quantidade_item,
-                        'contagem_item': item[0].contagem_item,
-                        'situacao': 'ATRASADA',
-                        'rota': listaProducao[i].cod_producao
+        
+                    if (item.length == 0) {
+                        item = await knex('Itens_Producao')
+                        .where('cod_producao', listaProducao[i].cod_producao)
+                        .where('status_aplicacao', 'REALIZADA')
+                        .join('Insumos', 'Insumos.cod_insumo', '=', 'Itens_Producao.cod_item')
+                        .select()
+        
+                        unidadeProducao = {
+                            'nome_plano': listaProducao[i].nome_plano,
+                            'dias_producao': listaProducao[i].dias_producao,
+                            'proxima_etapa': 'COLHER HORTALIÇA',
+                            'situacao': 'AGUARDANDO FINALIZAR',
+                            'rota': '/colherHortalica/' + listaProducao[i].cod_producao
+                        }
+                    } else {
+                        unidadeProducao = {
+                            'nome_plano': listaProducao[i].nome_plano,
+                            'dias_producao': listaProducao[i].dias_producao,
+                            'proxima_etapa': item[0].nome_insumo,
+                            'quantidade': item[0].quantidade_item,
+                            'contagem_item': item[0].contagem_item,
+                            'situacao': 'EM DIA',
+                            'rota': '/acessarProducao/' + listaProducao[i].cod_producao
+                        }
                     }
+                            
                 } else {
                     unidadeProducao = {
                         'nome_plano': listaProducao[i].nome_plano,
@@ -926,17 +962,14 @@ module.exports = {
                         'proxima_etapa': item[0].nome_insumo,
                         'quantidade': item[0].quantidade_item,
                         'contagem_item': item[0].contagem_item,
-                        'situacao': 'EM DIA',
-                        'rota': listaProducao[i].cod_producao
+                        'situacao': 'ATRASADA',
+                        'rota': '/acessarProducao/' + listaProducao[i].cod_producao
                     }
                 }
-
-                
-                
                 producoes.push(unidadeProducao)
                
             }
-
+    
             const tamanhoProducao = producoes.length
             
             return  res.render('Producao/plantacao.html', {producoes, tamanhoProducao})
@@ -1004,22 +1037,50 @@ module.exports = {
         }
         
     },
-
     async armazem(req,res, next) {
         try {
-             // Preparar a lista de itens no armazém
-             const codPlantacao = Number(local('plantacao'))
-             const listaHortalica = await knex('Armazens')
-             .where({'cod_Plantacao': codPlantacao})
-             .whereNot({'Armazens.quant_Restante_Hortalica': 0})
-             .join('Hortalicas', 'Hortalicas.cod_Hortalica', '=', 'Armazens.cod_Hortalica')
-             .select('Armazens.cod_Posicao_Armazem',
-                     'Hortalicas.nome_Hortalica', 
-                     'Armazens.quant_Restante_Hortalica', 
-                     'Hortalicas.contagem_Hortalica', 
-                     'Armazens.valor_Hortalica')
+            const listaArmazem = await knex('Armazens')
+            .where('Armazens.cod_plantacao', Number(local('plantacao')))
+            .where('status_hortalica', 'ARMAZENADO')
+            .join('Hortalicas', 'Hortalicas.cod_hortalica', '=',  'Armazens.cod_hortalica')
+            .join('Producoes', 'Producoes.cod_producao', '=', 'Armazens.cod_producao')
+            .join('Planos_Producao', 'Planos_Producao.cod_plano', '=', 'Producoes.cod_plano')
+            .select(
+                'Hortalicas.nome_hortalica',
+                'Planos_Producao.contagem_hortalica',
+                'Producoes.objetivo_producao',
+                'Armazens.quantidade_hortalica',
+                'Armazens.validade_hortalica',
+                'Armazens.contrato_venda',
+                'Armazens.cod_posicao'
+            )
+
+            var itensArmazem = []
+
+            for (let index = 0; index < listaArmazem.length; index++) {
+                const validade = new Date(listaArmazem[index].validade_hortalica)
+
+                var item = {
+                    'nome_hortalica': listaArmazem[index].nome_hortalica,
+                    'quantidade_hortalica': listaArmazem[index].quantidade_hortalica,
+                    'contagem_item': listaArmazem[index].contagem_hortalica,
+                    'data_validade': validade.getDate() + ' ' + nomeDosMesesAbre[validade.getMonth()] + ' ' + validade.getFullYear(),
+                    'rota': '/acessoItemArmazem/' + listaArmazem[index].cod_posicao
+                }
+
+                if (listaArmazem[index].contrato_venda > 0){
+                    item.objetivo_producao = 'CONTRATO DE VENDA';
+                } else {
+                    item.objetivo_producao = 'VENDAS FUTURAS';
+                }
+
+                itensArmazem.push(item)
+               
+            }
+
+             const tamanhoArmazem = listaArmazem.length
              
-            return  res.render('armazem.html', {listaHortalica})
+            return  res.render('Armazem/armazem.html', {tamanhoArmazem, itensArmazem})
         } catch (error) {
             next(error)
         }

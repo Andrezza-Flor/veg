@@ -79,89 +79,40 @@
     
     <div class="main">
         <h1>
-            Venda
-            <a href="/venda">
+            Entrada no Armazém
+            <a href="/plantacao">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
 
-        <form action="/escolherCliente" method="POST">
-
-            <fieldset name="listaFornecedor" class="dados-Top">
+        <form action={{producao.rota_registro}} method="POST">
+            <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Contrato de Venda</legend>
+                    <legend>Dados da Entrada</legend>
+                </div>
+                <div class="read-block">
+                    <label>Nome da Hortaliça:</label>
+                    <p class="input">{{producao.nome_hortalica}}</p>
+                </div>
+                <div class="read-block">
+                    <label>Dias de Produção:</label>
+                    <p class="input">{{producao.dias_producao}} dias</p>
                 </div>
                 <div class="write-block">
-                    <label for="codCliente">Nome do cliente:</label>
-                    <select name="codCliente" id="codCliente" required>
-                        <option value="" disable="" hidden="">Selecione uma opção</option>
-                        {%for cliente in listaCliente%}
-                            <option value={{cliente.cod_cliente}}>{{cliente.nome_cliente}}</option> 
-                        {%endfor%}
-                    </select>
+                    <label>Quantidade Colida em [ {{producao.contagem_hortalica}} ]:</label>
+                    <input type="number" name="quantidadeColida" id="quantidadeColida" min="0" step="0.00" placeholder="0000.00">
                 </div>
 
-                </br>
-
-                <div class="radio-block">
-                    <label for="entreaga">Tipo da Entrega:</label>
-                    <p>
-                        <label>
-                            <input type="radio" name="entrega" value="COM TRANSPORTE" checked> Sem Transporte
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            <input type="radio" name="entrega" value="SEM TRANSPORTE"> Com Transporte
-                        </label>
-                    </p>
+                <div class="write-block">
+                    <label>Validade da Hortaliça:</label>
+                    <input type="date" name="validadeHortalica" id="validadeHortalica">
                 </div>
                 
-                </br>
-                
-                <div class="radio-block">
-                    <label for="entreaga">Tipo de venda:</label>
-                    <p>
-                        <label onclick="imediato()">
-                            <input type="radio" name="venda" value="IMEDIATA" checked> Imediata
-                        </label>
-                    </p>
-                    <p>
-                        <label onclick="encomenda()">
-                            <input type="radio" name="venda" value="SOB ENCOMENDA" > Sob Encomenda
-                        </label>
-                    </p>
-                </div>
-
-                <div style="visibility: hidden;" class="write-block" id="dtEntrega">
-                    <label for="dataEntrega">Data da Entrega:</label>
-                    <input type="date" id="dataEntrega" name="dataEntrega">
-                </div>
-
-                
-                {%if mensagem == "DATA INVÁLIDA"%}
-                <p style="color: red;" class="mensagem">{{mensagem}}</p>
-                {%else%}
-                {%endif%}
-
-                
-                 
-                <button type="submit" class="btn_calcular" name="btn_calcular">Próximo</button>
-            </fieldset>         
-        </form>    
+                <button type="submit" class="btn_calcular" name="btn_calcular">Registrar</button>
+            </fieldset>
+        </form>
+        
     </div>
-
-   </body>
-
-<script language="JavaScript">
-    function imediato() {
-        document.getElementById('dtEntrega').style.visibility = 'hidden';
-    }
-
-    function encomenda() {
-        document.getElementById('dtEntrega').style.visibility = 'visible';
-    }
-</script>
-
+</body>
 </html>

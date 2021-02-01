@@ -343,21 +343,23 @@ CREATE TABLE Itens_Producao (
   FOREIGN KEY (cod_producao) REFERENCES Producoes(cod_producao),
   FOREIGN KEY (cod_item) REFERENCES Insumos(cod_insumo)
 );
-------------------------------------------PAREI--------------------------------------------
-
 
 CREATE TABLE Armazens (
-  cod_Posicao_Armazem int(4) AUTO_INCREMENT,
-  cod_Hortalica INT(4) NOT NULL,
-  cod_Fornecedor INT(4) NOT NULL,
-  cod_Plantacao INT(4) NOT NULL,
-  quant_Restante_Hortalica DECIMAL(10,2) not null,
-  valor_Hortalica DECIMAL(10,2) not null,
-  PRIMARY KEY (cod_Posicao_Armazem, cod_Hortalica, cod_Fornecedor, cod_Plantacao),
-  FOREIGN KEY (cod_Hortalica) REFERENCES Hortalicas(cod_Hortalica),
-  FOREIGN KEY (cod_Fornecedor) REFERENCES Fornecedores(cod_Fornecedor),
+  cod_posicao int(4) AUTO_INCREMENT,
+  contrato_venda INT(4) NOT NULL,
+  cod_plantacao INT(4) NOT NULL,
+  cod_producao INT(4) NOT NULL,
+  cod_hortalica INT(4) NOT NULL,
+  quantidade_hortalica INT(4) NOT NULL,
+  validade_hortalica DATE not null,
+  status_hortalica VARCHAR(500) NOT NULL,
+  PRIMARY KEY (cod_posicao),
+  FOREIGN KEY (cod_producao) REFERENCES Producoes(cod_producao),
+  FOREIGN KEY (cod_hortalica) REFERENCES Hortalicas(cod_hortalica),
   FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao)
 );
+------------------------------------------PAREI--------------------------------------------
+
 
 CREATE TABLE Colheita (
     cod_Plantacao_Hortalica INT(10),

@@ -14,11 +14,11 @@ const Compra = require('./controllers/ComprasController')
 const Celeiro= require('./controllers/CeleiroController')
 const Plano = require('./controllers/PlanoController')
 const Producao = require('./controllers/Producao')
+const Armazem = require('./controllers/ArmazemController')
 
 
 const ColaboradorController = require('./controllers/ColaboradorController')
 const AtividadeController = require('./controllers/AtividadeController')
-const ArmazemController = require('./controllers/ArmazemController')
 const VendaController = require('./controllers/VendaController')
 
 routes
@@ -142,6 +142,9 @@ routes
     .get('/criarProducao', Producao.criarProducao)
     .post('/apresentarProducao', Producao.apresentarProducao)
     .get('/cadastrarProducao', Producao.cadastrarProducao)
+    .get('/acessarProducao/:id', Producao.informarProducar)
+    .get('/aplicarInsumo/:id', Producao.aplicarInsumo)
+    .get('/colherHortalica/:id', Producao.colherHortalica)
 
         // Plano Producao
     .get('/planoProducao', Plano.planoProducao)
@@ -158,13 +161,14 @@ routes
     .post('/criarItemHortalica', Plano.salvarHortalica)
 
 
-
-// ------------------------------------------------------------------------
 // Armazem
     .get('/armazem', MenuController.armazem)
-    .post('/detalheHortalica', ArmazemController.detalheHortalica)
-    .get('/editarHortalica', ArmazemController.paginaEdicao)
-    .post('/editarHortalica', ArmazemController.editarHortalica)    
+    .post('/entradaArmazem/:id', Armazem.cadastrarEntrada)
+    .get('/acessoItemArmazem/:id', Armazem.acessarHortalica)
+    .get('/editarDadosArmazem', Armazem.apresentarDadosParaEdicao)
+    .post('/salvarDadosProduto', Armazem.salvarDados)
+
+// ------------------------------------------------------------------------
 
 // Colaborador
     .get('/colaborador', MenuController.colaborador)

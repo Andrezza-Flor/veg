@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/style/mainStyle.css">
     <link rel="stylesheet" href="/style/pagetable.css">
     <link rel="stylesheet" href="/style/formStyle.css">
+    <link rel="stylesheet" href="/style/atividade.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
 
@@ -78,90 +79,33 @@
     </div>
     
     <div class="main">
-        <h1>
-            Venda
-            <a href="/venda">
-                <img src="/imagem/voltar.png" alt="">
-                Voltar
-            </a>
-        </h1>
+        <h1>Armazém</h1>
+        <form>
+            <fieldset class="dados-Top">
 
-        <form action="/escolherCliente" method="POST">
+                {%if tamanhoArmazem == 0%}
 
-            <fieldset name="listaFornecedor" class="dados-Top">
-                <div class="title">
-                    <legend>Contrato de Venda</legend>
-                </div>
-                <div class="write-block">
-                    <label for="codCliente">Nome do cliente:</label>
-                    <select name="codCliente" id="codCliente" required>
-                        <option value="" disable="" hidden="">Selecione uma opção</option>
-                        {%for cliente in listaCliente%}
-                            <option value={{cliente.cod_cliente}}>{{cliente.nome_cliente}}</option> 
-                        {%endfor%}
-                    </select>
-                </div>
+                <p class="mensagem">Não há nenhuma item no Armazém</p>
 
-                </br>
-
-                <div class="radio-block">
-                    <label for="entreaga">Tipo da Entrega:</label>
-                    <p>
-                        <label>
-                            <input type="radio" name="entrega" value="COM TRANSPORTE" checked> Sem Transporte
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            <input type="radio" name="entrega" value="SEM TRANSPORTE"> Com Transporte
-                        </label>
-                    </p>
-                </div>
-                
-                </br>
-                
-                <div class="radio-block">
-                    <label for="entreaga">Tipo de venda:</label>
-                    <p>
-                        <label onclick="imediato()">
-                            <input type="radio" name="venda" value="IMEDIATA" checked> Imediata
-                        </label>
-                    </p>
-                    <p>
-                        <label onclick="encomenda()">
-                            <input type="radio" name="venda" value="SOB ENCOMENDA" > Sob Encomenda
-                        </label>
-                    </p>
-                </div>
-
-                <div style="visibility: hidden;" class="write-block" id="dtEntrega">
-                    <label for="dataEntrega">Data da Entrega:</label>
-                    <input type="date" id="dataEntrega" name="dataEntrega">
-                </div>
-
-                
-                {%if mensagem == "DATA INVÁLIDA"%}
-                <p style="color: red;" class="mensagem">{{mensagem}}</p>
                 {%else%}
+
+                <div class="conjunto-caixas">
+                    {%for item in itensArmazem%}
+                    <div class="caixa-conteudo">
+                        <p class="title"> {{item.nome_hortalica}}</p>
+                        <p class="conteudo"> <strong>OBJETIVO:</strong> {{item.objetivo_producao}}</p>
+                        <p class="conteudo"> <strong>QUANTIDADE:</strong> {{item.quantidade_hortalica}} {{item.contagem_item}} </p>
+                        <p class="conteudo"><strong>VALIDADE: </strong>{{item.data_validade}}</p>
+                        <a href={{item.rota}}>Acessar</a>
+                    </div>
+                    {%endfor%}
+                </div>
+
                 {%endif%}
-
                 
-                 
-                <button type="submit" class="btn_calcular" name="btn_calcular">Próximo</button>
-            </fieldset>         
-        </form>    
+            </fieldset>
+        </form>
+
     </div>
-
-   </body>
-
-<script language="JavaScript">
-    function imediato() {
-        document.getElementById('dtEntrega').style.visibility = 'hidden';
-    }
-
-    function encomenda() {
-        document.getElementById('dtEntrega').style.visibility = 'visible';
-    }
-</script>
-
+</body>
 </html>

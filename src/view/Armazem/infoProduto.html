@@ -79,89 +79,44 @@
     
     <div class="main">
         <h1>
-            Venda
-            <a href="/venda">
+            Produto do Armazém
+            <a href="/armazem">
                 <img src="/imagem/voltar.png" alt="">
                 Voltar
             </a>
         </h1>
-
-        <form action="/escolherCliente" method="POST">
-
-            <fieldset name="listaFornecedor" class="dados-Top">
+        
+        <form>
+            <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Contrato de Venda</legend>
+                    <legend>{{produto.nome_hortalica}}</legend>
                 </div>
-                <div class="write-block">
-                    <label for="codCliente">Nome do cliente:</label>
-                    <select name="codCliente" id="codCliente" required>
-                        <option value="" disable="" hidden="">Selecione uma opção</option>
-                        {%for cliente in listaCliente%}
-                            <option value={{cliente.cod_cliente}}>{{cliente.nome_cliente}}</option> 
-                        {%endfor%}
-                    </select>
+                             
+                <div class="read-block">
+                    <label>Quantidade:</label>
+                    <p class="input"> {{produto.quantidade_hortalica}}  {{produto.contagem_hortalica}}</p>
                 </div>
-
-                </br>
-
-                <div class="radio-block">
-                    <label for="entreaga">Tipo da Entrega:</label>
-                    <p>
-                        <label>
-                            <input type="radio" name="entrega" value="COM TRANSPORTE" checked> Sem Transporte
-                        </label>
-                    </p>
-                    <p>
-                        <label>
-                            <input type="radio" name="entrega" value="SEM TRANSPORTE"> Com Transporte
-                        </label>
-                    </p>
+                {%if produto.vencido == 0%}
+                <div class="read-block">
+                    <label>Validade:</label>
+                    <p class="input">{{produto.validade_hortalica}}</p>
                 </div>
-                
-                </br>
-                
-                <div class="radio-block">
-                    <label for="entreaga">Tipo de venda:</label>
-                    <p>
-                        <label onclick="imediato()">
-                            <input type="radio" name="venda" value="IMEDIATA" checked> Imediata
-                        </label>
-                    </p>
-                    <p>
-                        <label onclick="encomenda()">
-                            <input type="radio" name="venda" value="SOB ENCOMENDA" > Sob Encomenda
-                        </label>
-                    </p>
-                </div>
-
-                <div style="visibility: hidden;" class="write-block" id="dtEntrega">
-                    <label for="dataEntrega">Data da Entrega:</label>
-                    <input type="date" id="dataEntrega" name="dataEntrega">
-                </div>
-
-                
-                {%if mensagem == "DATA INVÁLIDA"%}
-                <p style="color: red;" class="mensagem">{{mensagem}}</p>
                 {%else%}
-                {%endif%}
+                <div class="read-block">
+                    <label style="display: inline;">Validade:</label> <div style="color: red; display: inline;" class='mensagem' >{{mensagem}}</div>
+                    <p class="input">{{produto.validade_hortalica}}</p>
+                </div>
+                {%endif%}                
+                <div class="read-block">
+                    <label>Destino:</label>
+                    <p class="input">{{produto.destino}}</p>
+                </div>              
+            </fieldset>
+        </form>
 
-                
-                 
-                <button type="submit" class="btn_calcular" name="btn_calcular">Próximo</button>
-            </fieldset>         
-        </form>    
+        <div class="botoes-fim-cadastro">
+            <a href="/editarDadosArmazem" id="cadastrar-cadastro"> <p>Editar Dados</p> </a>
+        </div>  
     </div>
-
-   </body>
-
-<script language="JavaScript">
-    function imediato() {
-        document.getElementById('dtEntrega').style.visibility = 'hidden';
-    }
-
-    function encomenda() {
-        document.getElementById('dtEntrega').style.visibility = 'visible';
-    }
-</script>
-
+</body>
 </html>
