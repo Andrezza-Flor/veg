@@ -22,6 +22,52 @@ const nomeDosMesesAbre = [
     'Nov. ',
     'Dez. '
 ]
+var tamanhoArmazem = 0
+var itensArmazem = []
+
+async function apresentarArmazem () {
+    const listaArmazem = await knex('Armazens')
+    .where('Armazens.cod_plantacao', Number(local('plantacao')))
+    .whereNot('status_hortalica', 'VENDIDO')
+    .join('Hortalicas', 'Hortalicas.cod_hortalica', '=',  'Armazens.cod_hortalica')
+    .join('Producoes', 'Producoes.cod_producao', '=', 'Armazens.cod_producao')
+    .join('Planos_Producao', 'Planos_Producao.cod_plano', '=', 'Producoes.cod_plano')
+    .select(
+        'Hortalicas.nome_hortalica',
+        'Planos_Producao.contagem_hortalica',
+        'Producoes.objetivo_producao',
+        'Armazens.quantidade_hortalica',
+        'Armazens.validade_hortalica',
+        'Armazens.destino_hortalica',
+        'Armazens.cod_posicao'
+    )
+
+    itensArmazem = []
+
+    for (let index = 0; index < listaArmazem.length; index++) {
+        const validade = new Date(listaArmazem[index].validade_hortalica)
+
+        var item = {
+            'nome_hortalica': listaArmazem[index].nome_hortalica,
+            'quantidade_hortalica': listaArmazem[index].quantidade_hortalica,
+            'contagem_item': listaArmazem[index].contagem_hortalica,
+            'data_validade': validade.getDate() + ' ' + nomeDosMesesAbre[validade.getMonth()] + ' ' + validade.getFullYear(),
+            'rota': '/acessoItemArmazem/' + listaArmazem[index].cod_posicao
+        }
+
+        if (listaArmazem[index].destino_hortalica > 0){
+            item.objetivo_producao = 'CONTRATO DE VENDA';
+        } else {
+            item.objetivo_producao = 'VENDAS FUTURAS';
+        }
+
+        itensArmazem.push(item)
+               
+    }
+
+    tamanhoArmazem = listaArmazem.length
+}
+
 var cod_posicao = 0
 module.exports = {
     async cadastrarEntrada(req, res, next) {
@@ -31,10 +77,10 @@ module.exports = {
                 validadeHortalica,
             } = req.body
 
-            const codPoducao = req.params.id
+            const codProducao = req.params.id
 
             const producao = await knex('Producoes')
-            .where('cod_producao', codPoducao)
+            .where('cod_producao', codProducao)
             .join('Planos_Producao', 'Planos_Producao.cod_plano', '=', 'Producoes.cod_plano')
             .select(
                 'Producoes.objetivo_producao',
@@ -43,63 +89,88 @@ module.exports = {
                 'Planos_Producao.cod_hortalica',
             )
 
-            await knex('Armazens')
-            .insert({
-                'contrato_venda': producao[0].objetivo_producao,
-                'cod_plantacao': producao[0].cod_plantacao,
-                'cod_producao': producao[0].cod_producao,
-                'cod_hortalica': producao[0].cod_hortalica,
-                'quantidade_hortalica': quantidadeColida,
-                'validade_hortalica': validadeHortalica,
-                'status_hortalica': 'ARMAZENADO',
-            })
+            if (producao[0].objetivo_producao == 0) {
+                await knex('Armazens')
+                .insert({
+                    'destino_hortalica': producao[0].objetivo_producao,
+                    'cod_plantacao': Number(local('plantacao')),
+                    'cod_producao': producao[0].cod_producao,
+                    'cod_hortalica': producao[0].cod_hortalica,
+                    'quantidade_hortalica': quantidadeColida,
+                    'validade_hortalica': validadeHortalica,
+                    'status_hortalica': 'LIVRE',
+                })
+            } else {
 
+                const quantidade = await knex('Producoes')
+                .where('cod_producao', codProducao)
+                .join('Itens_Venda', 'Itens_Venda.cod_item', '=', 'Producoes.objetivo_producao')
+                .select()
+
+                const quantidadeProduzida = quantidade[0].quantidade_produzida
+                const quantidadeTotal = quantidade[0].quantidade_produto
+                const quantidadeFaltante = quantidadeTotal - quantidadeProduzida
+
+                if(quantidadeFaltante < quantidadeColida) {
+                    await knex('Itens_Venda')
+                    .where('cod_item', producao[0].objetivo_producao)
+                    .update({
+                        'quantidade_produzida': quantidadeTotal,
+                    })
+                    var sobraColheita = quantidadeColida - quantidadeFaltante
+
+                    await knex('Armazens')
+                    .insert({
+                        'destino_hortalica': 0,
+                        'cod_plantacao': Number(local('plantacao')),
+                        'cod_producao': producao[0].cod_producao,
+                        'cod_hortalica': producao[0].cod_hortalica,
+                        'quantidade_hortalica': sobraColheita,
+                        'validade_hortalica': validadeHortalica,
+                        'status_hortalica': 'LIVRE',
+                    })
+
+                    await knex('Armazens')
+                    .insert({
+                        'destino_hortalica': producao[0].objetivo_producao,
+                        'cod_plantacao': Number(local('plantacao')),
+                        'cod_producao': producao[0].cod_producao,
+                        'cod_hortalica': producao[0].cod_hortalica,
+                        'quantidade_hortalica': quantidadeFaltante,
+                        'validade_hortalica': validadeHortalica,
+                        'status_hortalica': 'RESERVADA',
+                    })
+
+                } else {
+
+                    await knex('Itens_Venda')
+                    .where('cod_item', producao[0].objetivo_producao)
+                    .update({
+                        'quantidade_produzida': quantidadeProduzida + quantidadeColida,
+                    })
+
+                    await knex('Armazens')
+                    .insert({
+                        'destino_hortalica': producao[0].objetivo_producao,
+                        'cod_plantacao': Number(local('plantacao')),
+                        'cod_producao': producao[0].cod_producao,
+                        'cod_hortalica': producao[0].cod_hortalica,
+                        'quantidade_hortalica': quantidadeColida,
+                        'validade_hortalica': validadeHortalica,
+                        'status_hortalica': 'RESERVADA',
+                    })
+                } 
+            }
+           
+
+            // Atualização da producao para fechada
             await knex('Producoes')
-            .where('cod_producao', codPoducao)
+            .where('cod_producao', codProducao)
             .update({
                 'status_producao': 'FECHADA'
             })
 
-            const listaArmazem = await knex('Armazens')
-            .where('Armazens.cod_plantacao', Number(local('plantacao')))
-            .where('status_hortalica', 'ARMAZENADO')
-            .join('Hortalicas', 'Hortalicas.cod_hortalica', '=',  'Armazens.cod_hortalica')
-            .join('Producoes', 'Producoes.cod_producao', '=', 'Armazens.cod_producao')
-            .join('Planos_Producao', 'Planos_Producao.cod_plano', '=', 'Producoes.cod_plano')
-            .select(
-                'Hortalicas.nome_hortalica',
-                'Planos_Producao.contagem_hortalica',
-                'Producoes.objetivo_producao',
-                'Armazens.quantidade_hortalica',
-                'Armazens.validade_hortalica',
-                'Armazens.contrato_venda',
-                'Armazens.cod_posicao'
-            )
-
-            var itensArmazem = []
-
-            for (let index = 0; index < listaArmazem.length; index++) {
-                const validade = new Date(listaArmazem[index].validade_hortalica)
-
-                var item = {
-                    'nome_hortalica': listaArmazem[index].nome_hortalica,
-                    'quantidade_hortalica': listaArmazem[index].quantidade_hortalica,
-                    'contagem_item': listaArmazem[index].contagem_hortalica,
-                    'data_validade': validade.getDate() + ' ' + nomeDosMesesAbre[validade.getMonth()] + ' ' + validade.getFullYear(),
-                    'rota': '/acessoItemArmazem/' + listaArmazem[index].cod_posicao
-                }
-
-                if (listaArmazem[index].contrato_venda > 0){
-                    item.objetivo_producao = 'CONTRATO DE VENDA';
-                } else {
-                    item.objetivo_producao = 'VENDAS FUTURAS';
-                }
-
-                itensArmazem.push(item)
-               
-            }
-
-             const tamanhoArmazem = listaArmazem.length
+            await apresentarArmazem()
              
             return  res.render('Armazem/armazem.html', {tamanhoArmazem, itensArmazem})
             
@@ -125,7 +196,7 @@ module.exports = {
                 'Armazens.quantidade_hortalica',
                 'Planos_Producao.contagem_hortalica',
                 'Armazens.validade_hortalica',
-                'Armazens.contrato_venda',
+                'Armazens.destino_hortalica',
             )
             const now = new Date ()
             const validade = new Date(itemArmazem[0].validade_hortalica)
@@ -147,15 +218,16 @@ module.exports = {
             } else {
                 produto.vencido = 0
 
-                if(itemArmazem[0].contrato_venda == 0){
+                if(itemArmazem[0].destino_hortalica == 0){
                     produto.destino = 'LIBERADO PARA VENDA IMEDIATA'
                 } else {
                     const cliente = await knex('Armazens')
                     .where('cod_posicao', codPosicao)
-                    .join('Itens_Venda', 'Itens_Venda.cod_venda', '=', 'Armazens.contrato_venda')
+                    .join('Itens_Venda', 'Itens_Venda.cod_item', '=', 'Armazens.destino_hortalica')
                     .join('Vendas', 'Vendas.cod_venda', '=', 'Itens_Venda.cod_venda')
                     .join('Clientes', 'Clientes.cod_cliente', 'Vendas.cod_Cliente')
-                    .select('Clientes.nome_cliente')
+                    .select()
+
                     produto.destino = 'RESERVADA PARA VENDA - ' + cliente[0].nome_cliente
                 }
 
@@ -212,6 +284,7 @@ module.exports = {
             
             const listaArmazem = await knex('Armazens')
             .where('Armazens.cod_plantacao', Number(local('plantacao')))
+            .whereNot('Armazens.quantidade_hortalica', 0)
             .where('status_hortalica', 'ARMAZENADO')
             .join('Hortalicas', 'Hortalicas.cod_hortalica', '=',  'Armazens.cod_hortalica')
             .join('Producoes', 'Producoes.cod_producao', '=', 'Armazens.cod_producao')
@@ -222,7 +295,7 @@ module.exports = {
                 'Producoes.objetivo_producao',
                 'Armazens.quantidade_hortalica',
                 'Armazens.validade_hortalica',
-                'Armazens.contrato_venda',
+                'Armazens.destino_hortalica',
                 'Armazens.cod_posicao'
             )
 
@@ -239,7 +312,7 @@ module.exports = {
                     'rota': '/acessoItemArmazem/' + listaArmazem[index].cod_posicao
                 }
 
-                if (listaArmazem[index].contrato_venda > 0){
+                if (listaArmazem[index].destino_hortalica > 0){
                     item.objetivo_producao = 'CONTRATO DE VENDA';
                 } else {
                     item.objetivo_producao = 'VENDAS FUTURAS';

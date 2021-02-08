@@ -79,88 +79,134 @@
     
     <div class="main">
         <h1>
-            Venda
-            <a href="/venda">
-                <img src="/imagem/voltar.png" alt="">
-                Voltar
-            </a>
+            Finalizando Venda
         </h1>
-        
+
         <form>
             <fieldset class="dados-Top">
                 <div class="title">
-                    <legend>Lista de Produtos:</legend>
+                    <legend>Itens da Venda</legend>
                 </div>
+                
                 <table class="table-Detalhe">
                     <tr class="head">
-                        <th>Nome</th>
-                        <th>Valor Total</th>
-                        <th>Pedido</th>
-                        <th>Produção</th>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Total por produto</th>
                     </tr>
                     {%for item in listaProdutos%}
                         <tr>
                             <td>{{item.nome_hortalica}}</td>
-                            <td>R$ {{item.valor_produto}} </td>
-                            <td>{{item.quantidade_produto}}</td>
-                            <td>{{item.quantidade_produzida}}</td>
-                            
+                            <td> {{item.quantidade_produto}}</td>
+                            <td>R${{item.valor_produto}}</td>
                         </tr>
-                    {%endfor%}
-                    
+                    {%endfor%} 
                 </table>
-                {%if finalizarVenda == 0%}
-
-                {%else%}
-                <div class="acoes-n-banco">
-                    <a href={{finalizarVenda}} id="cadastrar-banco"> <p>Finalizar Venda</p> </a>
-                </div>
-                {%endif%}
-            </fieldset>
-            <fieldset class="dados-Botton">
-                <div class="title">
-                    <legend>Dados do Clinte</legend>
-                </div>
-                <div class="read-block">
-                    <label for="nomeCliente">Nome do Cliente:</label>
-                    <p class="input">{{venda.nome_cliente}}</p>
-                </div>
-                <div class="read-block">
-                    <label for="telefoneCliente">Telefone do Cliente:</label>
-                    <p class="input">{{venda.telefone_cliente}}</p>    
-                </div>
-                <div class="read-block">
-                    <label for="cepCliente">CEP do Cliente:</label>
-                    <p class="input">{{venda.cep_cliente}}</p>
-                </div>
-                <div class="read-block">
-                    <label for="emailCliente">E-mail do Cliente:</label>
-                    <p class="input">{{venda.email_cliente}}</p>
-                </div>
+                
             </fieldset>
 
             <fieldset class="dados-Botton">
                 <div class="title">
                     <legend>Dados da Venda</legend>
                 </div>
+                
+                <div class="read-block">
+                    <label>Nome do Cliente:</label>
+                    <p class="input">{{venda.nome_cliente}}</p>
+                </div>
+                <div class="read-block">
+                    <label>Telefone do Cliente:</label>
+                    <p class="input">{{venda.telefone_cliente}}</p>    
+                </div>
                 <div class="read-block">
                     <label>Data da Venda:</label>
-                    <p class="input">{{venda.dt_venda}}</p>
-                </div>
-                <div class="read-block">
-                    <label>Data da Entrega:</label>
-                    <p class="input">{{venda.dt_entrega}}</p>    
-                </div>
-                <div class="read-block">
-                    <label>Tipo de Entrega:</label>
-                    <p class="input">{{venda.tipo_entrega}}</p>
+                    <p class="input">{{venda.data_venda}}</p>    
                 </div>
                 <div class="read-block">
                     <label>Total da Venda:</label>
                     <p class="input">R$ {{venda.total_venda}}</p>
                 </div>
-            </fieldset>            
+                
+            </fieldset>
+            
+        </form>
+    
+        <form action="/finalizarVenda" method="POST">
+            <fieldset class="dados-Top">
+                <div class="title">
+                    <legend>Dados do Pagamento</legend>
+                </div>
+
+                </br>
+
+                <div class="radio-block">
+                    <label for="tipoPagamento">Tipo do Pagamento:</label>
+                    <p>
+                        <label onclick="vista()">
+                            <input type="radio" name="tipoPagamento" value="VISTA"> Pagamento à VISTA
+                        </label>
+                    </p>
+                    <p>
+                        <label onclick="prazo()">
+                            <input type="radio" name="tipoPagamento" value="PRAZO" checked> Pagamento à PRAZO
+                        </label>
+                    </p>
+                </div>
+
+                <div id="parcelamento">
+
+                    <div class="mix-write-block">
+                        <label for="parcelamento">Número de parcelas  |  Data da primeira parcela:</label>
+                        <input style="width: 26%; " type=number name="numParcelas" min="2" >
+                           
+                        <input style="width: 50%; margin-left: 1%;" type="date" name="diaPagamento" id="diaPagamento" placeholder="Dia da primeita parcela">
+                    </div>
+    
+                </div>
+
+                
+
+            </fieldset>  
+            
+            <p  style="font-size: 2rem; font-family: Poppins; color: red;" >{{mensagem}}
+
+            <button type="submit" class="btn_calcular" name="btn_calcular">Concluir Venda</button>
+
         </form> 
+
+
+        
+
+        
     </div>
 </body>
+
+<script language="JavaScript">
+    function vista() {
+        document.getElementById('parcelamento').style.visibility = 'hidden';
+        document.getElementById('valorjuros').style.visibility = 'hidden';
+    }
+
+    function prazo() {
+        document.getElementById('parcelamento').style.visibility = 'visible';
+        document.getElementById('valorjuros').style.visibility = 'visible';
+    }
+
+    function semFrete() {
+        document.getElementById('frete').style.visibility = 'hidden';
+    }
+
+    function comFrete() {
+        document.getElementById('frete').style.visibility = 'visible';
+    }
+
+    function semJuros() {
+        document.getElementById('valorjuros').style.visibility = 'hidden';
+    }
+
+    function comJuros() {
+        document.getElementById('valorjuros').style.visibility = 'visible';
+    }
+</script>
+
 </html>

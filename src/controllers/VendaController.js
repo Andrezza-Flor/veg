@@ -3,6 +3,7 @@ const e = require('express');
 const local = require('local-storage');
 const { apresentarCliente } = require('./ClienteController');
 const { selecionarFerramenta } = require('./FornecedorController');
+const { venda } = require('./MenuController');
 
 var dadosVenda = {
     cod_cliente: '',
@@ -30,10 +31,11 @@ const nomeDosMesesAbre = [
     'Dez. '
 ]
 
-
 var itensVenda = []
 var listaCompra = []
 var listaHortalica = []
+var tamanhoVenda = 0
+var vendas = []
 
 async function buscarHortalica (cod_hortalica){
     const hortalica = await knex('Hortalicas')
@@ -88,6 +90,42 @@ async function buscarItensCompra (cod_plano, quantidade){
     }
 }
 
+async function apresentarVendas () {
+    const listaVendas = await knex('Vendas')
+    .where('Vendas.cod_plantacao', Number(local('plantacao')))
+    .whereNot('Vendas.status_venda', 'FECHADA')
+    .join('Clientes', 'Clientes.cod_cliente', 'Vendas.cod_cliente')
+    .select()
+
+    vendas = []
+
+    for (let index = 0; index < listaVendas.length; index++) {
+        const itensVenda = await knex('Itens_Venda')
+        .where('cod_venda', listaVendas[index].cod_venda)
+        .join('Hortalicas', 'Hortalicas.cod_hortalica', '=', 'Itens_Venda.cod_produto')
+        .select()
+
+        var nomeItens = itensVenda[0].nome_hortalica;
+
+        for (var j = 1; j < itensVenda.length; j++) {
+            nomeItens = nomeItens + ', ' + itensVenda[j].nome_hortalica                
+        }
+
+        var data = new Date(listaVendas[index].dt_entrega)
+                
+        var venda = {
+            'nome_cliente': listaVendas[index].nome_cliente,
+            'data_entrega': data.getDate() + ' de ' + nomeDosMesesAbre[data.getMonth()] + data.getFullYear(),
+            'produtos': nomeItens,
+            'rota': '/apresentarVenda/' + listaVendas[index].cod_venda
+        }
+
+        vendas.push(venda)
+    }
+            
+    tamanhoVenda = vendas.length
+}
+
 module.exports = {
 
     // Funçoes para realizar a venda
@@ -135,6 +173,7 @@ module.exports = {
 
                 listaHortalica = await knex('Armazens')
                 .where('cod_plantacao', Number(local('plantacao')))
+                .where('Armazens.status_hortalica', 'LIVRE')
                 .join('Hortalicas', 'Hortalicas.cod_hortalica', '=', 'Armazens.cod_hortalica')
                 .select()
 
@@ -158,6 +197,7 @@ module.exports = {
                 .join('Hortalicas', 'Hortalicas.cod_hortalica', '=', 'Planos_Producao.cod_hortalica')
                 .select()
             }
+
             return res.render('Venda/escolherHortalica.html', {dadosVenda, listaHortalica})
 
         } catch (error) {
@@ -171,43 +211,92 @@ module.exports = {
             itensVenda = []
 
             const {
-                hortalica    
+                cod_hortalica    
             } = req.body
+            var hortalica = []
+            if (Array.isArray(cod_hortalica)) {
+                hortalica = cod_hortalica
+            } else if(cod_hortalica == undefined) {
+                const mensagem = 'É necessário selecionar pelo menos uma hortaliça'
+                return res.render('Venda/escolherHortalica.html', {dadosVenda, listaHortalica, mensagem})
+            } else {
+                hortalica.push(cod_hortalica)
+            }
 
-            // Buscar cada item selecionado para cadastra-los na lista de itensVenda
-            for (let index = 0; index < hortalica.length; index++) {
-                var dadosHortalica = await knex('Hortalicas')
-                .where('Hortalicas.cod_hortalica', Number(hortalica[index]))
-                .join('Planos_Producao', 'Planos_Producao.cod_hortalica', '=', 'Hortalicas.cod_hortalica')
-                .select();
+            if(dadosVenda.tipo_venda == 'IMEDIATA'){
+                for (let index = 0; index < hortalica.length; index++) {
+                    var dadosHortalica = await knex('Armazens')
+                    .where('Armazens.cod_plantacao', Number(local('plantacao')))
+                    .where('Armazens.cod_hortalica', hortalica[index])
+                    .where('Armazens.status_hortalica', 'LIVRE')
+                    .join('Hortalicas', 'Hortalicas.cod_hortalica', '=', 'Armazens.cod_hortalica')
+                    .join('Producoes', 'Producoes.cod_producao', 'Armazens.cod_producao')
+                    .join('Planos_Producao', 'Planos_Producao.cod_plano', 'Producoes.cod_plano')
+                    .select(
+                        'Hortalicas.nome_hortalica',
+                        'Armazens.quantidade_hortalica',
+                        'Armazens.cod_hortalica',
+                        'Planos_Producao.contagem_hortalica'
+                    );
+    
+                    var item = {
+                        rota_excluir: '/excluirItem/' + (itensVenda.length),
+                        cod_hortalica: dadosHortalica[0].cod_hortalica,
+                        nome_hortalica: dadosHortalica[0].nome_hortalica,
+                        quantidade_hortalica: dadosHortalica[0].quantidade_hortalica,
+                        valor_produto: 0,
+                        total_valor: 0,
+                        cod_plano: 0,
+                        dias_producao: 0,
+                        area_producao: 0,
+                        contagem_hortalica: dadosHortalica[0].contagem_hortalica
+                    }
+                    
+                    itensVenda.push(item)
+                }
 
-                var item = {
-                    rota_excluir: '/excluirItem/' + (itensVenda.length),
-                    cod_hortalica: dadosHortalica[0].cod_hortalica,
-                    nome_hortalica: dadosHortalica[0].nome_hortalica,
-                    quantidade_hortalica: 0,
-                    valor_produto: 0,
-                    total_valor: 0,
-                    cod_plano: 0,
-                    dias_producao: 0,
-                    area_producao: 0,
-                    contagem_hortalica: dadosHortalica[0].contagem_hortalica
+                const obs = 0
+
+                return res.render('Venda/escolherQuantidadeHortalica.html', {dadosVenda , itensVenda, obs})
+
+            } else {
+                // Buscar cada item selecionado para cadastra-los na lista de itensVenda
+                for (let index = 0; index < hortalica.length; index++) {
+                    var dadosHortalica = await knex('Hortalicas')
+                    .where('Hortalicas.cod_hortalica', Number(hortalica[index]))
+                    .join('Planos_Producao', 'Planos_Producao.cod_hortalica', '=', 'Hortalicas.cod_hortalica')
+                    .select();
+
+                    var item = {
+                        rota_excluir: '/excluirItem/' + (itensVenda.length),
+                        cod_hortalica: dadosHortalica[0].cod_hortalica,
+                        nome_hortalica: dadosHortalica[0].nome_hortalica,
+                        quantidade_hortalica: 9999999999.99,
+                        valor_produto: 0,
+                        total_valor: 0,
+                        cod_plano: 0,
+                        dias_producao: 0,
+                        area_producao: 0,
+                        contagem_hortalica: dadosHortalica[0].contagem_hortalica
+                    }
+                    
+                    itensVenda.push(item)
                 }
                 
-                itensVenda.push(item)
+                for (let index = 0; index < itensVenda.length; index++) {
+                    var plano = await knex('Planos_Producao')
+                    .where('cod_plantacao', Number(local('plantacao')))
+                    .where('cod_hortalica', itensVenda[index].cod_hortalica)
+                    .select()
+
+                    await buscarItensCompra(plano[0].cod_plano, itensVenda[index].quantidade_hortalica)     
+                }
+
+                return res.render('Venda/escolherQuantidadeHortalica.html', {dadosVenda, listaHortalica, itensVenda, listaCompra})
+
             }
+
             
-            for (let index = 0; index < itensVenda.length; index++) {
-                var plano = await knex('Planos_Producao')
-                .where('cod_plantacao', Number(local('plantacao')))
-                .where('cod_hortalica', itensVenda[index].cod_hortalica)
-                .select()
-
-                await buscarItensCompra(plano[0].cod_plano, itensVenda[index].quantidade_hortalica)     
-            }
-
-            return res.render('Venda/escolherQuantidadeHortalica.html', {dadosVenda, listaHortalica, itensVenda, listaCompra})
-
         } catch (error) {
             next(error)
         }
@@ -302,9 +391,13 @@ module.exports = {
                 }
             }
 
-            dadosVenda.area_producao = areaTotal.toFixed(2)
-            dadosVenda.dias_producao = diasTotais
-            dadosVenda.valor_venda = totalVenda.toFixed(2)
+            if (dadosVenda.tipo_venda != 'IMAEDIATA') {
+                dadosVenda.area_producao = areaTotal.toFixed(2)
+                dadosVenda.dias_producao = diasTotais
+                dadosVenda.valor_venda = totalVenda.toFixed(2)
+            }
+
+            
 
 
             return res.render('Venda/resultadoVenda.html',  {dadosVenda, itensVenda, listaCompra})
@@ -352,37 +445,14 @@ module.exports = {
                     'quantidade_produto': itensVenda[index].quantidade_hortalica,
                     'valor_produto': itensVenda[index].valor_produto,
                     'cod_plano': itensVenda[index].cod_plano,
+                    'quantidade_produzida': 0.00,
                 })
             }
+
+            await apresentarVendas()
             
-
-            const listaVendas = await knex('Vendas')
-            .where('Vendas.cod_plantacao', Number(local('plantacao')))
-            .join('Clientes', 'Clientes.cod_cliente', 'Vendas.cod_cliente')
-            .select()
-
-            var vendas = []
-
-            for (let index = 0; index < listaVendas.length; index++) {
-                const itensVenda = await knex('Itens_Venda')
-                .where('cod_venda', listaVendas[index].cod_venda)
-                .select()
-
-                var data = new Date(listaVendas[index].dt_entrega)
-                
-                var venda = {
-                    'nome_cliente': listaVendas[index].nome_cliente,
-                    'data_entrega': data.getDate() + ' de ' + nomeDosMesesAbre[data.getMonth()] + data.getFullYear(),
-                    'quantidade_produto': itensVenda.length + ' produtos',
-                    'rota': '/apresentarVenda/' + listaVendas[index].cod_venda
-                }
-
-                vendas.push(venda)
-            }
-            
-            var tamanhoVenda = vendas.length
-            
-            return  res.render('Venda/venda.html', {vendas, tamanhoVenda})        } catch (error) {
+            return  res.render('Venda/venda.html', {vendas, tamanhoVenda}) 
+        } catch (error) {
             next(error)
         }
     },
@@ -390,10 +460,10 @@ module.exports = {
     async infoVenda (req, res, next) {
         try {
 
-            const index = req.params.id;
+            const cod_venda = req.params.id;
 
             const listaVenda = await knex('Vendas')
-            .where('Vendas.cod_venda', index)
+            .where('Vendas.cod_venda', cod_venda)
             .join('Clientes', 'Clientes.cod_cliente', '=', 'Vendas.cod_cliente')
             .join('Usuarios', 'Usuarios.email_usuario', 'Vendas.email_usuario')
             .select()
@@ -410,24 +480,193 @@ module.exports = {
 
 
             var listaItens = await knex('Itens_Venda')
-            .where('cod_venda', index)
+            .where('cod_venda', cod_venda)
             .join('Planos_Producao', 'Planos_Producao.cod_Plano', '=', 'Itens_Venda.cod_Plano')
             .join('Hortalicas', 'Hortalicas.cod_hortalica', '=', 'Itens_Venda.cod_produto')
+            .select()
+
+            var finalizarVenda = 0
+            var listaProdutos = []
+
+            for (let index = 0; index < listaItens.length; index++) {
+                var item = {
+                    'nome_hortalica': listaItens[index].nome_hortalica,
+                    'quantidade_produto': listaItens[index].quantidade_produto + listaItens[index].contagem_hortalica,
+                    'valor_produto': (Number(listaItens[index].valor_produto) * Number(listaItens[index].quantidade_produto)).toFixed(2),
+                    'quantidade_produzida': listaItens[index].quantidade_produzida+ listaItens[index].contagem_hortalica,
+                }
+
+                if (item.quantidade_produto ==item.quantidade_produzida){
+                    finalizarVenda = '/finalizarVenda/' + cod_venda
+                } else {
+                    finalizarVenda = 0
+                }
+
+                listaProdutos.push(item)
+                 
+            }
+
+            return res.render('Venda/infoVenda.html', {venda, listaProdutos, finalizarVenda})
+        } catch (error) {
+            next(error)
+        }
+    },
+
+    async apresentarTelaFinalizar(req, res, next){
+        try {
+            const cod_venda = req.params.id
+            local ('cod_venda', String(cod_venda))
+
+            const arrayVenda = await knex("Vendas")
+            .where('cod_venda', cod_venda)
+            .join('Clientes', 'Clientes.cod_cliente', '=', 'Vendas.cod_cliente')
+            .select()
+            
+            const data_venda = new Date(arrayVenda[0].dt_venda)
+
+            const venda = {
+                'nome_cliente': arrayVenda[0].nome_cliente,
+                'telefone_cliente': arrayVenda[0].telefone_cliente,
+                'data_venda': data_venda.getDate() + ' ' + nomeDosMesesAbre[data_venda.getMonth()] + ' ' + data_venda.getFullYear(),
+                'total_venda': arrayVenda[0].total_venda,
+            }
+
+            var listaItens = await knex('Itens_Venda')
+            .where('cod_venda', cod_venda)
+            .join('Planos_Producao', 'Planos_Producao.cod_Plano', '=', 'Itens_Venda.cod_Plano')
+            .join('Hortalicas', 'Hortalicas.cod_hortalica', '=', 'Itens_Venda.cod_produto')
+            .select()
 
             var listaProdutos = []
 
             for (let index = 0; index < listaItens.length; index++) {
                 var item = {
                     'nome_hortalica': listaItens[index].nome_hortalica,
-                    'quantidade_produto': listaItens[index].quantidade_produto + ' ' + listaItens[index].contagem_hortalica,
-                    'valor_produto': 'R$ ' + (Number(listaItens[index].valor_produto) * Number(listaItens[index].quantidade_produto)).toFixed(2)
+                    'quantidade_produto': listaItens[index].quantidade_produto + listaItens[index].contagem_hortalica,
+                    'valor_produto': (Number(listaItens[index].valor_produto) * Number(listaItens[index].quantidade_produto)).toFixed(2),
                 }
 
                 listaProdutos.push(item)
-               
+                 
             }
 
-            return res.render('Venda/infoVenda.html', {venda, listaProdutos})
+            return res.render('Venda/finalizarVenda.html', {venda, listaProdutos})
+        } catch (error) {
+            next(error)
+        }
+    },
+    async finalizarVenda(req, res, next){
+        try {
+            const cod_venda = Number(local('cod_venda'))
+
+            const {
+                tipoPagamento,
+                numParcelas,
+                diaPagamento
+            } = req.body
+
+            const arrayVenda = await knex('Vendas')
+            .where('cod_venda', cod_venda)
+            .join('Clientes', 'Clientes.cod_cliente', '=', 'Vendas.cod_cliente')
+            .select()
+
+            var dataPagamento = new Date(diaPagamento)
+            
+            var parcelamento = []
+
+            if (tipoPagamento == 'PRAZO') {
+                if(numParcelas == '' || diaPagamento == '') {
+                    const arrayVenda = await knex("Vendas")
+                    .where('cod_venda', cod_venda)
+                    .join('Clientes', 'Clientes.cod_cliente', '=', 'Vendas.cod_cliente')
+                    .select()
+                    
+                    const data_venda = new Date(arrayVenda[0].dt_venda)
+
+                    const venda = {
+                        'nome_cliente': arrayVenda[0].nome_cliente,
+                        'telefone_cliente': arrayVenda[0].telefone_cliente,
+                        'data_venda': data_venda.getDate() + ' ' + nomeDosMesesAbre[data_venda.getMonth()] + ' ' + data_venda.getFullYear(),
+                        'total_venda': arrayVenda[0].total_venda,
+                    }
+
+                    var listaItens = await knex('Itens_Venda')
+                    .where('cod_venda', cod_venda)
+                    .join('Planos_Producao', 'Planos_Producao.cod_Plano', '=', 'Itens_Venda.cod_Plano')
+                    .join('Hortalicas', 'Hortalicas.cod_hortalica', '=', 'Itens_Venda.cod_produto')
+                    .select()
+
+                    var listaProdutos = []
+
+                    for (let index = 0; index < listaItens.length; index++) {
+                        var item = {
+                            'nome_hortalica': listaItens[index].nome_hortalica,
+                            'quantidade_produto': listaItens[index].quantidade_produto + listaItens[index].contagem_hortalica,
+                            'valor_produto': (Number(listaItens[index].valor_produto) * Number(listaItens[index].quantidade_produto)).toFixed(2),
+                        }
+
+                        listaProdutos.push(item)
+                    }
+
+                    var mensagem = 'Dados Inválidos';
+
+                    return res.render('Venda/finalizarVenda.html', {venda, listaProdutos, mensagem})
+
+                } else {
+                    var valoresParcelas = arrayVenda[0].total_venda / Number(numParcelas)
+                    for (let index = 0; index < Number(numParcelas); index++) {
+                        var parcela = {
+                            'dia_pagamento': dataPagamento.getFullYear()+ '-' +(dataPagamento.getMonth()+1)+ '-' +dataPagamento.getDate(),
+                            'valor_pagamento': valoresParcelas.toFixed(2),
+                        }
+                        parcelamento.push(parcela)
+                        dataPagamento.setMonth(dataPagamento.getMonth() + 1)
+                    }
+
+                }
+            } else {
+                var dataPagamento = new Date(arrayVenda[0].dt_entrega)
+                var parcela = {
+                    'dia_pagamento': dataPagamento,
+                    'valor_pagamento': arrayVenda[0].total_venda,
+                }
+
+                parcelamento.push(parcela)
+            }
+
+            for (let index = 0; index < parcelamento.length; index++) {
+                await knex('Entradas').insert({
+                    'cod_plantacao': Number(local('plantacao')),
+                    'validade_entrada': parcelamento[index].dia_pagamento,
+                    'nome_entrada': 'VENDA - ' + arrayVenda[0].nome_cliente,
+                    'valor_entrada': parcelamento[index].valor_pagamento,
+                    'destino_valor': null
+                })          
+            }
+
+            await knex('Vendas')
+            .where('cod_venda', cod_venda)
+            .update({
+                'status_venda': 'FECHADA'
+            })
+
+            const itemVenda = await knex('Itens_Venda')
+            .where('cod_venda', cod_venda)
+            .select()
+
+            for (let index = 0; index < itemVenda.length; index++) {
+                await knex('Armazens')                
+                .where('cod_plantacao', Number(local('plantacao')))
+                .where('destino_hortalica', itemVenda[index].cod_item)
+                .update ({
+                    'status_hortalica': 'VENDIDO'
+                })
+            }
+
+            // Retorno para vendas
+            await apresentarVendas()
+            
+            return  res.render('Venda/venda.html', {vendas, tamanhoVenda}) 
         } catch (error) {
             next(error)
         }

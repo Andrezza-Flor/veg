@@ -15,11 +15,12 @@ const Celeiro= require('./controllers/CeleiroController')
 const Plano = require('./controllers/PlanoController')
 const Producao = require('./controllers/Producao')
 const Armazem = require('./controllers/ArmazemController')
-
-
 const ColaboradorController = require('./controllers/ColaboradorController')
-const AtividadeController = require('./controllers/AtividadeController')
 const VendaController = require('./controllers/VendaController')
+const Relatorio = require('./controllers/RelatoriosController')
+const Ajuda = require('./controllers/AjudaController')
+
+const AtividadeController = require('./controllers/AtividadeController')
 
 routes
 //Login
@@ -130,6 +131,8 @@ routes
     .post('/apresentarVenda', VendaController.apresentarVenda)
     .post('/salvarVenda', VendaController.cadastarVenda)
     .get('/apresentarVenda/:id', VendaController.infoVenda)
+    .get('/finalizarVenda/:id', VendaController.apresentarTelaFinalizar)
+    .post('/finalizarVenda', VendaController.finalizarVenda)
    
     //Cliente
     .get('/cliente', MenuController.cliente)
@@ -168,29 +171,40 @@ routes
     .get('/editarDadosArmazem', Armazem.apresentarDadosParaEdicao)
     .post('/salvarDadosProduto', Armazem.salvarDados)
 
-// ------------------------------------------------------------------------
-
 // Colaborador
     .get('/colaborador', MenuController.colaborador)
-    .get('/cadastroColaborador', ColaboradorController.index)
-    .post('/criarColaborador', ColaboradorController.create)
-    .post('/detalheColaborador', ColaboradorController.paginaDetalhe)
-    .get('/editarColaborador', ColaboradorController.paginaEditar)
+    .get('/cadastrarColaborador', ColaboradorController.criarColaborador)
+    .post('/criarColaborador', ColaboradorController.cadastrarColaborador)
+    .post('/colaborador', ColaboradorController.paginaDetalhe)
     .get('/inabilitarColaborador', ColaboradorController.inabilitar)
-    .post('/editarColaborador', ColaboradorController.editar)
+    .get('/editarColaborador', ColaboradorController.editar)
     
-// Relatório
-    .get('/relatorio', MenuController.relatorio) 
-
-// Atividade
-    .get('/atividade', MenuController.atividade)
-    .get('/criarAtividade', AtividadeController.indexCriar)
-    .post('/criarAtividade', AtividadeController.create)
+    // .post('/criarColaborador', ColaboradorController.apresentarColaborador)
+    // .post('/detalheColaborador', ColaboradorController.paginaDetalhe)
+    // .get('/editarColaborador', ColaboradorController.paginaEditar)
+    // .get('/inabilitarColaborador', ColaboradorController.inabilitar)
+    // .post('/editarColaborador', ColaboradorController.editar)
 
 // Perfil
     .get('/perfil', MenuController.perfil)
     .get('/editarPerfil', GerenteController.paginaEditar)
     .post('/editarPerfil', GerenteController.editarPerfil)
     .get('/inabilitarPerfil', GerenteController.inabilitar)
+
+// Relatório
+    .get('/relatorio', MenuController.relatorio)
+    .post('/relatorio', Relatorio.apresentarRelatorio)
+
+// Ajuda
+    .get('/ajuda', MenuController.ajuda)
+    .post('/ajuda', Ajuda.apresentarAjuda)
+
+// ------------------------------------------------------------------------
+
+// Atividade
+    .get('/atividade', MenuController.atividade)
+    .get('/criarAtividade', AtividadeController.indexCriar)
+    .post('/criarAtividade', AtividadeController.create)
+
 
 module.exports = routes

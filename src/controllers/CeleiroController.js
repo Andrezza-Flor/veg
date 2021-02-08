@@ -147,6 +147,7 @@ module.exports = {
                 await knex('Celeiros')
                 .insert({
                     'cod_plantacao': Number(local('plantacao')),
+                    'cod_itemCompra': ferramentasCompras[index].cod_itemCompra,
                     'cod_item': ferramentasCompras[index].cod_item,
                     'cod_compra': ferramentasCompras[index].cod_compra,
                     'cod_fornecedor': ferramentasCompras[index].cod_fornecedor,
@@ -159,6 +160,7 @@ module.exports = {
                 await knex('Celeiros')
                 .insert({
                     'cod_plantacao': Number(local('plantacao')),
+                    'cod_itemCompra':insumosCompras[index].cod_itemCompra,
                     'cod_item': insumosCompras[index].cod_item,
                     'cod_compra': insumosCompras[index].cod_compra,
                     'cod_fornecedor': insumosCompras[index].cod_fornecedor,
@@ -248,10 +250,12 @@ module.exports = {
             if(celeiro[0].tipo_produto == 'INSUMO') {
                 itemCeleiro = await knex('Celeiros')
                 .where('cod_posicao', posicao)
-                .join('Itens_Compra', 'Itens_Compra.cod_itemCompra', '=', 'Celeiros.cod_itemCompra')
+                .where('Produtos.tipo_produto', 'INSUMO')
+                .join('Compras', 'Compras.cod_compra', '=', 'Celeiros.cod_compra')
                 .join('Fornecedores', 'Fornecedores.cod_fornecedor', '=', 'Celeiros.cod_fornecedor')
                 .join('Produtos', 'Produtos.id_produto', '=', 'Celeiros.cod_item')
                 .join('Insumos', 'Insumos.cod_insumo', 'Produtos.cod_produto')
+                .join('Itens_Compra', 'Itens_Compra.cod_itemCompra', 'Celeiros.cod_itemCompra')
                 .select(
                     'Insumos.nome_insumo',
                     'Celeiros.quantidade_item',
@@ -261,6 +265,7 @@ module.exports = {
                     'Celeiros.validade_insumo',
                     'Celeiros.cod_posicao',
                 )
+
                 item = itemCeleiro[0]
                 item.nome_item = itemCeleiro[0].nome_insumo
 
@@ -374,7 +379,7 @@ module.exports = {
                 'cod_plantacao': Number(local('plantacao')),
                 'validade_entrada': dataAtual,
                 'nome_entrada': 'VENDA ' + item.nome_item + ' ['+ quantidade + item.contagem_item +']',
-                'valor_entrada': Number(valor),
+                'valor_entrada': Number(valor) * Number(quantidade),
             })
 
             await retornarCeleiro()

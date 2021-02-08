@@ -127,7 +127,13 @@ async function varreduraProducao(){
                 .update({
                     'status_aplicacao': 'ATRASADO',
                 })
-            }       
+            } else {
+                await knex('Itens_Producao')
+                .where('cod_acao', listaItens[j].cod_acao)
+                .update({
+                    'status_aplicacao': 'NÃO REALIZADA',
+                })
+            }  
         }
     }
 
@@ -474,12 +480,6 @@ module.exports = {
 
             const codAcao =  req.params.id;
 
-            // atualizar o status dos Itens_Producao
-            await knex('Itens_Producao')
-            .where('cod_acao', codAcao)
-            .update({
-                'status_aplicacao': 'REALIZADA',
-            })
             // atualizar a quantidade do Celeiros
 
             const quantidade = await knex('Itens_Producao')
@@ -492,12 +492,20 @@ module.exports = {
             .where('Celeiros.cod_plantacao', Number(local('plantacao')))
             .where('cod_item', quantidade[0].id_produto)
             .whereBetween('quantidade_item', [quantidade[0].quantidade_item, 999999999.99])
-            .select('Celeiros.quantidade_item', 'Celeiros.cod_posicao')
+            .select()
             
             await knex('Celeiros')
             .where('cod_posicao', itemCeleiro[0].cod_posicao)
             .update({
                 'quantidade_item': itemCeleiro[0].quantidade_item - quantidade[0].quantidade_item
+            })
+
+            //atualizar o status dos Itens_Producao
+            await knex('Itens_Producao')
+            .where('cod_acao', codAcao)
+            .update({
+                'cod_ItemCompra': itemCeleiro[0].cod_itemCompra,
+                'status_aplicacao': 'REALIZADA',
             })
 
             // Preparação da tela de apresentação das producao
@@ -519,8 +527,6 @@ module.exports = {
             .join('Planos_Producao', 'Planos_Producao.cod_plano', '=', 'Producoes.cod_plano')
             .join('Hortalicas', 'Hortalicas.cod_hortalica', 'Planos_Producao.cod_hortalica')
             .select()
-
-            const now = new Date()
 
             const producao = {
                 'nome_hortalica': producoes[0].nome_hortalica,

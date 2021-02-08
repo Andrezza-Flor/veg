@@ -378,8 +378,56 @@ async function varreduraBalanco(codPlantacao) {
         'data_ativo': dataAtual,
     })
 
+    // Atualizar os Passivos Permanetes Folha de Pagamento
+    
+        // Buscando o Passivo Permanete do mês de referencia:
+    const folhaPagamento = await knex('Passivos')
+    .where('cod_balanco', codBalanco)
+    .where('cod_plantacao', Number(local('plantacao')))
+    .where('nome_passivo', 'FOLHA DE PAGAMENTO - ' + dataAtual.getMonth())
+    .where('tipo_passivo', 'PASSIVO PERMANENTE')
+    .select()
 
+    var totalSalario = 0
+    var data1 = dataAtual.getFullYear() + '-' + dataAtual.getMonth() + '-' + 1  
+    var data2 = dataAtual.getFullYear() + '-' + (dataAtual.getMonth() + 1 ) + '-' + 1  
+    if (folhaPagamento.length == 0 ) {
+        const colaboradores = await knex('Colaboradores')
+        .where('cod_plantacao', Number(local('plantacao')))
+        .whereBetween('data_contratacao', [data1, data2])
+        .select()
 
+        console.log(colaboradores)
+
+        for (let index = 0; index < colaboradores.length; index++) {
+            if (colaboradores[index].data_contratacao < data1) {
+                
+                totalSalario = totalSalario + colaboradores[index].salario_colaborador
+            } else {
+                const now = new Date(data2); // Data de hoje
+                const past = new Date(colaboradores[index].data_contratacao); // Outra data no passado
+                const diff = Math.abs(now.getTime() - past.getTime()); // Subtrai uma data pela outra
+                const days = Math.ceil(diff / (1000 * 60 * 60 * 24)); // Divide o total pelo total de milisegundos correspondentes a 1 dia. (1000 milisegundos = 1 segundo).
+
+                const salarioparcelado = (colaboradores[index].salario_colaborador / 30) * days
+                totalSalario = totalSalario + salarioparcelado
+            }
+        }
+
+        // Inserirdo o Passivo Permanete
+        await knex('Passivos')
+        .insert({
+            'cod_plantacao': Number(local('plantacao')),
+            'cod_balanco': codBalanco,
+            'tipo_passivo': 'PASSIVO PERMANENTE',
+            'nome_passivo': 'FOLHA DE PAGAMENTO - ' + dataAtual.getMonth(),
+            'valor_passivo': totalSalario,
+            'data_passivo': data2
+        })
+    } 
+
+    
+    
     // Atualização dos Passivos Circulates e Passivos Permanentes
     const saidas = await knex('Saidas')
     .where('cod_plantacao', codPlantacao)
@@ -602,7 +650,7 @@ async function varreduraProducao(){
     .select()
 
     for (var index = 0; index < listaProducao.length; index++) {
-        const now = new Date(); // Data de hoje
+        const now = new Date(2022, 2,4); // Data de hoje
         const past = new Date(listaProducao[index].dt_inicio); // Outra data no passado
         const diff = Math.abs(now.getTime() - past.getTime()); // Subtrai uma data pela outra
         const days = Math.ceil(diff / (1000 * 60 * 60 * 24)); 
@@ -672,6 +720,7 @@ module.exports = {
             next(error)
         }
     },
+
     async balanco(req, res, next) {
         try {
             const codPlantacao = Number(local('plantacao'))
@@ -782,7 +831,34 @@ module.exports = {
             next(error)
         }
         
-    }, 
+    },
+    async financiamento(req, res, next) {
+        try {
+            const plantacao = await knex('Plantacoes')
+            .where('cod_plantacao', Number(local('plantacao')))
+            .select('dt_criacao_plantacao');
+
+            const dataInicio = plantacao[0].dt_criacao_plantacao;
+            const dataAtual = new Date();
+
+            const financiamentos = await knex('Financiamentos')
+            .where('cod_plantacao', Number(local('plantacao')))
+            .whereNotBetween('dt_finalizado', [dataInicio, dataAtual])
+            .select()
+
+            for (let index = 0; index < financiamentos.length; index++) {
+                var dataTabela = new Date(financiamentos[index].dt_financiamento);
+               
+                financiamentos[index].dt_financiamento = dataTabela.getDate()+ ' / ' + (dataTabela.getMonth()+1)+ ' / ' + (dataTabela.getFullYear())
+            
+                financiamentos[index].valor_financiamento = (financiamentos[index].valor_financiamento).toFixed(2)
+            }
+
+            return res.render('Financiamento/financiamento.html', {financiamentos})
+        } catch (error) {
+            next(error)
+        }   
+    },
 
     async compra(req,res, next) {
         try {
@@ -858,20 +934,25 @@ module.exports = {
             for (let index = 0; index < listaVendas.length; index++) {
                 const itensVenda = await knex('Itens_Venda')
                 .where('cod_venda', listaVendas[index].cod_venda)
+                .join('Hortalicas', 'Hortalicas.cod_hortalica', '=', 'Itens_Venda.cod_produto')
                 .select()
+
+                var nomeItens = itensVenda[0].nome_hortalica;
+
+                for (var j = 1; j < itensVenda.length; j++) {
+                    nomeItens = nomeItens + ', ' + itensVenda[j].nome_hortalica                
+                }
 
                 var data = new Date(listaVendas[index].dt_entrega)
                 
                 var venda = {
                     'nome_cliente': listaVendas[index].nome_cliente,
                     'data_entrega': data.getDate() + ' de ' + nomeDosMesesAbre[data.getMonth()] + data.getFullYear(),
-                    'quantidade_produto': itensVenda.length + ' produtos',
+                    'produtos': nomeItens,
                     'rota': '/apresentarVenda/' + listaVendas[index].cod_venda
                 }
 
                 vendas.push(venda)
-
-                
             }
 
             var tamanhoVenda = vendas.length
@@ -1041,7 +1122,8 @@ module.exports = {
         try {
             const listaArmazem = await knex('Armazens')
             .where('Armazens.cod_plantacao', Number(local('plantacao')))
-            .where('status_hortalica', 'ARMAZENADO')
+            .whereNot('Armazens.quantidade_hortalica', 0)
+            .whereNot('status_hortalica', 'VENDIDO')
             .join('Hortalicas', 'Hortalicas.cod_hortalica', '=',  'Armazens.cod_hortalica')
             .join('Producoes', 'Producoes.cod_producao', '=', 'Armazens.cod_producao')
             .join('Planos_Producao', 'Planos_Producao.cod_plano', '=', 'Producoes.cod_plano')
@@ -1051,7 +1133,7 @@ module.exports = {
                 'Producoes.objetivo_producao',
                 'Armazens.quantidade_hortalica',
                 'Armazens.validade_hortalica',
-                'Armazens.contrato_venda',
+                'Armazens.destino_hortalica',
                 'Armazens.cod_posicao'
             )
 
@@ -1068,7 +1150,7 @@ module.exports = {
                     'rota': '/acessoItemArmazem/' + listaArmazem[index].cod_posicao
                 }
 
-                if (listaArmazem[index].contrato_venda > 0){
+                if (listaArmazem[index].destino_hortalica > 0){
                     item.objetivo_producao = 'CONTRATO DE VENDA';
                 } else {
                     item.objetivo_producao = 'VENDAS FUTURAS';
@@ -1085,67 +1167,6 @@ module.exports = {
             next(error)
         }
         
-    },
-    async financiamento(req, res, next) {
-        try {
-            const plantacao = await knex('Plantacoes')
-            .where('cod_plantacao', Number(local('plantacao')))
-            .select('dt_criacao_plantacao');
-
-            const dataInicio = plantacao[0].dt_criacao_plantacao;
-            const dataAtual = new Date();
-
-            const financiamentos = await knex('Financiamentos')
-            .where('cod_plantacao', Number(local('plantacao')))
-            .whereNotBetween('dt_finalizado', [dataInicio, dataAtual])
-            .select()
-
-            for (let index = 0; index < financiamentos.length; index++) {
-                var dataTabela = new Date(financiamentos[index].dt_financiamento);
-               
-                financiamentos[index].dt_financiamento = dataTabela.getDate()+ ' / ' + (dataTabela.getMonth()+1)+ ' / ' + (dataTabela.getFullYear())
-            
-                financiamentos[index].valor_financiamento = (financiamentos[index].valor_financiamento).toFixed(2)
-            }
-
-            return res.render('Financiamento/financiamento.html', {financiamentos})
-        } catch (error) {
-            next(error)
-        }   
-    },
-    async colaborador(req,res, next) {
-        try {
-            // Preparar a lista de itens no armazém
-            const codPlantacao = Number(local('plantacao'))
-
-            const listaColaborador = await knex('Logins')
-            .where({'cod_Plantacao': codPlantacao})
-            .whereNot({'tipo_Usuario': 'Gerente'})
-            .join('Usuarios', 'Usuarios.email_Usuario', '=', 'Logins.email_Usuario')
-            .select('Usuarios.nome_Usuario',
-                    'Usuarios.email_Usuario',
-                    'Usuarios.tipo_Usuario')
-            
-            return  res.render('colaborador.html', {listaColaborador})
-        } catch (error) {
-            return next(error)
-        }
-        
-    },
-    async relatorio(req,res, next) {
-        try {
-            return  res.render('relatorio.html')
-        } catch (error) {
-           next(error)
-        }
-        
-    },
-    async atividade(req,res, next) {
-        try {
-            return  res.render('atividades.html')
-        } catch (error) {
-            next(error)
-        }
     },
     async perfil(req, res, next) {
         try {
@@ -1190,5 +1211,139 @@ module.exports = {
             next(error);
         }
         
+    },
+        
+    async colaborador(req,res, next) {
+        try {
+            const colaboradores = await knex("Colaboradores")
+            .where('Colaboradores.cod_plantacao', Number(local('plantacao')))
+            .whereNot('salario_colaborador', 0)
+            .join('Usuarios', 'Usuarios.email_usuario', '=', 'Colaboradores.email_colaborador')
+            .select('Colaboradores.cod_colaborador', 'Usuarios.nome_usuario', 'Usuarios.tipo_usuario')
+            return  res.render('Colaborador/colaborador.html', {colaboradores})
+        } catch (error) {
+            return next(error)
+        }
+        
+    },
+    async relatorio(req,res, next) {
+        try {
+            const relatorios = [
+                {
+                    'cod_relatorio': 1,
+                    'nome_relatorio': 'Lucros e Prejuízos'
+                },
+                {
+                    'cod_relatorio': 2,
+                    'nome_relatorio': 'Passivos'
+                },
+                {
+                    'cod_relatorio': 3,
+                    'nome_relatorio': 'Ativos'
+                },
+                {
+                    'cod_relatorio': 4,
+                    'nome_relatorio': 'Balanço Patrimonial'
+                },
+                {
+                    'cod_relatorio': 5,
+                    'nome_relatorio': 'Fluxo de Caixa'
+                },
+                {
+                    'cod_relatorio': 6,
+                    'nome_relatorio': 'Frequência dos Fornecedores'
+                },
+                {
+                    'cod_relatorio': 7,
+                    'nome_relatorio': 'Frequência dos Clientes'
+                },
+                {
+                    'cod_relatorio': 8,
+                    'nome_relatorio': 'Frequência dos Insumos'
+                },
+                {
+                    'cod_relatorio': 9,
+                    'nome_relatorio': 'Frequência dos Planos de Produção'
+                },
+                
+                
+            ]
+            return  res.render('Relatorio/relatorio.html', {relatorios})
+        } catch (error) {
+           next(error)
+        }
+        
+    },
+    async ajuda(req,res, next) {
+        try {
+            const manuais = [
+                {
+                    'cod_manual': 1,
+                    'nome_manual': 'Balanço'
+                },
+                {
+                    'cod_manual': 2,
+                    'nome_manual': 'Fluxo de Caixa'
+                },
+                {
+                    'cod_manual': 3,
+                    'nome_manual': 'Financiamento'
+                },
+                {
+                    'cod_manual': 4,
+                    'nome_manual': 'Compra'
+                },
+                {
+                    'cod_manual': 5,
+                    'nome_manual': 'Fornecedor'
+                },
+                {
+                    'cod_manual': 6,
+                    'nome_manual': 'Venda'
+                },
+                {
+                    'cod_manual': 7,
+                    'nome_manual': 'Cliente'
+                },
+                {
+                    'cod_manual': 8,
+                    'nome_manual': 'Produção'
+                },
+                {
+                    'cod_manual': 9,
+                    'nome_manual': 'Plano Produção'
+                },
+                {
+                    'cod_manual': 10,
+                    'nome_manual': 'Celeiro'
+                },
+                {
+                    'cod_manual': 11,
+                    'nome_manual': 'Armazém'
+                },
+                {
+                    'cod_manual': 12,
+                    'nome_manual': 'Colaborador'
+                },
+                {
+                    'cod_manual': 13,
+                    'nome_manual': 'Relatório'
+                },
+                
+            ]
+            return  res.render('Ajuda/ajuda.html', {manuais})
+        } catch (error) {
+           next(error)
+        }
+        
+    },
+
+
+    async atividade(req,res, next) {
+        try {
+            return  res.render('atividades.html')
+        } catch (error) {
+            next(error)
+        }
     },
 }

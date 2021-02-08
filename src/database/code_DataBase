@@ -346,7 +346,7 @@ CREATE TABLE Itens_Producao (
 
 CREATE TABLE Armazens (
   cod_posicao int(4) AUTO_INCREMENT,
-  contrato_venda INT(4) NOT NULL,
+  destino_hortalica INT(4) NOT NULL,
   cod_plantacao INT(4) NOT NULL,
   cod_producao INT(4) NOT NULL,
   cod_hortalica INT(4) NOT NULL,
@@ -356,35 +356,18 @@ CREATE TABLE Armazens (
   PRIMARY KEY (cod_posicao),
   FOREIGN KEY (cod_producao) REFERENCES Producoes(cod_producao),
   FOREIGN KEY (cod_hortalica) REFERENCES Hortalicas(cod_hortalica),
-  FOREIGN KEY (cod_Plantacao) REFERENCES Plantacoes(cod_Plantacao)
+  FOREIGN KEY (cod_plantacao) REFERENCES Plantacoes(cod_plantacao)
+);
+
+CREATE TABLE Colaboradores (
+  cod_colaborador int(4) AUTO_INCREMENT,
+  cod_plantacao INT(4) NOT NULL,
+  email_colaborador VARCHAR(500) NOT NULL,
+  salario_colaborador DECIMAL(10,2) NOT NULL,
+  data_contratacao DATE NOT NULL,
+  data_termino DATE,
+  PRIMARY KEY (cod_colaborador),
+  FOREIGN KEY (email_colaborador) REFERENCES Usuarios(email_usuario),
+  FOREIGN KEY (cod_plantacao) REFERENCES Plantacoes(cod_plantacao)
 );
 ------------------------------------------PAREI--------------------------------------------
-
-
-CREATE TABLE Colheita (
-    cod_Plantacao_Hortalica INT(10),
-    cod_Posicao_Armazem int(4) NOT NULL,
-    quant_Total_Colida decimal(10,2) not null,
-    dt_Colheita timestamp NOT NULL DEFAULT current_timestamp(),
-    email_Usuario_Colheu VARCHAR(500) NOT NULL,
-    PRIMARY KEY (cod_Plantacao_Hortalica),
-    FOREIGN KEY (cod_Plantacao_Hortalica) REFERENCES Plantio(cod_Plantacao_Hortalica),
-    FOREIGN KEY (email_Usuario_Colheu) REFERENCES Usuarios(email_Usuario),
-    FOREIGN KEY (cod_Posicao_Armazem) REFERENCES Armazens(cod_Posicao_Armazem)
-);
-
-
-
-
-CREATE TABLE  (
-  cod_Item_Venda INT(4) AUTO_INCREMENT,
-  cod_Pedido_Venda INT(4) not null,
-  quant_vendida INT(5) NOT NULL,
-  cod_Posicao_Armazem int(4) not null,
-  cod_Hortalica INT(4) NOT NULL,
-  cod_Plantacao INT(10) NOT NULL,
-  PRIMARY KEY (cod_Item_Venda),
-  FOREIGN KEY (cod_Pedido_Venda) REFERENCES Pedidos_Venda(cod_Pedido_Venda),
-  FOREIGN KEY (cod_Hortalica) REFERENCES Hortalicas(cod_Hortalica),
-  FOREIGN KEY (cod_Posicao_Armazem) REFERENCES Armazens(cod_Posicao_Armazem)
-);

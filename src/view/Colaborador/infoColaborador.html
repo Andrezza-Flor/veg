@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/style/mainStyle.css">
     <link rel="stylesheet" href="/style/pagetable.css">
     <link rel="stylesheet" href="/style/formStyle.css">
-    <link rel="stylesheet" href="/style/atividade.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
 
@@ -79,48 +78,63 @@
     </div>
     
     <div class="main">
-        <h1>Venda</h1>
+        <h1>
+            Colaborador
+            <a href="/colaborador">
+                <img src="/imagem/voltar.png" alt="">
+                Voltar
+            </a>
+        </h1>
+
         <form>
             <fieldset class="dados-Top">
-
-                {%if tamanhoVenda == 0%}
-
-                <p class="mensagem">Não há nenhuma venda em aberto</p>
-
-                {%else%}
-
-                <div class="conjunto-caixas">
-                    {%for venda in vendas%}
-                    <div class="caixa-conteudo">
-                        <p class="title"> {{venda.nome_cliente}}</p>
-                        <p class="conteudo"> <strong>DATA ENTREGA:</strong> {{venda.data_entrega}}</p>
-                        <p class="conteudo"><strong>ITENS: </strong>{{venda.produtos}}</p>
-                        <a href={{venda.rota}}>Acessar</a>
-                    </div>
-                    {%endfor%}
+                <div class="title">
+                    <legend>Dados do Colaborador</legend>
                 </div>
-
-                {%endif%}
-                
-                
-
-                <a href="/criarVenda" class="button-footer">
-                    <img src="/imagem/venda.png" alt="Comprar">
-                    <p>Vender</p>
-                </a>
+                <div class="read-block">
+                    <label for="nomeColaborador">Nome:</label>
+                    <p class="input">{{colaborador.nome}}</p>
+                </div>
+               <div class="read-block">
+                    <label for="cpfColaborador">CPF Colaborador:</label>
+                    <p class="input">{{colaborador.cpf}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="telefoneColaborador">Telefone Colaborador:</label>
+                    <p class="input">{{colaborador.telefone}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="dtNasciamntoColaborador">Data de Nascimento:</label>
+                    <p class="input">{{colaborador.data_nascimento}}</p>
+                </div> 
+                <div class="read-block">
+                    <label for="salarioCo">Salário do Colaborador:</label>
+                    <p class="input">R${{colaborador.salario}}</p>
+                </div> 
             </fieldset>
-        </form>
 
-        <div class="foot-dados-Botton">
-            <div class="aviso-foot">
-                <p>Caso queira cadastrar ou visualizar os seus clientes</p>
-            </div>
-            <div class="acoes-n-banco">
-                <a href="/cliente" id="cadastrar-banco"> <p>Cliente</p> </a>
-            </div>
-        </div>
-
-
+            <fieldset class="dados-Botton">
+                <div class="title">
+                    <legend>Dados da Acesso</legend>
+                </div>
+                <div class="read-block">
+                    <label for="emailColaborador">Email Colaborador:</label>
+                    <p class="input">{{colaborador.email}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="funcaoColaborador">Função do Colaborador:</label>
+                    <p class="input">{{colaborador.tipo_usuairo}}</p>
+                </div>
+                <div class="read-block">
+                    <label for="dtAdmissao">Data de Admissão:</label>
+                    <p class="input">{{colaborador.data_admissao}}</p>
+                </div>
+            </fieldset>
+        </form>        
+        <div class="botoes-fim-cadastro">
+            <a href="/inabilitarColaborador" id="cancelar-cadastro"> <p>Inabilitar</p> </a>
+            <!-- <a href="/editarColaborador" id="cadastrar-cadastro"> <p>Editar</p> </a> -->
+        </div>  
     </div>
 </body>
 </html>

@@ -104,7 +104,7 @@
                             <tr>
                                 <td style="width: 1rem;"> <a href={{item.rota_excluir}}><img src="/imagem/lixo.png" alt="apagar"></a> </td>
                                 <td style="width: 2rem;">{{item.nome_hortalica}}</td>                                    
-                                <td style="width: 2rem;" class="input"> <input class="quantProduto" type="number" name="quantProduto"  step=".01"min=".1" placeholder="0.00" required> {{item.contagem_hortalica}}</td>
+                                <td style="width: 2rem;" class="input"> <input class="quantProduto" type="number" name="quantProduto"  step=".01"min=".1" max={{item.quantidade_hortalica}} placeholder="0.00" required> {{item.contagem_hortalica}}</td>
                                 <td style="width: 10rem;" class="input"> R$<input  class="valorProduto" type="number" name="valorProduto"  step=".01"min=".1" placeholder="0.00" required> POR {{item.contagem_hortalica}}</td>
                             </tr>
                         {%endfor%}
@@ -115,7 +115,10 @@
                 <button type="submit" class="btn_calcular" name="btn_calcular">Finalizar</button>
             </fieldset>
         </form>
+        {%if obs == 0%}
 
+        {%else%}
+        
         <form>
             <fieldset class="dados-Botton">
                 <div class="title">
@@ -134,7 +137,9 @@
                         </tr>
                     {%endfor%}
                 </table>
-        </form> 
+        </form>
+
+        {%endif%}
         
     </div>
 </body>

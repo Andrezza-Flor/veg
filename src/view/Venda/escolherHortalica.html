@@ -98,13 +98,18 @@
                     {%for hortalica in listaHortalica%}
                         <p>
                             <label onclick="imediato()">
-                                <input type="checkbox" name="hortalica" value={{hortalica.cod_hortalica}}> {{hortalica.nome_hortalica}}
+                                <input type="checkbox" name="cod_hortalica" value={{hortalica.cod_hortalica}}> {{hortalica.nome_hortalica}}
                             </label>
                         </p>
                     {%endfor%}  
                     
                 </div>
 
+                <div class="foot-dados-Botton">
+                    <div class="aviso-foot">
+                        <p style="font-size: 15px; padding-top: 10px; color: red;">{{mensagem}}</p>
+                    </div>
+                </div>   
 
                 <button type="submit" class="btn_calcular" name="btn_calcular">Selecionar</button>
             </fieldset>

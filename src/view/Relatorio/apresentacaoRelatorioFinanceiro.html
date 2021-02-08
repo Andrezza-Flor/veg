@@ -8,9 +8,35 @@
     <link rel="stylesheet" href="/style/mainStyle.css">
     <link rel="stylesheet" href="/style/pagetable.css">
     <link rel="stylesheet" href="/style/formStyle.css">
-    <link rel="stylesheet" href="/style/atividade.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
+
+    <script>
+        function criarPDF() {
+            var minhatabela = document.getElementById('relatorio').innerHTML;
+            var style = "<style>";
+            
+            style = style + "table {width: 100%; font:20px Arial;}";
+            style = style + "legend {width: 100%; font:28px Arial;}";
+            style = style + "p, label {width: 100%; font:17px Arial;}";
+            style = style + "table,th, td {border:solid 1px #DDD; border-collapse:collapse;}";
+            style = style + "padding:2px 3px; text-align: center;";
+            style = style + "</style>";
+
+            var win = window.open('', '', 'height=700, width=700');
+            win.document.write('<html><head>');
+            win.document.write('<title>Relatório Financeiro</title>');
+            win.document.write(style);
+            win.document.write('</head>');
+            win.document.write('<body>');
+            win.document.write(minhatabela);
+            win.document.write('</body></html>');
+
+            win.print();
+            
+            
+        }
+    </script>
 
     <title>Veg</title>
 </head>
@@ -79,48 +105,53 @@
     </div>
     
     <div class="main">
-        <h1>Venda</h1>
-        <form>
+        <h1>
+            Relatórios
+        </h1>
+
+        <form id="relatorio">
             <fieldset class="dados-Top">
-
-                {%if tamanhoVenda == 0%}
-
-                <p class="mensagem">Não há nenhuma venda em aberto</p>
-
-                {%else%}
-
-                <div class="conjunto-caixas">
-                    {%for venda in vendas%}
-                    <div class="caixa-conteudo">
-                        <p class="title"> {{venda.nome_cliente}}</p>
-                        <p class="conteudo"> <strong>DATA ENTREGA:</strong> {{venda.data_entrega}}</p>
-                        <p class="conteudo"><strong>ITENS: </strong>{{venda.produtos}}</p>
-                        <a href={{venda.rota}}>Acessar</a>
-                    </div>
-                    {%endfor%}
+                <div class="title">
+                    <legend>{{titulo}}</legend>
+                </div>
+                <br>
+                <div class="read-block">
+                    <label style="width: 20%;" > <strong>Inicio da Busca:</strong> {{busca.inicio}}</label>
                 </div>
 
+                <div class="read-block">
+                    <label style="width: 20%;" > <strong>Fim da Busca:</strong> {{busca.fim}}</label>
+                </div>
+                </br>
+                {%if tamanhoRelatorio == 0%}
+                <p class="mensagem">Não há nenhuma item no Celeiro</p>
+                {%else%}
+                <table class="table-Detalhe">
+                    <tr class="head">
+                    {%for item in cabecalho%}
+                        <th>{{item}}</th>
+                    {%endfor%} 
+                        
+                    </tr>
+                    
+                    {%for item in relatorio%}
+                    <tr>
+                        <td>{{item.coluna1}}</td>
+                        <td>{{item.coluna2}}</td>
+                        <td>{{item.coluna3}}</td>
+                        <td>{{item.coluna4}}</td>
+                    </tr>   
+                    {%endfor%}  
+                </table>
                 {%endif%}
+    
                 
-                
-
-                <a href="/criarVenda" class="button-footer">
-                    <img src="/imagem/venda.png" alt="Comprar">
-                    <p>Vender</p>
-                </a>
             </fieldset>
-        </form>
-
-        <div class="foot-dados-Botton">
-            <div class="aviso-foot">
-                <p>Caso queira cadastrar ou visualizar os seus clientes</p>
-            </div>
-            <div class="acoes-n-banco">
-                <a href="/cliente" id="cadastrar-banco"> <p>Cliente</p> </a>
-            </div>
-        </div>
-
-
+        </form>     
+        <a class="button-footer" onclick="criarPDF()">
+            <img src="/imagem/baixar.png" alt="Baixar">
+            <p>Baixar</p>
+        </a> 
     </div>
 </body>
 </html>

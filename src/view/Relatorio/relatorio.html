@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="/style/mainStyle.css">
     <link rel="stylesheet" href="/style/pagetable.css">
     <link rel="stylesheet" href="/style/formStyle.css">
-    <link rel="stylesheet" href="/style/atividade.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet">
 
@@ -79,48 +78,36 @@
     </div>
     
     <div class="main">
-        <h1>Venda</h1>
-        <form>
-            <fieldset class="dados-Top">
+        <h1>
+            Relatórios
+        </h1>
 
-                {%if tamanhoVenda == 0%}
+        <form action="/relatorio" method="POST">
 
-                <p class="mensagem">Não há nenhuma venda em aberto</p>
-
-                {%else%}
-
-                <div class="conjunto-caixas">
-                    {%for venda in vendas%}
-                    <div class="caixa-conteudo">
-                        <p class="title"> {{venda.nome_cliente}}</p>
-                        <p class="conteudo"> <strong>DATA ENTREGA:</strong> {{venda.data_entrega}}</p>
-                        <p class="conteudo"><strong>ITENS: </strong>{{venda.produtos}}</p>
-                        <a href={{venda.rota}}>Acessar</a>
-                    </div>
-                    {%endfor%}
+            <fieldset name="listaFornecedor" class="dados-Top">
+                <div class="title">
+                    <legend>Escolha um tipo de Relatório</legend>
                 </div>
-
-                {%endif%}
-                
-                
-
-                <a href="/criarVenda" class="button-footer">
-                    <img src="/imagem/venda.png" alt="Comprar">
-                    <p>Vender</p>
-                </a>
-            </fieldset>
-        </form>
-
-        <div class="foot-dados-Botton">
-            <div class="aviso-foot">
-                <p>Caso queira cadastrar ou visualizar os seus clientes</p>
-            </div>
-            <div class="acoes-n-banco">
-                <a href="/cliente" id="cadastrar-banco"> <p>Cliente</p> </a>
-            </div>
-        </div>
-
-
+                <div class="write-block">
+                    <label for="codRelatorio">Relatório:</label>
+                    <select name="codRelatorio" id="codRelatorio" required>
+                        <option value="" disable="" hidden="">Selecione uma opção</option>
+                        {%for relatorio in relatorios%}
+                            <option value={{relatorio.cod_relatorio}}>{{relatorio.nome_relatorio}}</option> 
+                        {%endfor%}
+                    </select>
+                </div>
+                <div class="write-block">
+                    <label for="inicioBusca">Inicio da Busca</label>
+                    <input type="date" id="inicioBusca" name="inicioBusca">
+                </div>
+                <div class="write-block">
+                    <label for="fimBusca">Fim da Busca</label>
+                    <input type="date" id="fimBusca" name="fimBusca">
+                </div>   
+                <button type="submit" class="btn_calcular" name="btn_calcular">Selecionar</button>
+            </fieldset>         
+        </form> 
     </div>
 </body>
 </html>
